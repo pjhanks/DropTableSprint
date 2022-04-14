@@ -1,5 +1,5 @@
 <!DOCTYPE html>
- <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+ <link rel="stylesheet" href="/static/css/bootstrap.css">
 <html lang="en">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <head>
@@ -8,23 +8,24 @@
 </head>
 <body class="text-center" class="center-block">
 <h1>Home Page</h1>
-
-<form class="text-center" action="/" method="post">
     <div>
-        <div class="row justify-content-center">
-        <div class="col-auto">
+        <form class="text-center" action="/" method="post">
+            <div>
+                <div class="row justify-content-center">
+                    <div class="col-auto">
 
-        {% csrf_token %}
-      <table class="table table-responsive">
-        <tr class="center-block"><td>Username: </td><td><input type="text" name="name"></td></tr>
-        <tr class="center-block"><td>Password: </td><td><input type="password" name="password"></td></tr>
-      </table>
-            <button type="submit" class="btn btn-primary my-2 my-sm-0">Submit</button>
+                          {% csrf_token %}
+                        <table class="table table-responsive">
+                          <tr class="center-block"><td>Username: </td><td><input type="text" name="name"></td></tr>
+                          <tr class="center-block"><td>Password: </td><td><input type="password" name="password"></td></tr>
+                        </table>
+                              <button type="submit" class="btn btn-primary my-2 my-sm-0">Submit</button>
+
+                    </div>
 
             </div>
-        </div>
+        </form>
     </div>
-</form>
 {{ message }}
 </body>
 </html>
