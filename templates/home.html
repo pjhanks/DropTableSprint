@@ -7,21 +7,21 @@
     <title>Team DropTable's Amazing TA Scheudling App</title>
 </head>
 <body class="text-center" class="center-block">
-<h1 style="text-align: center">TA Scheduler</h1>
-<h2 style="color:slategrey; text-align: center">Let's get it together</h2>
+<h1>TA Scheduler</h1>
+<h2>Let's get it together</h2>
     <div>
         <form class="text-center" style="text-align: center" action="/" method="post">
             <div>
                 <div class="row justify-content-center">
                     <div class="col-auto">
                           {% csrf_token %}
-                        <table class="table table-responsive" style="text-align: center">
-                          <tr class="center-block"><td><input type="text" style="text-align: center; color:slategrey" value="Username" name="name"></td></tr>
-                          <tr class="center-block"><td>Password: </td><td><input value="Password" type="password" name="password"></td></tr>
+                        <table class="table table-responsive">
+                          <tr class="center-block"><td><input type="text" placeholder="Username" name="name"></td></tr>
+                          <tr class="center-block"><td></td><td><input type="password" placeholder="Password"></td></tr>
                         </table>
                               <button style="text-align: center" type="submit" class="btn btn-primary my-2 my-sm-0">Login</button>
                     </div>
-
+                </div>
             </div>
         </form>
     </div>
