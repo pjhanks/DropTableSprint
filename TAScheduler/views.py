@@ -10,6 +10,7 @@ class Home(View):
 
     def post(self, request):
         noSuchUser = False
+        blankName = False
         badPassword = False
         try:
             m = MyUser.objects.get(name=request.POST['name'])
@@ -29,3 +30,6 @@ class Home(View):
 
     def myView(request):
          return render(request, "home.html", {})
+
+    def courseView(request):
+        return render(request, "login.html", {})
