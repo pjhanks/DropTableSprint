@@ -12,8 +12,6 @@ class MyUser(models.Model):
 class Course(models.Model):
   pass
 
-class TA(models.Model):
-  pass
 
 class Sections(models.Model):
   sectionCode=models.CharField(max_length=10, primary_key=True)
