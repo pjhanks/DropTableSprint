@@ -4,7 +4,7 @@ from django.test import TestCase
 from .models import TA
 
 
-class testPositive(TestCase):
+class testTA(TestCase):
     TAList = None
 
     def setUp(self):
