@@ -9,7 +9,7 @@
 <body class="text-center" class="center-block">
 <div class="col-auto text-right">
     <table class = "table">
-        <form class="text-center" style="text-align: center" action="/" method="post">
+         <form class="text-center" style="text-align: center" action="/" method="post">
             Admin User
         <a href="/">
             Logout
@@ -17,12 +17,10 @@
         </form>
     </table>
 </div>
-
 <div class="col-auto text-center">
     <h1>TA Scheduler</h1>
-    <h2><small>Courses</small></h2>
+    <h2><small>Instructors</small></h2>
 </div>
-
     <div>
         <form class="text-center" style="text-align: center" action="/" method="post">
             <div>
@@ -30,11 +28,10 @@
                     <div class="col-auto center-block">
                           {% csrf_token %}
                         <table class = "table table-responsive">
-                            <tr>
                             <div class="row">
                                 <div class="col-md-4">
-                                    <a href="/instructors">
-                                        Instructors
+                                    <a href="/courses">
+                                        Courses
                                     </a>
                                 </div>
                                 <div class="col-md-1">
@@ -53,25 +50,13 @@
                                         Home
                                     </a>
                                 </div>
-
                             </div>
-                            </tr>
                         </table>
                     </div>
                 </div>
             </div>
         </form>
     </div>
-
-<div>
-    <table class = "table table-responsive">
-
-
-    </table>
-</div>
-
-
-
 {{ message }}
 </body>
 </html>

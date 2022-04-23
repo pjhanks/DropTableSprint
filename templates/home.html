@@ -7,24 +7,56 @@
     <title>Team DropTable's Amazing TA Scheudling App</title>
 </head>
 <body class="text-center" class="center-block">
-<h1 style="text-align: center">TA Scheduler</h1>
-<h2 style="color:slategrey; text-align: center">Let's get it together</h2>
+<div class="col-auto text-right">
+    <table class = "table">
+        <form class="text-center" style="text-align: center" action="/" method="post">
+            Admin User
+        <a href="/">
+            Logout
+        </a>
+        </form>
+    </table>
+</div>
+<div class="col-auto text-center">
+    <h1>TA Scheduler</h1>
+    <h2><small>Home</small></h2>
+</div>
     <div>
         <form class="text-center" style="text-align: center" action="/" method="post">
             <div>
                 <div class="row justify-content-center">
-                    <div class="col-auto">
+                    <div class="col-auto center-block">
                           {% csrf_token %}
-                        <table class="table table-responsive" style="text-align: center">
-                          <tr class="center-block"><td><input type="text" style="text-align: center; color:slategrey" value="Username" name="name"></td></tr>
-                          <tr class="center-block"><td>Password: </td><td><input value="Password" type="password" name="password"></td></tr>
+                        <table class = "table table-responsive">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <a href="/courses">
+                                        Courses
+                                    </a>
+                                </div>
+                                <div class="col-md-1">
+                                    |
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="/TA">
+                                        TA
+                                    </a>
+                                </div>
+                                <div class="col-md-1">
+                                    |
+                                </div>
+                                <div class="col-md-2">
+                                    <a href="/instructors">
+                                        Instructors
+                                    </a>
+                                </div>
+                            </div>
                         </table>
-                              <button style="text-align: center" type="submit" class="btn btn-primary my-2 my-sm-0">Login</button>
                     </div>
-
+                </div>
             </div>
         </form>
     </div>
-{{ message }}
+<label>{{ message }}</label>
 </body>
 </html>
