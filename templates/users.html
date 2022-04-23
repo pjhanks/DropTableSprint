@@ -19,7 +19,7 @@
 </div>
 <div class="col-auto text-center">
     <h1>TA Scheduler</h1>
-    <h2><small>Instructors</small></h2>
+    <h2><small>Users</small></h2>
 </div>
     <div>
         <form class="text-center" style="text-align: center" action="/" method="post">
@@ -39,7 +39,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <a href="/TA">
-                                        TA
+                                        Sections
                                     </a>
                                 </div>
                                 <div class="col-md-1">
@@ -57,6 +57,43 @@
             </div>
         </form>
     </div>
+
+<div class="row justify-content-center" >
+    <div class="col-auto">
+        <table class = "table table-responsive">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Role</th>
+
+                </tr>
+            </thead>
+
+
+            <tbody>
+                {% for row in instructors %}
+                    <tr>
+                        <td>{{ row.name }}</td>
+                        <td>{{ row.address }}</td>
+                        <td>{{ row.email }}</td>
+                        <td>{{ row.phoneNumber }}</td>
+                        <td>{{ row.role }}</td>
+                    </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+
+
+        </table>
+    </div>
+</div>
+
+
 {{ message }}
 </body>
 </html>

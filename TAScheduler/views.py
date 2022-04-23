@@ -52,13 +52,11 @@ class Courses(View):
     def get(self, request):
         m = MyUser.objects.get(userID=request.session["username"])
 
-        c = Course.objects.all()
-        """
-                if (m.role == "Supervisor"):
-
+        if (m.role == "Supervisor"):
+            c = Course.objects.all()
         else:
-            c = Course.objects.get(userID=request.session["username"])
-        """
+            c = Course.objects.filter(instructorID=request.session["username"])
+
 
         return render(request, "courses.html", {"name": request.session["name"], "courses": c})
 
@@ -66,7 +64,16 @@ class Courses(View):
 class Instructors(View):
 
     def get(self, request):
-        return render(request, "instructors.html", {"name": request.session["name"]})
+
+        m = MyUser.objects.get(userID=request.session["username"])
+
+        if (m.role == "Supervisor"):
+            i = MyUser.objects.filter(role="Instructor")
+        else:
+            i = MyUser.objects.filter(userID=request.session["username"])
+
+
+        return render(request, "users.html", {"name": request.session["name"], "instructors": i})
 
 
 class TA(View):
