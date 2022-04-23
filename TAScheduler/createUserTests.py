@@ -1,13 +1,11 @@
-DJANGO_SETTINGS_MODULE = TAScheduler.settings
 import django
-
-django.setup()
 import unittest
+from django.test import TestCase
 from TAScheduler.Users import Users
 from TAScheduler.models import MyUser
 
 
-class testPositive(unittest.TestCase):
+class testPositive(TestCase):
     def setUp(self):
         temp = MyUser(ID="1",
                       name="Fred",
@@ -36,7 +34,8 @@ class testPositive(unittest.TestCase):
         things = list(map(str, MyUser.objects.filter(name="James")))
         self.assertIn("3", things, "Item was improperly added to list")
 
-class testNegative(unittest.TestCase):
+
+class testNegative(TestCase):
     def setup(self):
         temp = MyUser(ID="1",
                       name="Fred",
