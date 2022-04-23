@@ -33,14 +33,18 @@ class Users():
     check = list(map(str, Sections.objects.filter(ID=sectionCode)))
     if len(check)==0:
       raise Exception("Database already contains a section with that ID")
+    elif type(sectionCode) != str or type(parentCode) != str or type(TA != str):
+      raise Exception("A non-string value was passed in createSections!")
     else:
       temp = Sections(sectionCode, parentCode, TA)
       temp.save()
 
-  def createClassTAAssignments(self, AssignmentsID, courseCode, TAID):
+  def createClassTAAssignments(self, AssignmentsID, courseCode, TACode):
     check = list(map(str, Sections.objects.filter(ID=AssignmentsID)))
     if len(check) == 0:
       raise Exception("Database already contains a classTAAssignment with that ID")
+    elif type(courseCode) != str or type(AssignmentsID) != str or type(courseCode != str) or type(TACode) != str:
+      raise Exception("A non-string value was passed in createClassTAAssignments!")
     else:
-      temp = Sections(AssignmentsID, courseCode, TAID)
+      temp = Sections(AssignmentsID, courseCode, TACode)
       temp.save()
