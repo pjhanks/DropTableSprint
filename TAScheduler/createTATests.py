@@ -38,7 +38,7 @@ class testTA(TestCase):
         # same ids
         Users.createTA("2", "42")
         things = list(map(str, TA.objects.filter(name="2")))
-        self.assertIn("2", things, "Item was improperly added to list")
+        self.assertIn("2", things, "TA was improperly added to list")
 
     def test_toManyFields(self):
         with self.assertRaises(TypeError, msg="Too many arguments passed for createTA!"):
@@ -46,4 +46,4 @@ class testTA(TestCase):
 
     def test_toLittleFields(self):
         with self.assertRaises(TypeError, msg="Not enough arguments passed for createTA!"):
-            Users.createUser("3")
+            Users.createTA("3")
