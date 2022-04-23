@@ -13,7 +13,7 @@ class testSection(TestCase):
                       TA="39")
         temp.save()
 
-        temp = Course(ID="2",
+        temp = Sections(ID="2",
                       parentCode="8",
                       TA="32")
         temp.save()
@@ -31,7 +31,7 @@ class testSection(TestCase):
 
     def test_floatID(self):
         # non string
-        with self.assertRaises(TypeError, msg="The values passed to createCourse must be strings!"):
+        with self.assertRaises(TypeError, msg="The values passed to createSection must be strings!"):
             Users.createSection(3.0, "9", "44")
 
     def test_badID(self):
