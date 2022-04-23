@@ -25,7 +25,7 @@ class testCourse(TestCase):
         # add Something.addCourse("courseCode");
         Users.createCourse("3", "9", "44", "212")
         things = list(map(str, Course.objects.filter(instructor="9")))
-        self.assertIn("3", things, "Instructor was not added to list")
+        self.assertIn("3", things, "Course was not added to list")
 
     def test_intID(self):
         # non string
@@ -41,12 +41,12 @@ class testCourse(TestCase):
         # same ids
         Users.createCousre("2", "9", "42", "313")
         things = list(map(str, Course.objects.filter(name="2")))
-        self.assertIn("2", things, "Item was improperly added to list")
+        self.assertIn("2", things, "Course was improperly added to list")
 
     def test_toManyFields(self):
-        with self.assertRaises(TypeError, msg="Too many arguments passed for createTA!"):
-            Users.createTA("3", "9", "44", "212", "oops extra argument")
+        with self.assertRaises(TypeError, msg="Too many arguments passed for createCourse!"):
+            Users.createCourse("3", "9", "44", "212", "oops extra argument")
 
     def test_toLittleFields(self):
-        with self.assertRaises(TypeError, msg="Not enough arguments passed for createTA!"):
-            Users.createUser("3")
+        with self.assertRaises(TypeError, msg="Not enough arguments passed for createCourse!"):
+            Users.createCourse("3")
