@@ -78,6 +78,15 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 0.5rem;
 }
 
+h1 {
+  text-align:center;
+}
+
+h2 {
+  color:slategrey;
+  text-align:center;
+}
+
 p {
   margin-top: 0;
   margin-bottom: 1rem;
@@ -9984,7 +9993,14 @@ a.text-dark:hover, a.text-dark:focus {
   tr,
   img {
     page-break-inside: avoid;
+    text-align: center;
+    color:slategrey;
   }
+
+  tr {
+
+  }
+
   p,
   h2,
   h3 {
