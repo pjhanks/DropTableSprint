@@ -14,6 +14,7 @@ class Login(View):
         logger = logging.getLogger(__name__)
         logger.info("Simple info")
         print("TEST")
+
         return render(request, "login.html")
 
     def post(self, request):
@@ -34,35 +35,33 @@ class Login(View):
         elif badPassword:
             return render(request, "login.html", {"message": "bad password"})
         else:
+            request.session["username"] = m.userID
             request.session["name"] = m.name
             return redirect("/home/")
 
-    def myView(request):
-        return render(request, "login.html", {})
-
-    def courseView(request):
-        return render(request, "courses.html", {})
+    
 
 
 class Home(View):
 
     def get(self, request):
-        return render(request, "home.html")
+        #print(request.session["name"])
+        return render(request, "home.html", {"name" : request.session["name"]})
 
 
 class Courses(View):
 
     def get(self, request):
-        return render(request, "courses.html")
+        return render(request, "courses.html", {"name" : request.session["name"]})
 
 
 class Instructors(View):
 
     def get(self, request):
-        return render(request, "instructors.html")
+        return render(request, "instructors.html", {"name" : request.session["name"]})
 
 
 class TA(View):
 
     def get(self, request):
-        return render(request, "TA.html")
+        return render(request, "TA.html", {"name" : request.session["name"]})
