@@ -9,10 +9,12 @@ class Users():
       temp = MyUser(IDnumber, name, address, email, phoneNumber, role, password)
       temp.save()
 
-  def createTA(self, TACode):
+  def createTA(self, TACode, TAID):
     check = list(map(str, TA.objects.filter(ID=TACode)))
     if len(check)==0:
       raise Exception("Database already contains a TA with that ID")
+    elif type(TACode) != str:
+      raise Exception("A non-string value was passed in createTA!")
     else:
       temp = TA(TACode)
       temp.save()
