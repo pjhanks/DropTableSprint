@@ -57,19 +57,48 @@
                             </div>
                             </tr>
                         </table>
+
                     </div>
+
                 </div>
             </div>
         </form>
     </div>
 
-<div>
-    <table class = "table table-responsive">
+<div class="row justify-content-center" >
+    <div class="col-auto">
+        <table class = "table table-responsive">
+            <thead>
+                <tr>
+                    <th>Course Code</th>
+                    <th>Course Number</th>
+                    <th>Instructor</th>
+
+                </tr>
+            </thead>
 
 
-    </table>
+            <tbody>
+                {% for row in courses %}
+                    <tr>
+                        <td>{{ row.courseCode }}</td>
+                        <td>{{ row.courseNumber }}</td>
+                        <td>{{ row.instructorID.name }}</td>
+                    </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+
+
+        </table>
+    </div>
 </div>
+<div>
 
+
+</div>
 
 
 {{ message }}

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .models import MyUser
+from .models import MyUser, Course
 import logging
 # Create your views here.
 from django.http import HttpResponse
@@ -39,29 +39,37 @@ class Login(View):
             request.session["name"] = m.name
             return redirect("/home/")
 
-    
-
 
 class Home(View):
 
     def get(self, request):
-        #print(request.session["name"])
-        return render(request, "home.html", {"name" : request.session["name"]})
+        # print(request.session["name"])
+        return render(request, "home.html", {"name": request.session["name"]})
 
 
 class Courses(View):
 
     def get(self, request):
-        return render(request, "courses.html", {"name" : request.session["name"]})
+        m = MyUser.objects.get(userID=request.session["username"])
+
+        c = Course.objects.all()
+        """
+                if (m.role == "Supervisor"):
+
+        else:
+            c = Course.objects.get(userID=request.session["username"])
+        """
+
+        return render(request, "courses.html", {"name": request.session["name"], "courses": c})
 
 
 class Instructors(View):
 
     def get(self, request):
-        return render(request, "instructors.html", {"name" : request.session["name"]})
+        return render(request, "instructors.html", {"name": request.session["name"]})
 
 
 class TA(View):
 
     def get(self, request):
-        return render(request, "TA.html", {"name" : request.session["name"]})
+        return render(request, "TA.html", {"name": request.session["name"]})
