@@ -13,7 +13,7 @@ class Users():
     check = list(map(str, TA.objects.filter(ID=TACode)))
     if len(check)==0:
       raise Exception("Database already contains a TA with that ID")
-    elif type(TACode) != str:
+    elif type(TACode) != str or type(TAID) != str:
       raise Exception("A non-string value was passed in createTA!")
     else:
       temp = TA(TACode)
@@ -23,6 +23,8 @@ class Users():
     check = list(map(str, Course.objects.filter(ID=courseCode)))
     if len(check)==0:
       raise Exception("Database already contains a course with that ID")
+    elif type(courseCode) != str or type(instructorID) != str or type(TAs != str) or type(courseNumber) != str:
+      raise Exception("A non-string value was passed in createCourse!")
     else:
       temp = Course(courseCode, instructorID, TAs, courseNumber)
       temp.save()
