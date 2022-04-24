@@ -1,7 +1,7 @@
 from .models import Sections, Course
 
 
-class Sections():
+class SectionsClass():
 
     def createSection(self, SectionCode, ParentID):
         if (SectionCode is None):

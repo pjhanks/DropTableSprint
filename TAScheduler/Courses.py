@@ -1,7 +1,7 @@
 from .models import Course, MyUser
 
 
-class Courses():
+class CoursesClass():
 
     def createCourse(self, CourseCode, instructorID, CourseNumber):
         if (CourseCode is None):
