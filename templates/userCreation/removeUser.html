@@ -11,6 +11,7 @@
         <table class = "table table-responsive">
             <thead>
                 <tr>
+                    <th>ID Number</th>
                     <th>Name</th>
                     <th>Address</th>
                     <th>Email</th>
@@ -24,6 +25,7 @@
             <tbody>
                 {% for row in users %}
                     <tr>
+                        <td>{{ row.IDNumber }}</td>
                         <td>{{ row.name }}</td>
                         <td>{{ row.address }}</td>
                         <td>{{ row.email }}</td>
@@ -40,13 +42,14 @@
         </table>
     </div>
 </div>
-<div>
+<br>
+    <div class="text-center" class="center-block">
      <form class="text-center" style="text-align: center" action="/removeUser/" method="post">
          {% csrf_token %}
          <div class="form-group">
-                              <label value="t2" for="InputRole"><select id = "InputRole" name = "InputRole" class="form-control" required>
+                              <label value="t2" for="InputUser"><select id = "InputUser" name = "InputUser" class="form-control" required>
                                               {% for row in users %}
-                                                <option>{{ row.name }}</option>
+                                                <option>{{ row.IDNumber }} </option>
                                               {% endfor %}
                                             </select> </label>
                     <button type="submit" class="btn btn-primary my-2 my-sm-0">Remove User</button>
@@ -55,7 +58,9 @@
                     </a>
         </div>
      </form>
-
+    <br>
+    {{ message }}
+    </div>
 </div>
 
 </body>

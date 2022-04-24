@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.views import View
 from .models import MyUser, Course, Sections
@@ -24,7 +25,7 @@ class Login(View):
         badPassword = False
 
         try:
-            
+
             m = MyUser.objects.get(IDNumber=request.POST['InputUsername'])
             badPassword = (m.password != request.POST['InputPassword'])
         except:
@@ -108,7 +109,7 @@ class makeUser(View):
         PhoneNumber = request.POST['InputPhoneNumber']
         Role = request.POST['InputRole']
         Password = request.POST['InputPassword']
-
+        print(ID)
         try:
             UserClass.createUser(self, ID, Name, Address, Email, PhoneNumber, Role, Password)
         except:
@@ -117,19 +118,27 @@ class makeUser(View):
 
         return redirect("/users/")
 
+
 class removeUser(View):
 
     def get(self, request):
 
-        m = MyUser.objects.all()
+        m = MyUser.objects.filter(~Q(IDNumber=request.session["username"]))
+        j = MyUser.objects.get(IDNumber=request.session["username"])
 
-        if m.count() > 0 :
+        if m.count() > 0:
             return render(request, "userCreation/removeUser.html", {"name": request.session["name"], "users": m})
 
         else:
+            m = MyUser.objects.all()
             return render(request, "userCreation/users.html",
-                          {"name": request.session["name"], "message" : "No users to remove"})
+                          {"name": request.session["name"], "message": "No users to remove", "instructors": m,
+                           "role": j.role})
 
+    def post(self, request):
 
-
-
+        m = MyUser.objects.get(IDNumber=request.POST["InputUser"])
+        m.delete()
+        j = MyUser.objects.filter(~Q(IDNumber=request.session["username"]))
+        return render(request, "userCreation/removeUser.html",
+                      {"name": request.session["name"], "message": "User successfully removed", "users": j})
