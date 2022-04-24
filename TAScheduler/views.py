@@ -24,8 +24,8 @@ class Login(View):
         badPassword = False
 
         try:
-            print(request.POST['InputUsername'])
-            m = MyUser.objects.get(userID=request.POST['InputUsername'])
+            
+            m = MyUser.objects.get(IDNumber=request.POST['InputUsername'])
             badPassword = (m.password != request.POST['InputPassword'])
         except:
             noSuchUser = True
@@ -36,7 +36,7 @@ class Login(View):
         elif badPassword:
             return render(request, "login.html", {"message": "bad password"})
         else:
-            request.session["username"] = m.userID
+            request.session["username"] = m.IDNumber
             request.session["name"] = m.name
             return redirect("/home/")
 
@@ -51,7 +51,7 @@ class Home(View):
 class Courses(View):
 
     def get(self, request):
-        m = MyUser.objects.get(userID=request.session["username"])
+        m = MyUser.objects.get(IDNumber=request.session["username"])
 
         if (m.role == "Supervisor"):
             c = Course.objects.all()
@@ -66,12 +66,12 @@ class Users(View):
 
     def get(self, request):
 
-        m = MyUser.objects.get(userID=request.session["username"])
+        m = MyUser.objects.get(IDNumber=request.session["username"])
 
         if (m.role == "Supervisor"):
             i = MyUser.objects.all()
         else:
-            i = MyUser.objects.filter(userID=request.session["username"])
+            i = MyUser.objects.filter(IDNumber=request.session["username"])
 
         return render(request, "userCreation/users.html",
                       {"name": request.session["name"], "instructors": i, "role": m.role})
@@ -81,12 +81,12 @@ class Section(View):
 
     def get(self, request):
 
-        m = MyUser.objects.get(userID=request.session["username"])
+        m = MyUser.objects.get(IDNumber=request.session["username"])
 
         if (m.role == "Supervisor"):
             s = Sections.objects.all()
         else:
-            s = MyUser.objects.filter(userID=request.session["username"])
+            s = MyUser.objects.filter(IDNumber=request.session["username"])
 
         return render(request, "sectionCreation/sections.html",
                       {"name": request.session["name"], "sections": s, "role": m.role})
@@ -96,12 +96,12 @@ class makeUser(View):
 
     def get(self, request):
 
-        m = MyUser.objects.get(userID=request.session["username"])
+        m = MyUser.objects.get(IDNumber=request.session["username"])
 
         return render(request, "userCreation/makeUser.html", {"name": request.session["name"], "role": m.role})
 
     def post(self, request):
-        ID = request.POST['InputUserID']
+        ID = request.POST['InputIDNumber']
         Name = request.POST['InputName']
         Address = request.POST['InputAddress']
         Email = request.POST['InputEmail']
@@ -113,7 +113,7 @@ class makeUser(View):
             UserClass.createUser(self, ID, Name, Address, Email, PhoneNumber, Role, Password)
         except:
             return render(request, "userCreation/makeUser.html",
-                          {"name": request.session["name"], "message": "UserID is aleady in the system"})
+                          {"name": request.session["name"], "message": "IDNumber is aleady in the system"})
 
         return redirect("/users/")
 

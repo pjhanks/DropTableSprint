@@ -71,6 +71,7 @@
 
                     <th>Course Number</th>
                     <th>Section Code</th>
+                    <th>Course Instructor</th>
                     <th>TA</th>
 
                 </tr>
@@ -81,7 +82,9 @@
                 {% for row in sections %}
                     <tr>
                         <td>{{ row.sectionCode }}</td>
+
                         <td>{{ row.parentCode.courseNumber }}</td>
+                        <td>{{ row.parentCode.instructorID.name }}</td>
                         <td>{{ row.TA.name }}</td>
                     </tr>
 
