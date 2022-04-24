@@ -1,4 +1,3 @@
-DJANGO_SETTINGS_MODULE = TAScheduler.settings
 import django
 
 django.setup()

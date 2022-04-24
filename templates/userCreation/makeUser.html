@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="/static/css/bootstrap.css">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Team DropTable's Amazing TA Scheudling App</title>
+</head>
+<body class="text-center" class="center-block">
+<div class="col-auto text-center">
+    <h1>TA Scheduler</h1>
+    <h2><small>Create User</small></h2>
+</div>
+<div>
+    <form class="text-center" style="text-align: center" action="/makeUser/" method="post">
+            <div>
+                <div class="row justify-content-center">
+                    <div class="col-auto">
+                          {% csrf_token %}
+                        <table class="table table-responsive">
+                            <div class="form-group">
+                                <label value="t2" for="InputUserID"><input type="text" name="InputUserID" class="form-control" id="InputUserID" placeholder="UserID" required> </label>
+                            </div>
+                            <div class="form-group">
+                              <label value="t2" for="InputName"><input type="text" name="InputName" class="form-control" id="InputName" placeholder="Name" required> </label>
+                            </div>
+                            <div class="form-group">
+                              <label value="t2" for="InputAddress"><input type="text" name="InputAddress" class="form-control" id="InputAddress" placeholder="Address" required> </label>
+                            </div>
+                            <div class="form-group">
+                              <label value="t2" for="InputEmail"><input type="email" name="InputEmail" class="form-control" id="InputEmail" placeholder="Email" required> </label>
+                            </div>
+                            <div class="form-group">
+                              <label value="t2" for="InputPhoneNumber"><input type="text" name="InputPhoneNumber" class="form-control" id="InputPhoneNumber" placeholder="Phone Number" required> </label>
+                            </div>
+                            <div class="form-group">
+                              <label value="t2" for="InputRole"><select id = "InputRole" name = "InputRole" class="form-control" required>
+                                              <option>TA</option>
+                                              <option>Instructor</option>
+                                              <option>Supervisor</option>
+                                            </select> </label>
+                            </div>
+                            <div class="form-group">
+                              <label value="t2" for="InputPassword"><input type="text" name="InputPassword" class="form-control" id="InputPassword" placeholder="Password" required> </label>
+                            </div>
+                        </table>
+
+                              <button type="submit" class="btn btn-primary my-2 my-sm-0">Login</button>
+                                {{ message }}
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+</div>
+
+
+
+
+
+</body>
+</html>

@@ -38,7 +38,7 @@
                                     |
                                 </div>
                                 <div class="col-md-3">
-                                    <a href="/TA">
+                                    <a href="/sections">
                                         Sections
                                     </a>
                                 </div>
@@ -92,7 +92,26 @@
         </table>
     </div>
 </div>
+{% if role == "Supervisor" %}
+<div>
+        <div>
+            <a href="/makeUser">
+            <button type="submit" class="btn btn-primary my-2 my-sm-0">Add User</button>
+            </a>
+        </div></br>
+        {% csrf_token %}
 
+
+        <div>
+        {% csrf_token %}
+        <a href="/removeUser">
+          <button type="submit" class="btn btn-primary my-2 my-sm-0">Remove User</button>
+        </a>
+        </div>
+
+
+</div>
+{% endif %}
 
 {{ message }}
 </body>

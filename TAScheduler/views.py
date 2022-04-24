@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .models import MyUser, Course
+from .models import MyUser, Course, Sections
 import logging
+from .Users import UserClass
 # Create your views here.
 from django.http import HttpResponse
 
@@ -57,26 +58,62 @@ class Courses(View):
         else:
             c = Course.objects.filter(instructorID=request.session["username"])
 
+        return render(request, "courseCreation/courses.html",
+                      {"name": request.session["name"], "courses": c, "role": m.role})
 
-        return render(request, "courses.html", {"name": request.session["name"], "courses": c})
 
-
-class Instructors(View):
+class Users(View):
 
     def get(self, request):
 
         m = MyUser.objects.get(userID=request.session["username"])
 
         if (m.role == "Supervisor"):
-            i = MyUser.objects.filter(role="Instructor")
+            i = MyUser.objects.all()
         else:
             i = MyUser.objects.filter(userID=request.session["username"])
 
+        return render(request, "userCreation/users.html",
+                      {"name": request.session["name"], "instructors": i, "role": m.role})
 
-        return render(request, "users.html", {"name": request.session["name"], "instructors": i})
 
-
-class TA(View):
+class Section(View):
 
     def get(self, request):
-        return render(request, "TA.html", {"name": request.session["name"]})
+
+        m = MyUser.objects.get(userID=request.session["username"])
+
+        if (m.role == "Supervisor"):
+            s = Sections.objects.all()
+        else:
+            s = MyUser.objects.filter(userID=request.session["username"])
+
+        return render(request, "sectionCreation/sections.html",
+                      {"name": request.session["name"], "sections": s, "role": m.role})
+
+
+class makeUser(View):
+
+    def get(self, request):
+
+        m = MyUser.objects.get(userID=request.session["username"])
+
+        return render(request, "userCreation/makeUser.html", {"name": request.session["name"], "role": m.role})
+
+    def post(self, request):
+        ID = request.POST['InputUserID']
+        Name = request.POST['InputName']
+        Address = request.POST['InputAddress']
+        Email = request.POST['InputEmail']
+        PhoneNumber = request.POST['InputPhoneNumber']
+        Role = request.POST['InputRole']
+        Password = request.POST['InputPassword']
+
+        try:
+            UserClass.createUser(self, ID, Name, Address, Email, PhoneNumber, Role, Password)
+        except:
+            return render(request, "userCreation/makeUser.html",
+                          {"name": request.session["name"], "message": "UserID is aleady in the system"})
+
+        return redirect("/users/")
+
