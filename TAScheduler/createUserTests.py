@@ -29,8 +29,8 @@ class testPositive(TestCase):
     def test_addUser(self):
         # add Something.addUser("user info");
         UserClass.createUser(self, "3", "James", "125 park place", "alex@uwm.edu", "18000000002", "Instructor", "123")
-        things = list(map(str, MyUser.objects.filter(name="James")))
-        self.assertIn("3", things, "Item was not added to list")
+        things = MyUser.objects.get(name="James")
+        self.assertIn("3", things.IDNumber, "Item was not added to list")
 
     def test_intPhone(self):
         # non string
