@@ -117,3 +117,19 @@ class makeUser(View):
 
         return redirect("/users/")
 
+class removeUser(View):
+
+    def get(self, request):
+
+        m = MyUser.objects.all()
+
+        if m.count() > 0 :
+            return render(request, "userCreation/removeUser.html", {"name": request.session["name"], "users": m})
+
+        else:
+            return render(request, "userCreation/users.html",
+                          {"name": request.session["name"], "message" : "No users to remove"})
+
+
+
+

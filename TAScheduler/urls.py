@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 from django.contrib import admin
-from TAScheduler.views import Login, Home, Users, Courses, Section, makeUser
+from TAScheduler.views import Login, Home, Users, Courses, Section, makeUser,removeUser
 
 urlpatterns = [
 
@@ -12,5 +12,5 @@ urlpatterns = [
     path('sections/', Section.as_view(), name='section'),
     path('courses/', Courses.as_view(), name='courses'),
     path('makeUser/', makeUser.as_view(), name='makeUser'),
-
+    path('removeUser/', removeUser.as_view(), name='removeUser'),
 ]
