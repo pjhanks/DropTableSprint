@@ -12,18 +12,9 @@ class MyUser(models.Model):
     role = models.CharField(max_length=11)
     password = models.CharField(max_length=20)
 
-
-class TA(models.Model):
-    TACode = models.CharField(max_length=20, primary_key=True, default="42")
-    TAID = models.ForeignKey(MyUser, on_delete=models.CASCADE, null=True)
-
-    def __str__(self):
-        return self.TACode
-
 class Course(models.Model):
     courseCode = models.CharField(max_length=9, primary_key=True, default="12345")
     instructorID = models.ForeignKey(MyUser, on_delete=models.CASCADE, null=True)
-    TAs = models.ForeignKey(TA, on_delete=models.CASCADE, null=True)
     courseNumber = models.CharField(max_length=20, default="101")
 
     def __str__(self):
@@ -32,7 +23,7 @@ class Course(models.Model):
 class Sections(models.Model):
     sectionCode = models.CharField(max_length=10, primary_key=True)
     parentCode = models.ForeignKey(Course, on_delete=models.CASCADE, null=True)
-    TA = models.ForeignKey(TA, on_delete=models.CASCADE, null=True)
+    TA = models.ForeignKey(MyUser, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.sectionCode
