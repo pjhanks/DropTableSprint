@@ -13,14 +13,14 @@ class testPositive(TestCase):
                       email="fred@uwm.edu",
                       phoneNumber="18000000000",
                       role="Administrator")
-        temp.save
+        temp.save()
         temp = MyUser(ID="2",
                       name="Alex",
                       address="124 park place",
                       email="alex@uwm.edu",
                       phoneNumber="18000000001",
                       role="TA")
-        temp.save
+        temp.save()
 
     def test_addUser(self):
         # add Something.addUser("user info");
@@ -43,14 +43,14 @@ class testNegative(TestCase):
                       email="fred@uwm.edu",
                       phoneNumber="18000000000",
                       role="Administrator")
-        temp.save
+        temp.save()
         temp = MyUser(ID="2",
                       name="Alex",
                       address="124 park place",
                       email="alex@uwm.edu",
                       phoneNumber="18000000001",
                       role="TA")
-        temp.save
+        temp.save()
 
     def test_badID(self):
         # same ids

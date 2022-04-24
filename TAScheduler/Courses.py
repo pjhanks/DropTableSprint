@@ -1,11 +1,11 @@
 from .models import Course, MyUser
 
 
-class Users():
+class Courses():
 
     def createCourse(self, CourseCode, instructorID, CourseNumber):
         if (CourseCode is None):
-            raise Exception("does not acept null Primary keys")
+            raise Exception("does not accept null Primary keys")
         check = list(map(str, Course.objects.filter(courseCode=CourseCode)))
         checkInstructor = list(map(str, MyUser.objects.filter(ID=instructorID)))
         if len(checkInstructor == 0):
@@ -14,7 +14,7 @@ class Users():
             raise Exception("Database already contains am course with that ID")
         else:
             temp = Course(CourseCode, instructorID, CourseNumber)
-            temp.save
+            temp.save()
 
     def createCourse(self, CourseCode, CourseNumber):
         if (CourseCode is None):
@@ -24,4 +24,4 @@ class Users():
             raise Exception("Database already contains am course with that ID")
         else:
             temp = Course(CourseCode, None, CourseNumber)
-            temp.save
+            temp.save()
