@@ -201,7 +201,7 @@ class removeCourse(View):
 
         allCourses = Course.objects.all()
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
-        if (allCourses.role == "Supervisor"):
+        if (loggedUser.role == "Supervisor"):
             if allCourses.count() > 0:
                 return render(request, "courseTemplates/removeCourse.html",
                               {"name": request.session["name"], "courses": allCourses})
