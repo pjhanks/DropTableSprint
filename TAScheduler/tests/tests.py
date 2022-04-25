@@ -1,5 +1,5 @@
 from django.test import TestCase, Client
-from TAScheduler.models import MyUser, Sections, Course, TA
+from TAScheduler.models import MyUser, Sections, Course
 
 
 class LoginTests(TestCase):

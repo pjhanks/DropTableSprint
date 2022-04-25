@@ -1,4 +1,4 @@
-from .models import Sections, Course
+from TAScheduler.models import Sections, Course
 
 
 class SectionsClass():
@@ -14,7 +14,7 @@ class SectionsClass():
         if checkParent.count() == 0:
             raise Exception("No such parent course")
         if len(checkRepeat) != 0:
-            raise Exception("Database already contains am course with that ID")
+            raise Exception("Database already contains a section with that ID")
         else:
             x = Course.objects.get(courseCode=ParentID)
             temp = Sections(sectionCode=SectionCode, parentCode=x ,TA= None)

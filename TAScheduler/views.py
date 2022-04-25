@@ -3,11 +3,10 @@ from django.shortcuts import render, redirect
 from django.views import View
 from .models import MyUser, Course, Sections
 import logging
-from .Users import UserClass
-from .Courses import CoursesClass
-from .Sections import SectionsClass
+from TAScheduler.classes.Users import UserClass
+from TAScheduler.classes.Courses import CoursesClass
+from TAScheduler.classes.Sections import SectionsClass
 # Create your views here.
-from django.http import HttpResponse
 
 
 class Login(View):
@@ -218,7 +217,7 @@ class removeCourse(View):
         m.delete()
         j = Course.objects.all()
         return render(request, "courseCreation/removeCourse.html",
-                      {"name": request.session["name"], "message": "User successfully removed", "courses": j})
+                      {"name": request.session["name"], "message": "Course successfully removed", "courses": j})
 
 
 class makeSection(View):
@@ -255,3 +254,32 @@ class makeSection(View):
                                "courses": j})
 
         return redirect("/sections/")
+
+
+class removeSection(View):
+
+    def get(self, request):
+
+        m = Sections.objects.all()
+        j = MyUser.objects.get(IDNumber=request.session["username"])
+
+        if (j.role == "Supervisor"):
+            if m.count() > 0:
+                return render(request, "sectionCreation/removeSection.html",
+                              {"name": request.session["name"], "sections": m})
+
+            else:
+                m = MyUser.objects.all()
+                return render(request, "sectionCreation/sections.html",
+                              {"name": request.session["name"], "message": "No users to remove", "sections": j,
+                               "role": m.role})
+        else:
+            return redirect("/courses/")
+
+    def post(self, request):
+
+        m = Sections.objects.get(sectionCode=request.POST["InputCourse"])
+        m.delete()
+        j = Sections.objects.all()
+        return render(request, "sectionCreation/removeSection.html",
+                      {"name": request.session["name"], "message": "Section successfully removed", "sections": j})

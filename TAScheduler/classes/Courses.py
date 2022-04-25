@@ -1,4 +1,4 @@
-from .models import Course, MyUser
+from TAScheduler.models import Course, MyUser
 
 
 class CoursesClass():
@@ -9,9 +9,9 @@ class CoursesClass():
         check = Course.objects.filter(courseCode=CourseCode)
         checkInstructor = MyUser.objects.filter(IDNumber=instructorID)
         if (checkInstructor.count()) == 0:
-            raise Exception("No such parent course")
+            raise Exception("No such instructor")
         if check.count() > 0:
-            raise Exception("Database already contains am course with that ID")
+            raise Exception("Database already contains a course with that ID")
         else:
             x = MyUser.objects.get(IDNumber=instructorID)
             temp = Course(courseCode=CourseCode, instructorID=x, courseNumber=CourseNumber)
@@ -26,3 +26,8 @@ class CoursesClass():
         else:
             temp = Course(courseCode=CourseCode, instructorID=None, courseNumber=CourseNumber)
             temp.save()
+
+    def assignInstructor(self, CourseCode, InstructorID):
+        toUpdate = Course.objects.get(courseCode=CourseCode)
+        toUpdate.instructorID = InstructorID
+        toUpdate.save()
