@@ -1,4 +1,5 @@
 import django
+
 django.setup()
 # import os
 # os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'DropTableSprint.settings')
@@ -11,20 +12,20 @@ from TAScheduler.models import Course, MyUser
 class testPositive(TestCase):
     def setUp(self):
         temp1 = MyUser(IDNumber="1",
-                      name="Fred",
-                      address="123 park place",
-                      email="fred@uwm.edu",
-                      phoneNumber="18000000000",
-                      role="Supervisor",
-                      password="123")
+                       name="Fred",
+                       address="123 park place",
+                       email="fred@uwm.edu",
+                       phoneNumber="18000000000",
+                       role="Supervisor",
+                       password="123")
         temp1.save()
         temp2 = MyUser(IDNumber="2",
-                      name="Alex",
-                      address="124 park place",
-                      email="alex@uwm.edu",
-                      phoneNumber="18000000001",
-                      role="TA",
-                      password="123")
+                       name="Alex",
+                       address="124 park place",
+                       email="alex@uwm.edu",
+                       phoneNumber="18000000001",
+                       role="TA",
+                       password="123")
         temp2.save()
         temp = MyUser(IDNumber="3",
                       name="Bob",
@@ -54,23 +55,24 @@ class testPositive(TestCase):
         things = Course.objects.get(courseCode="222")
         self.assertIn("222", things.courseCode, "Course was not successfully added")
 
+
 class testNegative(TestCase):
     def setUp(self):
         temp1 = MyUser(IDNumber="1",
-                      name="Fred",
-                      address="123 park place",
-                      email="fred@uwm.edu",
-                      phoneNumber="18000000000",
-                      role="Supervisor",
-                      password="123")
+                       name="Fred",
+                       address="123 park place",
+                       email="fred@uwm.edu",
+                       phoneNumber="18000000000",
+                       role="Supervisor",
+                       password="123")
         temp1.save()
         temp2 = MyUser(IDNumber="2",
-                      name="Alex",
-                      address="124 park place",
-                      email="alex@uwm.edu",
-                      phoneNumber="18000000001",
-                      role="TA",
-                      password="123")
+                       name="Alex",
+                       address="124 park place",
+                       email="alex@uwm.edu",
+                       phoneNumber="18000000001",
+                       role="TA",
+                       password="123")
         temp2.save()
         temp = MyUser(IDNumber="3",
                       name="Bob",
@@ -91,7 +93,7 @@ class testNegative(TestCase):
         temp.save()
 
     def test_noCourseCode(self):
-        #passes null primary key
+        # passes null primary key
         with self.assertRaises(Exception, msg="You can't pass a null Primary key!"):
             CoursesClass.createCourse(self, None, "3", "456")
 
@@ -107,7 +109,7 @@ class testNegative(TestCase):
             CoursesClass.createCourse(self, "105", "3")
 
     def test_noCourseCode_noInstructor(self):
-        #passes null primary key
+        # passes null primary key
         with self.assertRaises(Exception, msg="You can't pass a null Primary key!"):
             CoursesClass.createCourse2(self, None, "456")
 
