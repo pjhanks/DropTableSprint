@@ -8,45 +8,42 @@
 <body class="text-center" class="center-block">
 <div class="col-auto text-center">
     <h1>TA Scheduler</h1>
-    <h2><small>Create User</small></h2>
+    <h2><small>Create Sections</small></h2>
 </div>
 <div>
-    <form class="text-center" style="text-align: center" action="/makeUser/" method="post">
+    <form class="text-center" style="text-align: center" action="/makeCourse/" method="post">
             <div>
                 <div class="row justify-content-center">
                     <div class="col-auto">
+
                           {% csrf_token %}
+
                         <table class="table table-responsive">
                             <div class="form-group">
-                                <label value="t2" for="InputIDNumber"><input type="text" name="InputIDNumber" class="form-control" id="InputIDNumber" placeholder="ID Number" required> </label>
+                                <label value="t2" for="InputSectionCode"><input type="text" name="InputSectionCode" class="form-control" id="InputSectionCode" placeholder="Section Code" required> </label>
                             </div>
                             <div class="form-group">
-                              <label value="t2" for="InputName"><input type="text" name="InputName" class="form-control" id="InputName" placeholder="Name" required> </label>
-                            </div>
-                            <div class="form-group">
-                              <label value="t2" for="InputAddress"><input type="text" name="InputAddress" class="form-control" id="InputAddress" placeholder="Address" required> </label>
-                            </div>
-                            <div class="form-group">
-                              <label value="t2" for="InputEmail"><input type="email" name="InputEmail" class="form-control" id="InputEmail" placeholder="Email" required> </label>
-                            </div>
-                            <div class="form-group">
-                              <label value="t2" for="InputPhoneNumber"><input type="text" name="InputPhoneNumber" class="form-control" id="InputPhoneNumber" placeholder="Phone Number" required> </label>
-                            </div>
-                            <div class="form-group">
-                              <label value="t2" for="InputRole"><select id = "InputRole" name = "InputRole" class="form-control" required>
-                                              <option>TA</option>
-                                              <option>Instructor</option>
-                                              <option>Supervisor</option>
+                              <label value="t2" for="InputCourse"><select id = "InputCourse" name = "InputCourse" class="form-control" >
+                                                <option>  </option>
+                                              {% for row in courses %}
+                                                <option>{{ row.courseCode }} | {{ row.courseNumber }} </option>
+                                              {% endfor %}
                                             </select> </label>
                             </div>
                             <div class="form-group">
-                              <label value="t2" for="InputPassword"><input type="text" name="InputPassword" class="form-control" id="InputPassword" placeholder="Password" required> </label>
+                              <label value="t2" for="InputTA"><select id = "InputTA" name = "InputTA" class="form-control" >
+                                                <option>  </option>
+                                              {% for row in users %}
+                                                <option>{{ row.IDNumber }} | {{ row.name }} </option>
+                                              {% endfor %}
+                                            </select> </label>
                             </div>
+
                         </table>
 
-                              <button type="submit" class="btn btn-primary my-2 my-sm-0">Add User</button>
+                              <button type="submit" class="btn btn-primary my-2 my-sm-0">Add Section</button>
                                 {{ message }}
-                                <a href="/users">
+                                <a href="/sections">
                                 Back
                                 </a>
                     </div>
