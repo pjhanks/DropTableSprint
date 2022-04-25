@@ -26,8 +26,10 @@
                               <label value="t2" for="InputCourseNumber"><input type="text" name="InputCourseNumber" class="form-control" id="InputCourseNumber" placeholder="Course Number" required> </label>
                             </div>
                             <div class="form-group">
-                              <label value="t2" for="InputInstructor"><select id = "InputInstructor" name = "InputInstructor" class="form-control" >
+                              <label value="t2" for="InputInstructor"><select id = "InputInstructor" name = "InputInstructor" class="form-control" required>
+                                                <option value="" disabled selected>Instructor ID Number | Instructor</option>
                                                 <option>  </option>
+
                                               {% for row in users %}
                                                 <option>{{ row.IDNumber }} | {{ row.name }} </option>
                                               {% endfor %}

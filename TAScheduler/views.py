@@ -5,6 +5,7 @@ from .models import MyUser, Course, Sections
 import logging
 from .Users import UserClass
 from .Courses import CoursesClass
+from .Sections import SectionsClass
 # Create your views here.
 from django.http import HttpResponse
 
@@ -227,42 +228,30 @@ class makeSection(View):
         m = MyUser.objects.get(IDNumber=request.session["username"])
         j = Course.objects.all()
 
-        x = Sections.objects.all()
-
-        for sect in x:
-            n = Course.objects.get(courseCode=sect.parentCode)
 
         if (m.role == "Supervisor"):
-            return render(request, "courseCreation/makeCourse.html",
-                          {"name": request.session["name"], "role": m.role, "users": j})
+            return render(request, "sectionCreation/makeSection.html",
+                          {"name": request.session["name"], "role": m.role, "courses": j})
         else:
             return redirect("/sections/")
 
     def post(self, request):
 
-        ID = request.POST['InputInstructor']
-        CourseCode = request.POST['InputCourseCode']
-        CourseNumber = request.POST['InputCourseNumber']
-        j = MyUser.objects.filter(role="Instructor")
+        InputSectionCode = request.POST['InputSectionCode']
+        InputCourse = request.POST['InputCourse']
+        j = Course.objects.all()
 
-        if (ID == ''):
-            try:
-                CoursesClass.createCourseNoInstructor(self, CourseCode, CourseNumber)
-            except Exception as e:
+        x = str(InputCourse).split("|")
 
-                return render(request, "courseCreation/makeCourse.html",
-                              {"name": request.session["name"], "message": "Course Code is already in the system",
-                               "users": j})
-        else:
-            x = str(ID).split("|")
-            print(x[0])
+        sectionCode = (x[1].strip()+"-"+InputSectionCode)
 
-            try:
-                CoursesClass.createCourse(self, CourseCode, (x[0]).strip(), CourseNumber)
-            except Exception as e:
-                print(e)
-                return render(request, "courseCreation/makeCourse.html",
+
+        try:
+            SectionsClass.createSection(self, sectionCode, x[0].strip() )
+        except Exception as e:
+            print(e)
+            return render(request, "sectionCreation/makeSection.html",
                               {"name": request.session["name"], "message": "IDNumber is already in the system",
-                               "users": j})
+                               "courses": j})
 
-        return redirect("/courses/")
+        return redirect("/sections/")

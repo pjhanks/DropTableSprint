@@ -69,8 +69,8 @@
             <thead>
                 <tr>
 
-                    <th>Course Number</th>
                     <th>Section Code</th>
+                    <th>Course Number</th>
                     <th>Course Instructor</th>
                     <th>TA</th>
 
@@ -99,14 +99,20 @@
 </div>
 {% if role == "Supervisor" %}
 <div>
-    <form class="text-center" style="text-align: center" action="/" method="post">
+    <div>
+            <a href="/makeSection">
+            <button type="submit" class="btn btn-primary my-2 my-sm-0">Add Section</button>
+            </a>
+        </div></br>
         {% csrf_token %}
-        <button type="submit" class="btn btn-primary my-2 my-sm-0">Add Section</button>
-    </form></br>
-    <form class="text-center" style="text-align: center" action="/" method="post">
+
+
+        <div>
         {% csrf_token %}
-        <button type="submit" class="btn btn-primary my-2 my-sm-0">Remove Section</button>
-    </form>
+        <a href="/removeSection">
+          <button type="submit" class="btn btn-primary my-2 my-sm-0">Remove Section</button>
+        </a>
+        </div>
 
 </div>
 {% endif %}
