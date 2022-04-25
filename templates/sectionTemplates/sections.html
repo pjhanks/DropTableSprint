@@ -1,26 +1,28 @@
 <!DOCTYPE html>
- <link rel="stylesheet" href="/static/css/bootstrap.css">
+<link rel="stylesheet" href="/static/css/bootstrap.css" xmlns="http://www.w3.org/1999/html">
 <html lang="en">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <head>
     <meta charset="UTF-8">
-    <title>Team DropTable's Amazing TA Scheudling App</title>
+    <title>Team DropTable's Amazing TA Scheduling App</title>
 </head>
 <body class="text-center" class="center-block">
+
 <div class="col-auto text-right">
     <table class = "table">
-        <form class="text-center" style="text-align: center" action="/" method="post">
+          <form class="text-center" style="text-align: center" action="/" method="post">
             {{ name }}
         <a href="/">
             Logout
         </a>
         </form>
     </table>
+
 </div>
 
 <div class="col-auto text-center">
     <h1>TA Scheduler</h1>
-    <h2><small>Courses</small></h2>
+    <h2><small>Sections</small></h2>
 </div>
 
     <div>
@@ -30,8 +32,8 @@
                     <div class="col-auto center-block">
                           {% csrf_token %}
                         <table class = "table table-responsive">
-                            <tr>
                             <div class="row">
+
                                 <div class="col-md-4">
                                     <a href="/users">
                                         Users
@@ -41,8 +43,8 @@
                                     |
                                 </div>
                                 <div class="col-md-3">
-                                    <a href="/sections">
-                                        Sections
+                                    <a href="/courses">
+                                        Courses
                                     </a>
                                 </div>
                                 <div class="col-md-1">
@@ -53,13 +55,9 @@
                                         Home
                                     </a>
                                 </div>
-
                             </div>
-                            </tr>
                         </table>
-
                     </div>
-
                 </div>
             </div>
         </form>
@@ -70,20 +68,24 @@
         <table class = "table table-responsive">
             <thead>
                 <tr>
-                    <th>Course Code</th>
+
+                    <th>Section Code</th>
                     <th>Course Number</th>
-                    <th>Instructor</th>
+                    <th>Course Instructor</th>
+                    <th>TA</th>
 
                 </tr>
             </thead>
 
 
             <tbody>
-                {% for row in courses %}
+                {% for row in sections %}
                     <tr>
-                        <td>{{ row.courseCode }}</td>
-                        <td>{{ row.courseNumber }}</td>
-                        <td>{{ row.instructorID.name }}</td>
+                        <td>{{ row.sectionCode }}</td>
+
+                        <td>{{ row.parentCode.courseNumber }}</td>
+                        <td>{{ row.parentCode.instructorID.name }}</td>
+                        <td>{{ row.TA.name }}</td>
                     </tr>
 
                 {% endfor %}
@@ -95,12 +97,11 @@
         </table>
     </div>
 </div>
-</div>
 {% if role == "Supervisor" %}
 <div>
-        <div>
-            <a href="/makeCourse">
-            <button type="submit" class="btn btn-primary my-2 my-sm-0">Add Course</button>
+    <div>
+            <a href="/makeSection">
+            <button type="submit" class="btn btn-primary my-2 my-sm-0">Add Section</button>
             </a>
         </div></br>
         {% csrf_token %}
@@ -108,17 +109,13 @@
 
         <div>
         {% csrf_token %}
-        <a href="/removeCourse">
-          <button type="submit" class="btn btn-primary my-2 my-sm-0">Remove Course</button>
+        <a href="/removeSection">
+          <button type="submit" class="btn btn-primary my-2 my-sm-0">Remove Section</button>
         </a>
         </div>
 
-
 </div>
 {% endif %}
-
-
-
 {{ message }}
 </body>
 </html>

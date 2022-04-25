@@ -29,5 +29,5 @@ class CoursesClass():
 
     def assignInstructor(self, CourseCode, InstructorID):
         toUpdate = Course.objects.get(courseCode=CourseCode)
-        toUpdate.instructorID = InstructorID
+        toUpdate.instructorID = MyUser.objects.get(IDNumber=InstructorID)
         toUpdate.save()

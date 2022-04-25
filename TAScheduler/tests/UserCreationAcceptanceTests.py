@@ -4,7 +4,7 @@ from TAScheduler.models import MyUser
 class testPositive(TestCase):
     def setUp(self):
         self.mockClient=Client()
-        temp = MyUser(ID="1",
+        temp = MyUser(IDNumber="1",
                       name="Fred",
                       address="123 park place",
                       email="fred@uwm.edu",
@@ -12,7 +12,7 @@ class testPositive(TestCase):
                       role="Supervisor",
                       password="1234")
         temp.save()
-        temp = MyUser(ID="2",
+        temp = MyUser(IDNumber="2",
                       name="Alex",
                       address="124 park place",
                       email="alex@uwm.edu",
@@ -20,12 +20,12 @@ class testPositive(TestCase):
                       role="TA",
                       password="1234")
         temp.save()
-        self.client.post("/",{"1","1234"},follow=True)
+        self.client.post("/",{"InputUsername" :"1", "InputPassword" : "1234"},follow=True)
 
     def test_addTA(self):
         # add Something.addUser("user info");
         resp = self.mockClient.post("makeUser/",{"3","Ronen","122 Park place","a@uwm","18000000000","TA","1234"},follow=True)
-        checkUser = MyUser.objects.get(IDNumber="3")
+        checkUser = MyUser.objects.get(IDNumberNumber="3")
         self.assertIn("3", checkUser, "Item was not added to list")
     def test_addInstructor(self):
         resp = self.mockClient.post("makeUser/",

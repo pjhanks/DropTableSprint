@@ -6,6 +6,8 @@ import logging
 from TAScheduler.classes.Users import UserClass
 from TAScheduler.classes.Courses import CoursesClass
 from TAScheduler.classes.Sections import SectionsClass
+
+
 # Create your views here.
 
 
@@ -16,7 +18,6 @@ class Login(View):
     def get(self, request):
         logger = logging.getLogger(__name__)
         logger.info("Simple info")
-        print("TEST")
 
         return render(request, "login.html")
 
@@ -27,8 +28,8 @@ class Login(View):
 
         try:
 
-            m = MyUser.objects.get(IDNumber=request.POST['InputUsername'])
-            badPassword = (m.password != request.POST['InputPassword'])
+            user = MyUser.objects.get(IDNumber=request.POST['InputUsername'])
+            badPassword = (user.password != request.POST['InputPassword'])
         except:
             noSuchUser = True
 
@@ -38,69 +39,69 @@ class Login(View):
         elif badPassword:
             return render(request, "login.html", {"message": "bad password"})
         else:
-            request.session["username"] = m.IDNumber
-            request.session["name"] = m.name
+            request.session["username"] = user.IDNumber
+            request.session["name"] = user.name
             return redirect("/home/")
 
 
 class Home(View):
 
     def get(self, request):
-        # print(request.session["name"])
         return render(request, "home.html", {"name": request.session["name"]})
 
 
 class Courses(View):
 
     def get(self, request):
-        m = MyUser.objects.get(IDNumber=request.session["username"])
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
 
-        if (m.role == "Supervisor"):
-            c = Course.objects.all()
+        if (loggedUser.role == "Supervisor"):
+            allCourses = Course.objects.all()
         else:
-            c = Course.objects.filter(instructorID=request.session["username"])
+            allCourses = Course.objects.filter(instructorID=request.session["username"])
 
-        return render(request, "courseCreation/courses.html",
-                      {"name": request.session["name"], "courses": c, "role": m.role})
+        return render(request, "courseTemplates/courses.html",
+                      {"name": request.session["name"], "courses": allCourses, "role": loggedUser.role})
 
 
 class Users(View):
 
     def get(self, request):
 
-        m = MyUser.objects.get(IDNumber=request.session["username"])
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
 
-        if (m.role == "Supervisor"):
-            i = MyUser.objects.all()
+        if (loggedUser.role == "Supervisor"):
+            allUsers = MyUser.objects.all()
         else:
-            i = MyUser.objects.filter(IDNumber=request.session["username"])
+            allUsers = MyUser.objects.filter(IDNumber=request.session["username"])
 
-        return render(request, "userCreation/users.html",
-                      {"name": request.session["name"], "instructors": i, "role": m.role})
+        return render(request, "userTemplates/users.html",
+                      {"name": request.session["name"], "instructors": allUsers, "role": loggedUser.role})
 
 
 class Section(View):
 
     def get(self, request):
 
-        m = MyUser.objects.get(IDNumber=request.session["username"])
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
 
-        if (m.role == "Supervisor"):
-            s = Sections.objects.all()
+        if (loggedUser.role == "Supervisor"):
+            allSections = Sections.objects.all()
         else:
-            s = MyUser.objects.filter(IDNumber=request.session["username"])
+            allSections = MyUser.objects.filter(IDNumber=request.session["username"])
 
-        return render(request, "sectionCreation/sections.html",
-                      {"name": request.session["name"], "sections": s, "role": m.role})
+        return render(request, "sectionTemplates/sections.html",
+                      {"name": request.session["name"], "sections": allSections, "role": loggedUser.role})
 
 
 class makeUser(View):
 
     def get(self, request):
 
-        m = MyUser.objects.get(IDNumber=request.session["username"])
-        if (m.role == "Supervisor"):
-            return render(request, "userCreation/makeUser.html", {"name": request.session["name"], "role": m.role})
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+        if (loggedUser.role == "Supervisor"):
+            return render(request, "userTemplates/makeUser.html",
+                          {"name": request.session["name"], "role": loggedUser.role})
         else:
             return redirect("/users/")
 
@@ -112,13 +113,13 @@ class makeUser(View):
         PhoneNumber = str(request.POST['InputPhoneNumber'])
         Role = str(request.POST['InputRole']).strip()
         Password = str(request.POST['InputPassword'])
-        print(Role)
+
         try:
             UserClass.createUser(self, ID, Name, Address, Email, PhoneNumber, Role, Password)
-        except Exception as e:
-            print(e)
-            return render(request, "userCreation/makeUser.html",
-                          {"name": request.session["name"], "message": "IDNumber is aleady in the system"})
+        except:
+
+            return render(request, "userTemplates/makeUser.html",
+                          {"name": request.session["name"], "message": "ID Number is already in the system"})
 
         return redirect("/users/")
 
@@ -127,38 +128,41 @@ class removeUser(View):
 
     def get(self, request):
 
-        m = MyUser.objects.filter(~Q(IDNumber=request.session["username"]))
-        j = MyUser.objects.get(IDNumber=request.session["username"])
-        if (m.role == "Supervisor"):
-            if m.count() > 0:
-                return render(request, "userCreation/removeUser.html", {"name": request.session["name"], "users": m})
+        allUserWithoutLoggedUser = MyUser.objects.filter(~Q(IDNumber=request.session["username"]))
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+        if (loggedUser.role == "Supervisor"):
+            if allUserWithoutLoggedUser.count() > 0:
+                return render(request, "userTemplates/removeUser.html",
+                              {"name": request.session["name"], "users": allUserWithoutLoggedUser})
 
             else:
-                m = MyUser.objects.all()
-                return render(request, "userCreation/users.html",
-                              {"name": request.session["name"], "message": "No users to remove", "instructors": m,
-                               "role": j.role})
+                allUserWithoutLoggedUser = MyUser.objects.all()
+                return render(request, "userTemplates/users.html",
+                              {"name": request.session["name"], "message": "No users to remove",
+                               "instructors": allUserWithoutLoggedUser,
+                               "role": loggedUser.role})
         else:
             return redirect("/users/")
 
     def post(self, request):
 
-        m = MyUser.objects.get(IDNumber=request.POST["InputUser"])
-        m.delete()
-        j = MyUser.objects.filter(~Q(IDNumber=request.session["username"]))
-        return render(request, "userCreation/removeUser.html",
-                      {"name": request.session["name"], "message": "User successfully removed", "users": j})
+        userToRemove = MyUser.objects.get(IDNumber=request.POST["InputUser"])
+        userToRemove.delete()
+        allUserWithoutLoggedUser = MyUser.objects.filter(~Q(IDNumber=request.session["username"]))
+        return render(request, "userTemplates/removeUser.html",
+                      {"name": request.session["name"], "message": "User successfully removed",
+                       "users": allUserWithoutLoggedUser})
 
 
 class makeCourse(View):
 
     def get(self, request):
 
-        m = MyUser.objects.get(IDNumber=request.session["username"])
-        j = MyUser.objects.filter(role="Instructor")
-        if (m.role == "Supervisor"):
-            return render(request, "courseCreation/makeCourse.html",
-                          {"name": request.session["name"], "role": m.role, "users": j})
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+        allInstructors = MyUser.objects.filter(role="Instructor")
+        if (loggedUser.role == "Supervisor"):
+            return render(request, "courseTemplates/makeCourse.html",
+                          {"name": request.session["name"], "role": loggedUser.role, "users": allInstructors})
         else:
             return redirect("/courses/")
 
@@ -167,27 +171,26 @@ class makeCourse(View):
         ID = request.POST['InputInstructor']
         CourseCode = request.POST['InputCourseCode']
         CourseNumber = request.POST['InputCourseNumber']
-        j = MyUser.objects.filter(role="Instructor")
+        allInstructors = MyUser.objects.filter(role="Instructor")
 
         if (ID == ''):
             try:
                 CoursesClass.createCourseNoInstructor(self, CourseCode, CourseNumber)
             except Exception as e:
 
-                return render(request, "courseCreation/makeCourse.html",
+                return render(request, "courseTemplates/makeCourse.html",
                               {"name": request.session["name"], "message": "Course Code is already in the system",
-                               "users": j})
+                               "users": allInstructors})
         else:
             x = str(ID).split("|")
-            print(x[0])
 
             try:
                 CoursesClass.createCourse(self, CourseCode, (x[0]).strip(), CourseNumber)
             except Exception as e:
-                print(e)
-                return render(request, "courseCreation/makeCourse.html",
+
+                return render(request, "courseTemplates/makeCourse.html",
                               {"name": request.session["name"], "message": "IDNumber is already in the system",
-                               "users": j})
+                               "users": allInstructors})
 
         return redirect("/courses/")
 
@@ -196,41 +199,42 @@ class removeCourse(View):
 
     def get(self, request):
 
-        m = Course.objects.all()
-        j = MyUser.objects.get(IDNumber=request.session["username"])
-        if (m.role == "Supervisor"):
-            if m.count() > 0:
-                return render(request, "courseCreation/removeCourse.html",
-                              {"name": request.session["name"], "courses": m})
+        allCourses = Course.objects.all()
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+        if (allCourses.role == "Supervisor"):
+            if allCourses.count() > 0:
+                return render(request, "courseTemplates/removeCourse.html",
+                              {"name": request.session["name"], "courses": allCourses})
 
             else:
-                m = MyUser.objects.all()
-                return render(request, "courseCreation/courses.html",
-                              {"name": request.session["name"], "message": "No users to remove", "instructors": m,
-                               "role": j.role})
+                allCourses = MyUser.objects.all()
+                return render(request, "courseTemplates/courses.html",
+                              {"name": request.session["name"], "message": "No users to remove",
+                               "instructors": allCourses,
+                               "role": loggedUser.role})
         else:
             return redirect("/courses/")
 
     def post(self, request):
 
-        m = Course.objects.get(courseCode=request.POST["InputCourse"])
-        m.delete()
-        j = Course.objects.all()
-        return render(request, "courseCreation/removeCourse.html",
-                      {"name": request.session["name"], "message": "Course successfully removed", "courses": j})
+        courseToRemove = Course.objects.get(courseCode=request.POST["InputCourse"])
+        courseToRemove.delete()
+        allCourses = Course.objects.all()
+        return render(request, "courseTemplates/removeCourse.html",
+                      {"name": request.session["name"], "message": "Course successfully removed",
+                       "courses": allCourses})
 
 
 class makeSection(View):
 
     def get(self, request):
 
-        m = MyUser.objects.get(IDNumber=request.session["username"])
-        j = Course.objects.all()
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+        allCourses = Course.objects.all()
 
-
-        if (m.role == "Supervisor"):
-            return render(request, "sectionCreation/makeSection.html",
-                          {"name": request.session["name"], "role": m.role, "courses": j})
+        if (loggedUser.role == "Supervisor"):
+            return render(request, "sectionTemplates/makeSection.html",
+                          {"name": request.session["name"], "role": loggedUser.role, "courses": allCourses})
         else:
             return redirect("/sections/")
 
@@ -238,20 +242,19 @@ class makeSection(View):
 
         InputSectionCode = request.POST['InputSectionCode']
         InputCourse = request.POST['InputCourse']
-        j = Course.objects.all()
+        allCourses = Course.objects.all()
 
         x = str(InputCourse).split("|")
 
-        sectionCode = (x[1].strip()+"-"+InputSectionCode)
-
+        sectionCode = (x[1].strip() + "-" + InputSectionCode)
 
         try:
-            SectionsClass.createSection(self, sectionCode, x[0].strip() )
+            SectionsClass.createSection(self, sectionCode, x[0].strip())
         except Exception as e:
-            print(e)
-            return render(request, "sectionCreation/makeSection.html",
-                              {"name": request.session["name"], "message": "IDNumber is already in the system",
-                               "courses": j})
+
+            return render(request, "sectionTemplates/makeSection.html",
+                          {"name": request.session["name"], "message": "IDNumber is already in the system",
+                           "courses": allCourses})
 
         return redirect("/sections/")
 
@@ -260,26 +263,61 @@ class removeSection(View):
 
     def get(self, request):
 
-        m = Sections.objects.all()
-        j = MyUser.objects.get(IDNumber=request.session["username"])
+        allSections = Sections.objects.all()
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
 
-        if (j.role == "Supervisor"):
-            if m.count() > 0:
-                return render(request, "sectionCreation/removeSection.html",
-                              {"name": request.session["name"], "sections": m})
+        if (loggedUser.role == "Supervisor"):
+            if allSections.count() > 0:
+                return render(request, "sectionTemplates/removeSection.html",
+                              {"name": request.session["name"], "sections": allSections})
 
             else:
-                m = MyUser.objects.all()
-                return render(request, "sectionCreation/sections.html",
-                              {"name": request.session["name"], "message": "No users to remove", "sections": j,
-                               "role": m.role})
+                allSections = MyUser.objects.all()
+                return render(request, "sectionTemplates/sections.html",
+                              {"name": request.session["name"], "message": "No Sections to remove",
+                               "sections": allSections,
+                               "role": loggedUser.role})
         else:
             return redirect("/courses/")
 
     def post(self, request):
 
-        m = Sections.objects.get(sectionCode=request.POST["InputCourse"])
-        m.delete()
-        j = Sections.objects.all()
-        return render(request, "sectionCreation/removeSection.html",
-                      {"name": request.session["name"], "message": "Section successfully removed", "sections": j})
+        sectionToDelete = Sections.objects.get(sectionCode=request.POST["InputCourse"])
+        sectionToDelete.delete()
+        allSections = Sections.objects.all()
+        return render(request, "sectionTemplates/removeSection.html",
+                      {"name": request.session["name"], "message": "Section successfully removed",
+                       "sections": allSections})
+
+
+class addInstructor(View):
+
+    def get(self, request):
+
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+        coursesNoInstructor = Course.objects.filter(instructorID=None)
+        allInstructors = MyUser.objects.filter(role="Instructor")
+
+        return render(request, "courseTemplates/addInstructor.html",
+                      {"name": request.session["name"], "courses": coursesNoInstructor, "users": allInstructors})
+
+    def post(self, request):
+
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+        coursesNoInstructor = Course.objects.filter(instructorID=None)
+        allInstructors = MyUser.objects.filter(role="Instructor")
+
+        courseCode = (str(request.POST["InputCourse"]).split("|"))[0].strip()
+        instructorID = (str(request.POST["InputInstructor"]).split("|"))[0].strip()
+
+        try:
+            CoursesClass.assignInstructor(self, courseCode, instructorID)
+            allCourses = Course.objects.all()
+            return render(request, "courseTemplates/courses.html",
+                          {"name": request.session["name"], "courses": allCourses, "role": loggedUser.role})
+
+        except Exception as e:
+            print(e)
+            return render(request, "courseTemplates/addInstructor.html",
+                          {"name": request.session["name"], "courses": coursesNoInstructor, "users": allInstructors,
+                           "message": "Could not add instructor"})
