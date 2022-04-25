@@ -22,6 +22,8 @@ class Course(models.Model):
     def __str__(self):
         return self.courseCode
 
+class TA(models.Model):
+  pass
 
 class Sections(models.Model):
     sectionCode = models.CharField(max_length=10, primary_key=True)
