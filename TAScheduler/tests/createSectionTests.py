@@ -4,7 +4,7 @@ django.setup()
 # os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'DropTableSprint.settings')
 import unittest
 from django.test import TestCase
-from TAScheduler.Sections import SectionsClass
+from TAScheduler.classes.Sections import SectionsClass
 from TAScheduler.models import Course, MyUser, Sections
 
 
