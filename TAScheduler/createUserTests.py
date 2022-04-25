@@ -9,14 +9,16 @@ class testPositive(TestCase):
                       address="123 park place",
                       email="fred@uwm.edu",
                       phoneNumber="18000000000",
-                      role="Administrator")
+                      role="Administrator",
+                      password="1234")
         temp.save()
         temp = MyUser(ID="2",
                       name="Alex",
                       address="124 park place",
                       email="alex@uwm.edu",
                       phoneNumber="18000000001",
-                      role="TA")
+                      role="TA",
+                      password="1234")
         temp.save()
 
     def test_addUser(self):
@@ -25,11 +27,7 @@ class testPositive(TestCase):
         things = MyUser.objects.get(name="James")
         self.assertIn("3", things, "Item was not added to list")
 
-    def test_intPhone(self):
-        # non string
-        UserClass.createUser("3", "James", "125 park place", "alex@uwm.edu", 18000000002, "Instructor", "1234")
-        things = MyUser.objects.get(name="James")
-        self.assertIn("3", things, "Item was improperly added to list")
+
 
 
 class testNegative(TestCase):
@@ -56,13 +54,16 @@ class testNegative(TestCase):
         UserClass.createUser("2", "James", "125 park place", "alex@uwm.edu", "18000000002", "Instructor", "1234")
         things = MyUser.objects.get(name="James")
         self.assertIn("2", things, "Item was improperly added to list")
-
+    def test_intPhone(self):
+        # non string
+        UserClass.createUser("3", "James", "125 park place", "alex@uwm.edu", 18000000002, "Instructor", "1234")
+        things = MyUser.objects.get(IDNumber="3")
+        self.assertIn("3", things, "Item was improperly added to list")
     def test_toManyFields(self):
         # too many fields
         with self.assertRaises(TypeError, msg="Should not accept that many fields"):
             UserClass.createUser("2", "Alex", "125 park place", "alex@uwm.edu", "18000000002", "Instructor", "1234",
                                  "error")
-
     def test_toLittleFields(self):
         # too few fields
         with self.assertRaises(TypeError, msg="Should not accept that few fields"):
