@@ -14,26 +14,20 @@
         <table class = "table table-responsive">
             <thead>
                 <tr>
-                    <th>ID Number</th>
-                    <th>Name</th>
-                    <th>Address</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Role</th>
+                    <th>Course Code</th>
+                    <th>Course Number</th>
+                    <th>Instructor</th>
 
                 </tr>
             </thead>
 
 
             <tbody>
-                {% for row in users %}
+                {% for row in courses %}
                     <tr>
-                        <td>{{ row.IDNumber }}</td>
-                        <td>{{ row.name }}</td>
-                        <td>{{ row.address }}</td>
-                        <td>{{ row.email }}</td>
-                        <td>{{ row.phoneNumber }}</td>
-                        <td>{{ row.role }}</td>
+                        <td>{{ row.courseCode }}</td>
+                        <td>{{ row.courseNumber }}</td>
+                        <td>{{ row.instructorID.name }}</td>
                     </tr>
 
                 {% endfor %}
@@ -52,7 +46,7 @@
          <div class="form-group">
                               <label value="t2" for="InputUser"><select id = "InputUser" name = "InputUser" class="form-control" required>
                                               {% for row in users %}
-                                                <option>{{ row.IDNumber }} </option>
+                                                <option>{{ row.instructorID.IDNumber }} </option>
                                               {% endfor %}
                                             </select> </label>
                     <button type="submit" class="btn btn-primary my-2 my-sm-0">Remove User</button>

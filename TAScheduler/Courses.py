@@ -7,21 +7,22 @@ class CoursesClass():
         if (CourseCode is None):
             raise Exception("does not accept null Primary keys")
         check = list(map(str, Course.objects.filter(courseCode=CourseCode)))
-        checkInstructor = list(map(str, MyUser.objects.filter(ID=instructorID)))
-        if len(checkInstructor == 0):
+        checkInstructor = MyUser.objects.filter(IDNumber=instructorID)
+        if (checkInstructor.count()) == 0:
             raise Exception("No such parent course")
-        if len(check) == 0:
+        if len(check) > 0:
             raise Exception("Database already contains am course with that ID")
         else:
-            temp = Course(CourseCode, instructorID, CourseNumber)
+            x = MyUser.objects.get(IDNumber=instructorID)
+            temp = Course(courseCode=CourseCode, instructorID=x, courseNumber=CourseNumber)
             temp.save()
 
-    def createCourse(self, CourseCode, CourseNumber):
+    def createCourse2(self, CourseCode, CourseNumber):
         if (CourseCode is None):
             raise Exception("does not accept null Primary keys")
         check = list(map(str, Course.objects.filter(courseCode=CourseCode)))
-        if len(check) == 0:
+        if len(check) > 0:
             raise Exception("Database already contains am course with that ID")
         else:
-            temp = Course(CourseCode, None, CourseNumber)
+            temp = Course(courseCode=CourseCode, instructorID=None, courseNumber=CourseNumber)
             temp.save()

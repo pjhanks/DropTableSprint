@@ -4,6 +4,7 @@ from django.views import View
 from .models import MyUser, Course, Sections
 import logging
 from .Users import UserClass
+from .Courses import CoursesClass
 # Create your views here.
 from django.http import HttpResponse
 
@@ -142,3 +143,40 @@ class removeUser(View):
         j = MyUser.objects.filter(~Q(IDNumber=request.session["username"]))
         return render(request, "userCreation/removeUser.html",
                       {"name": request.session["name"], "message": "User successfully removed", "users": j})
+
+
+class makeCourse(View):
+
+    def get(self, request):
+
+        m = MyUser.objects.get(IDNumber=request.session["username"])
+        j = MyUser.objects.filter(role="Instructor")
+
+        return render(request, "courseCreation/makeCourse.html", {"name": request.session["name"], "role": m.role, "users" : j})
+
+    def post(self, request):
+
+        ID = request.POST['InputInstructor']
+        CourseCode = request.POST['InputCourseCode']
+        CourseNumber = request.POST['InputCourseNumber']
+        j = MyUser.objects.filter(role="Instructor")
+
+        if (ID == ''):
+            try:
+                CoursesClass.createCourse2(self, CourseCode, CourseNumber)
+            except Exception as e:
+
+                return render(request, "courseCreation/makeCourse.html",
+                              {"name": request.session["name"], "message": "Course Code is already in the system", "users" : j})
+        else:
+            x = str(ID).split("|")
+            print(x[0])
+
+            try:
+                CoursesClass.createCourse(self, CourseCode, (x[0]).strip(), CourseNumber)
+            except Exception as e:
+                print(e)
+                return render(request, "courseCreation/makeCourse.html",
+                              {"name": request.session["name"], "message": "IDNumber is already in the system", "users" : j})
+
+        return redirect("/courses/")

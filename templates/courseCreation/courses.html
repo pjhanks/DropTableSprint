@@ -95,19 +95,28 @@
         </table>
     </div>
 </div>
+</div>
 {% if role == "Supervisor" %}
 <div>
-    <form class="text-center" style="text-align: center" action="/" method="post">
+        <div>
+            <a href="/makeCourse">
+            <button type="submit" class="btn btn-primary my-2 my-sm-0">Add Course</button>
+            </a>
+        </div></br>
         {% csrf_token %}
-        <button type="submit" class="btn btn-primary my-2 my-sm-0">Add Course</button>
-    </form></br>
-    <form class="text-center" style="text-align: center" action="/" method="post">
+
+
+        <div>
         {% csrf_token %}
-        <button type="submit" class="btn btn-primary my-2 my-sm-0">Remove Course</button>
-    </form>
+        <a href="/removeCourse">
+          <button type="submit" class="btn btn-primary my-2 my-sm-0">Remove Course</button>
+        </a>
+        </div>
+
 
 </div>
 {% endif %}
+
 
 
 {{ message }}
