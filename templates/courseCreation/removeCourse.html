@@ -7,7 +7,8 @@
 </head>
 <div class="col-auto text-center">
     <h1>TA Scheduler</h1>
-    <h2><small>Remove User</small></h2>
+    <h2><small>Remove Course</small></h2>
+</div>
 <body>
 <div class="row justify-content-center" >
     <div class="col-auto">
@@ -41,16 +42,16 @@
 </div>
 <br>
     <div class="text-center" class="center-block">
-     <form class="text-center" style="text-align: center" action="/removeUser/" method="post">
+     <form class="text-center" style="text-align: center" action="/removeCourse/" method="post">
          {% csrf_token %}
          <div class="form-group">
-                              <label value="t2" for="InputUser"><select id = "InputUser" name = "InputUser" class="form-control" required>
-                                              {% for row in users %}
-                                                <option>{{ row.instructorID.IDNumber }} </option>
+                              <label value="t2" for="InputCourse"><select id = "InputCourse" name = "InputCourse" class="form-control" required>
+                                              {% for row in courses %}
+                                                <option>{{ row.courseCode }} </option>
                                               {% endfor %}
                                             </select> </label>
-                    <button type="submit" class="btn btn-primary my-2 my-sm-0">Remove User</button>
-                    <a href="/users">
+                    <button type="submit" class="btn btn-primary my-2 my-sm-0">Remove Course</button>
+                    <a href="/courses">
                         Back
                     </a>
         </div>
@@ -58,7 +59,7 @@
     <br>
     {{ message }}
     </div>
-</div>
+
 
 </body>
 </html>

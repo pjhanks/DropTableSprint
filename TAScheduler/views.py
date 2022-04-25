@@ -180,3 +180,27 @@ class makeCourse(View):
                               {"name": request.session["name"], "message": "IDNumber is already in the system", "users" : j})
 
         return redirect("/courses/")
+
+class removeCourse(View):
+
+    def get(self, request):
+
+        m = Course.objects.all()
+        j = MyUser.objects.get(IDNumber=request.session["username"])
+
+        if m.count() > 0:
+            return render(request, "courseCreation/removeCourse.html", {"name": request.session["name"], "courses": m})
+
+        else:
+            m = MyUser.objects.all()
+            return render(request, "courseCreation/courses.html",
+                          {"name": request.session["name"], "message": "No users to remove", "instructors": m,
+                           "role": j.role})
+
+    def post(self, request):
+
+        m = Course.objects.get(courseCode=request.POST["InputCourse"])
+        m.delete()
+        j = Course.objects.all()
+        return render(request, "courseCreation/removeCourse.html",
+                      {"name": request.session["name"], "message": "User successfully removed", "courses": j})
