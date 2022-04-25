@@ -8,8 +8,8 @@ class CoursesClass():
             raise Exception("does not accept null Primary keys")
         check = list(map(str, Course.objects.filter(courseCode=CourseCode)))
         checkInstructor = MyUser.objects.filter(IDNumber=instructorID)
-        # if (checkInstructor.count()) == 0:
-        #     raise Exception("No such parent course")
+        if (checkInstructor.count()) == 0:
+            raise Exception("No such parent course")
         if len(check) > 0:
             raise Exception("Database already contains am course with that ID")
         else:
