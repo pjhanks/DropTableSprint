@@ -51,7 +51,7 @@ class testPositive(TestCase):
         self.assertIn("217", things.courseCode, "Course was not successfully added")
 
     def test_addCourseNoInstructor(self):
-        CoursesClass.createCourse2(self, "222", "444")
+        CoursesClass.createCourseNoInstructor(self, "222", "444")
         things = Course.objects.get(courseCode="222")
         self.assertIn("222", things.courseCode, "Course was not successfully added")
 
