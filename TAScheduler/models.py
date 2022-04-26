@@ -23,8 +23,6 @@ class Course(models.Model):
         return self.courseCode
 
 
-class TA(models.Model):
-    pass
 
 
 class Sections(models.Model):
@@ -36,6 +34,7 @@ class Sections(models.Model):
         return self.sectionCode
 
 
+#uneeded?
 class ClassTAAssignments(models.Model):
     AssignmentsID = models.CharField(max_length=50, primary_key=True)
     courseCode = models.ForeignKey(Course, on_delete=models.CASCADE, null=True)
