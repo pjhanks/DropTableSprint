@@ -36,7 +36,6 @@ class Sections(models.Model):
         return self.sectionCode
 
 
-
 class ClassTAAssignments(models.Model):
     AssignmentsID = models.CharField(max_length=50, primary_key=True)
     courseCode = models.ForeignKey(Course, on_delete=models.CASCADE, null=True)
