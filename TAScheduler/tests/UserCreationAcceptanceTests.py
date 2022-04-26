@@ -49,7 +49,7 @@ class testPositive(TestCase):
 
 
 class testNegative(TestCase):
-    def setup(self):
+    def setUp(self):
         self.mockClient = Client()
         temp = MyUser(IDNumber="1",
                       name="Fred",
