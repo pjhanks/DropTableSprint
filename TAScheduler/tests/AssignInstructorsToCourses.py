@@ -1,6 +1,6 @@
 from django.test import TestCase
-from TAScheduler import Courses
-from TAScheduler.models import MyUser,Course
+from TAScheduler.classes import Courses
+from TAScheduler.models import MyUser, Course
 
 class positiveTests(TestCase):
     def setup(self):
@@ -29,11 +29,11 @@ class positiveTests(TestCase):
                       courseNumber="3")
         temp.save()
     def test_NonetoSome(self):
-        Courses.assignInstructor("1","1")
+        Courses.CoursesClass.assignInstructor(self ,"1","1")
         checkCourse = Course.objects.get(courseCode="1")
         self.assertEqual(checkCourse.instructorID, "1")
     def testSomeToSome(self):
-        Courses.assignInstructor("2", "2")
+        Courses.CoursesClass.assignInstructor(self ,"2", "2")
         checkCourse = Course.objects.get(courseCode="1")
         self.assertEqual(checkCourse.instructorID, "2")
 
@@ -64,12 +64,12 @@ class negativeTests(TestCase):
                       courseNumber="3")
         temp.save()
     def testNotInstructor(self):
-        Courses.assignInstructor("2", "2")
+        Courses.CoursesClass.assignInstructor(self ,"2", "2")
         checkCourse = Course.objects.get(courseCode="1")
         self.assertNotEqual(checkCourse.instructorID, "2")
     def testNotEnoughElements(self):
         with self.assertRaises(TypeError, msg="Should not accept that few fields"):
-            Courses.assignInstructor("2")
+            Courses.CoursesClass.assignInstructor("2")
     def testTooManyElements(self):
         with self.assertRaises(TypeError, msg="Should not accept that many fields"):
-         Courses.assignInstructor("2", "2", "error")
+         Courses.CoursesClass.assignInstructor(self ,"2", "2", "error")
