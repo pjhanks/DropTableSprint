@@ -43,6 +43,8 @@ class testPositive(TestCase):
 
         checkUser = MyUser.objects.get(IDNumber="5")
         self.assertIn("5", checkUser, "Item was not added to list")
+    def removeUser(self):
+        pass
 
 
 
@@ -92,3 +94,7 @@ class testNegative(TestCase):
                                      "InputPassword": "1234"}, follow=True)
         checkUser = MyUser.objects.get(IDNumber="5")
         self.assertNotIn("5", checkUser, "Item was added and should not have")
+    def attemptToRemoveYourself(self):
+        pass
+    def noSuchUserToRemove(self):
+        pass
