@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="/static/css/bootstrap.css" xmlns="http://www.w3.org/1999/html">
+<html lang="en">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <meta charset="UTF-8">
+    <title>Team DropTable's Amazing TA Scheduling App</title>
+</head>
+<body class="text-center" class="center-block">
+
+<div class="col-auto text-right">
+    <table class = "table">
+          <form class="text-center" style="text-align: center" action="/" method="post">
+            {{ name }}
+        <a href="/">
+            Logout
+        </a>
+        </form>
+    </table>
+
+</div>
+
+<div class="col-auto text-center">
+    <h1>TA Scheduler</h1>
+    <h2><small>Sections</small></h2>
+</div>
+
+    <div>
+        <form class="text-center" style="text-align: center" action="/" method="post">
+            <div>
+                <div class="row justify-content-center">
+                    <div class="col-auto center-block">
+                          {% csrf_token %}
+                        <table class = "table table-responsive">
+                            <div class="row">
+
+                                <div class="col-md-4">
+                                    <a href="/users">
+                                        Users
+                                    </a>
+                                </div>
+                                <div class="col-md-1">
+                                    |
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="/courses">
+                                        Courses
+                                    </a>
+                                </div>
+                                <div class="col-md-1">
+                                    |
+                                </div>
+                                <div class="col-md-2">
+                                    <a href="/home">
+                                        Home
+                                    </a>
+                                </div>
+                            </div>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+<div class="row justify-content-center" >
+    <div class="col-auto">
+        <table class = "table table-responsive">
+            <thead>
+                <tr>
+
+                    <th>Section Code</th>
+                    <th>Course Number</th>
+                    <th>Course Instructor</th>
+                    <th>TA</th>
+
+                </tr>
+            </thead>
+
+
+            <tbody>
+                {% for row in sections %}
+                    <tr>
+                        <td>{{ row.sectionCode }}</td>
+
+                        <td>{{ row.parentCode.courseNumber }}</td>
+                        <td>{{ row.parentCode.instructorID.name }}</td>
+                        <td>{{ row.TA.name }}</td>
+                    </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+
+
+        </table>
+    </div>
+</div>
+{% if role == "Supervisor" %}
+<div>
+    <div>
+            <a href="/makeSection">
+            <button type="submit" class="btn btn-primary my-2 my-sm-0">Add Section</button>
+            </a>
+        </div></br>
+        {% csrf_token %}
+
+
+        <div>
+        {% csrf_token %}
+        <a href="/removeSection">
+          <button type="submit" class="btn btn-primary my-2 my-sm-0">Remove Section</button>
+        </a>
+        </div>
+
+</div>
+{% endif %}
+{{ message }}
+</body>
+</html>
