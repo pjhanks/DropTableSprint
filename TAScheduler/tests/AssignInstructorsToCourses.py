@@ -35,14 +35,14 @@ class positiveTests(TestCase):
         checkCourse = Course.objects.get(courseCode="1")
         self.assertEqual(checkCourse.instructorID, "1")
 
-    def test_SomeToSome(self):
+    def testSomeToSome(self):
         Courses.CoursesClass.assignInstructor(self, "2", "2")
         checkCourse = Course.objects.get(courseCode="1")
         self.assertEqual(checkCourse.instructorID, "2")
 
 
 class negativeTests(TestCase):
-    def setUp(self):
+    def setup(self):
         temp = MyUser(IDNumber="1",
                       name="Fred",
                       address="123 park place",
@@ -68,15 +68,15 @@ class negativeTests(TestCase):
                       courseNumber="3")
         temp.save()
 
-    def test_NotInstructor(self):
+    def testNotInstructor(self):
         Courses.CoursesClass.assignInstructor(self, "2", "2")
         checkCourse = Course.objects.get(courseCode="1")
         self.assertNotEqual(checkCourse.instructorID, "2")
 
-    def test_NotEnoughElements(self):
+    def testNotEnoughElements(self):
         with self.assertRaises(TypeError, msg="Should not accept that few fields"):
             Courses.CoursesClass.assignInstructor("2")
 
-    def test_TooManyElements(self):
+    def testTooManyElements(self):
         with self.assertRaises(TypeError, msg="Should not accept that many fields"):
             Courses.CoursesClass.assignInstructor(self, "2", "2", "error")
