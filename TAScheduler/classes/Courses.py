@@ -1,4 +1,4 @@
-from TAScheduler.models import Course, MyUser
+from TAScheduler.models import Course, MyUser, ClassTAAssignments
 
 
 class CoursesClass():
@@ -31,3 +31,7 @@ class CoursesClass():
         toUpdate = Course.objects.get(courseCode=CourseCode)
         toUpdate.instructorID = MyUser.objects.get(IDNumber=InstructorID)
         toUpdate.save()
+
+    def assignTA(self, CourseCode, TAcode):
+        toUpdate = ClassTAAssignments.objects.get(courseCode=CourseCode)
+        toUpdate.TAcode = MyUser.objects.get(IDNumber=TAcode)
