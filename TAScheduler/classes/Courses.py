@@ -39,5 +39,9 @@ class CoursesClass():
         toUpdate.save()
 
     def assignTA(self, CourseCode, TAcode):
-        toUpdate = ClassTAAssignments.objects.get(courseCode=CourseCode)
-        toUpdate.TAcode = MyUser.objects.get(IDNumber=TAcode)
+        courseCode = Course.objects.get(courseCode=CourseCode)
+        taCode = MyUser.objects.get(IDNumber=TAcode)
+        # toUpdate.TAcode = MyUser.objects.get(IDNumber=TAcode)
+        #
+        temp = ClassTAAssignments(AssignmentsID='5', courseCode=courseCode, TAcode=taCode)
+        temp.save()

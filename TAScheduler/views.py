@@ -356,7 +356,7 @@ class addTA(View):
     def get(self, request):
 
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
-        courses = Course.objects
+        courses = Course.objects.all()
         allTAs = MyUser.objects.filter(role="TA")
 
         return render(request, "courseTemplates/addTA.html",
@@ -365,7 +365,7 @@ class addTA(View):
     def post(self, request):
 
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
-        courses = Course.objects
+        courses = Course.objects.all()
         allTAs = MyUser.objects.filter(role="TA")
 
         courseCode = (str(request.POST["InputCourse"]).split("|"))[0].strip()
