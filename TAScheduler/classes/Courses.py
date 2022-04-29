@@ -32,6 +32,11 @@ class CoursesClass():
         toUpdate.instructorID = MyUser.objects.get(IDNumber=InstructorID)
         toUpdate.save()
 
+    def removeInstructor(self, CourseCode):
+        toUpdate = Course.objects.get(courseCode=CourseCode)
+        toUpdate.instructorID = None
+        toUpdate.save()
+
     def assignTA(self, CourseCode, TAcode):
         toUpdate = ClassTAAssignments.objects.get(courseCode=CourseCode)
         toUpdate.TAcode = MyUser.objects.get(IDNumber=TAcode)
