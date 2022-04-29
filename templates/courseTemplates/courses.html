@@ -123,6 +123,14 @@
         {% csrf_token %}
 
         <div>
+            <a href="/removeInstructor">
+                <button type="submit" class="btn btn-primary my-2 my-sm-0">Remove Instructor from Course</button>
+            </a>
+        </div>
+        <br>
+        {% csrf_token %}
+
+        <div>
             <a href="/addTA">
                 <button type="submit" class="btn btn-primary my-2 my-sm-0">Add TA to Course</button>
             </a>
