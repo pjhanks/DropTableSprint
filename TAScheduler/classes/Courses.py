@@ -34,6 +34,7 @@ class CoursesClass():
 
     def removeInstructor(self, CourseCode):
         toUpdate = Course.objects.get(courseCode=CourseCode)
+        #toUpdate.instructorID = MyUser.objects.get(IDNumber=InstructorID)
         toUpdate.instructorID = None
         toUpdate.save()
 

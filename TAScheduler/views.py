@@ -322,6 +322,35 @@ class addInstructor(View):
                           {"name": request.session["name"], "courses": coursesNoInstructor, "users": allInstructors,
                            "message": "Could not add instructor"})
 
+class removeInstructor(View):
+    def get(self, request):
+
+        allCourses = Course.objects.all()
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+
+        if (loggedUser.role == "Supervisor" or loggedUser.role == "Instructor"):
+            if allCourses.count() > 0:
+                return render(request, "courseTemplates/removeInstructor.html",
+                              {"name": request.session["name"], "courses": allCourses})
+
+            else:
+                allCourses = MyUser.objects.all()
+                return render(request, "courseTemplates/courses.html",
+                              {"name": request.session["name"], "message": "No Courses to remove the instructor from",
+                               "courses": allCourses,
+                               "role": loggedUser.role})
+        else:
+            return redirect("/courses/")
+
+    def post(self, request):
+        courseCode = (str(request.POST["InputCourse"]).split("|"))[0].strip()
+
+        CoursesClass.removeInstructor(self, courseCode)
+        allCourses = Course.objects.all()
+        return render(request, "courseTemplates/removeInstructor.html",
+                      {"name": request.session["name"], "message": "Instructor successfully removed",
+                       "courses": allCourses})
+
 class addTA(View):
 
     def get(self, request):
