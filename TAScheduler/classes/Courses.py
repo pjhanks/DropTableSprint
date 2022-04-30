@@ -45,3 +45,10 @@ class CoursesClass():
         #
         temp = ClassTAAssignments(AssignmentsID='5', courseCode=courseCode, TAcode=taCode)
         temp.save()
+
+    def removeTA(self, CourseCode, TAcode):
+        courseCode = Course.objects.get(courseCode=CourseCode)
+        taCode = MyUser.objects.get(IDNumber=TAcode)
+        toUpdate = ClassTAAssignments.objects.get(courseCode=courseCode)
+        toUpdate.TAcode = None
+        toUpdate.save()

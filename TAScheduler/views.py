@@ -382,3 +382,33 @@ class addTA(View):
             return render(request, "courseTemplates/addTA.html",
                           {"name": request.session["name"], "courses": courses, "users": allTAs,
                            "message": "Could not add TA"})
+
+class removeTA(View):
+
+    def get(self, request):
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+        courses = Course.objects.all()
+        allTAs = MyUser.objects.filter(role="TA")
+
+        return render(request, "courseTemplates/removeTA.html",
+                      {"name": request.session["name"], "courses": courses, "users": allTAs})
+
+    def post(self, request):
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+        courses = Course.objects.all()
+        allTAs = MyUser.objects.filter(role="TA")
+
+        courseCode = (str(request.POST["InputCourse"]).split("|"))[0].strip()
+        TAcode = (str(request.POST["InputTA"]).split("|"))[0].strip()
+
+        try:
+            CoursesClass.assignTA(self, courseCode, TAcode)
+            allCourses = Course.objects.all()
+            return render(request, "courseTemplates/courses.html",
+                          {"name": request.session["name"], "courses": allCourses, "role": loggedUser.role})
+
+        except Exception as e:
+            print(e)
+            return render(request, "courseTemplates/removeTA.html",
+                          {"name": request.session["name"], "courses": courses, "users": allTAs,
+                           "message": "Could not remove TA"})

@@ -135,6 +135,16 @@
                 <button type="submit" class="btn btn-primary my-2 my-sm-0">Add TA to Course</button>
             </a>
         </div>
+
+         <br>
+        {% csrf_token %}
+
+        <div>
+            <a href="/removeTA">
+                <button type="submit" class="btn btn-primary my-2 my-sm-0">Remove TA from Course</button>
+            </a>
+        </div>
+
         </br>
         {% csrf_token %}
 
