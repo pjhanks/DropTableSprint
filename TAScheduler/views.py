@@ -412,3 +412,35 @@ class removeTA(View):
             return render(request, "courseTemplates/removeTA.html",
                           {"name": request.session["name"], "courses": courses, "users": allTAs,
                            "message": "Could not remove TA"})
+
+class addTAsec(View):
+
+    def get(self, request):
+
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+        sections = Sections.objects.all()
+        allTAs = MyUser.objects.filter(role="TA")
+
+        return render(request, "sectionTemplates/addTAsec.html",
+                      {"name": request.session["name"], "sections": sections, "users": allTAs})
+
+    def post(self, request):
+
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+        sections = Sections.objects.all()
+        allTAs = MyUser.objects.filter(role="TA")
+
+        sectionCode = (str(request.POST["InputSec"]).split("|"))[0].strip()
+        TAcode = (str(request.POST["InputTA"]).split("|"))[0].strip()
+
+        try:
+            SectionsClass.assignTAsec(self, sectionCode, TAcode)
+            allSections = Sections.objects.all()
+            return render(request, "sectionTemplates/addTAsec.html",
+                          {"name": request.session["name"], "sections": allSections, "role": loggedUser.role})
+
+        except Exception as e:
+            print(e)
+            return render(request, "sectionTemplates/addTAsec.html",
+                          {"name": request.session["name"], "sections": sections, "users": allTAs,
+                           "message": "Could not add TA"})
