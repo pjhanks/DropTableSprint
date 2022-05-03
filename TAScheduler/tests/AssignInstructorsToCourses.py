@@ -45,6 +45,7 @@ class positiveTests(TestCase):
 
 
 class negativeTests(TestCase):
+
     def setUp(self):
         self.myuser = MyUser.objects.create(IDNumber="1",
                                             name="Fred",
