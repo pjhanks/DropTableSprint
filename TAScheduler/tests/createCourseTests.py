@@ -111,12 +111,12 @@ class testNegative(TestCase):
     def test_noCourseCode_noInstructor(self):
         # passes null primary key
         with self.assertRaises(Exception, msg="You can't pass a null Primary key!"):
-            CoursesClass.createCourse2(self, None, "456")
+            CoursesClass.createCourseNoInstructor(self, None, "456")
 
     def test_tooManyFields_noInstructor(self):
         # too many fields
         with self.assertRaises(Exception, msg="Should not accept that many fields"):
-            CoursesClass.createCourse2(self, "102", "111", "222")
+            CoursesClass.createCourseNoInstructor(self, "102", "111", "222")
 
     def test_tooLittleFields_noInstructor(self):
         # too few fields
