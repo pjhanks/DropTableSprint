@@ -1,8 +1,7 @@
-from TAScheduler.models import Course, MyUser
+from TAScheduler.models import Course, MyUser, ClassTAAssignments
 
 
 class CoursesClass():
-
     def createCourse(self, CourseCode, instructorID, CourseNumber):
         if (CourseCode is None):
             raise Exception("does not accept null Primary keys")
@@ -31,3 +30,6 @@ class CoursesClass():
         toUpdate = Course.objects.get(courseCode=CourseCode)
         toUpdate.instructorID = MyUser.objects.get(IDNumber=InstructorID)
         toUpdate.save()
+
+    def removeTA(self, TAID, CourseCode):
+        return
