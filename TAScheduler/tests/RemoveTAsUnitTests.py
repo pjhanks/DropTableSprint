@@ -54,16 +54,24 @@ class NegativeTests(TestCase):
         temp3 = ClassTAAssignments(AssignmentsID="1",
                                    courseCode=temp2,
                                    TAcode=temp)
-
-    def test_noTAAssigned(self):
-        NegativeTests.setUp(self)
-        with self.assertRaises(Exception, msg="This person does not exist"):
-            CoursesClass.removeTA(self, "1", "351")
+        temp3.save()
 
     def test_TANotAssigned(self):
         NegativeTests.setUp(self)
-        with self.assertRaises(Exception, msg="TA not assigned to this class"):
-            CoursesClass.removeTA(self, "351", "3")
+        #cc = Course.objects.get(courseCode="351")
+        #tc = MyUser.objects.get(IDNumber="1")
+        #CoursesClass.removeTA(self, "351", "1")
+        with self.assertRaises(RuntimeError, msg="That TA is not assigned to that course"):
+            CoursesClass.removeTA(self, "351", "2")
+
+    def test_NoTAAsignment(self):
+        NegativeTests.setUp(self)
+        test = ClassTAAssignments.objects.get_queryset()
+        print(test)
+        CoursesClass.removeTA(self, "351", "1")
+        print(test)
+        with self.assertRaises(RuntimeError, msg="No TAs are assigned to this class"):
+            CoursesClass.removeTA(self, "351", "1")
 
     def test_NoSuchClass(self):
         NegativeTests.setUp(self)
