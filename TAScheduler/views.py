@@ -93,7 +93,7 @@ class Users(View):
             j = (list(UserSkills.objects.filter(UserID=x.IDNumber)))
             skillString=""
             for i in j:
-                skillString = skillString+ ( i.SkillID.SkillDescription ) + ", "
+                skillString = skillString + ( i.SkillID.SkillDescription ) + ", "
             skillDict[x.IDNumber] = skillString
 
         print(skillDict)
