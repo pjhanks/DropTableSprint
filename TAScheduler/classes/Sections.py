@@ -1,4 +1,4 @@
-from TAScheduler.models import Sections, Course
+from TAScheduler.models import Sections, Course, MyUser, ClassTAAssignments
 
 
 class SectionsClass():
@@ -19,3 +19,14 @@ class SectionsClass():
             x = Course.objects.get(courseCode=ParentID)
             temp = Sections(sectionCode=SectionCode, parentCode=x ,TA= None)
             temp.save()
+
+    def assignTAsec(self, SectionCode, TAcode):
+        toUpdate = Sections.objects.get(sectionCode=SectionCode)
+        taCode = MyUser.objects.get(IDNumber=TAcode)
+        toUpdate.TA = taCode
+        toUpdate.save()
+
+    def removeTAsec(self, SectionCode, TAcode):
+        toUpdate = Sections.objects.get(sectionCode=SectionCode)
+        toUpdate.TA = None
+        toUpdate.save()

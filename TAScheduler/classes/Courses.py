@@ -31,5 +31,32 @@ class CoursesClass():
         toUpdate.instructorID = MyUser.objects.get(IDNumber=InstructorID)
         toUpdate.save()
 
-    def removeTA(self, TAID, CourseCode):
-        return
+
+    def removeInstructor(self, CourseCode):
+        toUpdate = Course.objects.get(courseCode=CourseCode)
+        #toUpdate.instructorID = MyUser.objects.get(IDNumber=InstructorID)
+        toUpdate.instructorID = None
+        toUpdate.save()
+
+    def assignTA(self, CourseCode, TAcode):
+        courseCode = Course.objects.get(courseCode=CourseCode)
+        taCode = MyUser.objects.get(IDNumber=TAcode)
+        if(ClassTAAssignments.objects.get(courseCode=courseCode).TAcode == taCode):
+            raise RuntimeError("That TA is already assigned to that course!")
+        else:
+            temp = ClassTAAssignments(courseCode=courseCode, TAcode=taCode)
+            temp.save()
+
+    def removeTA(self, CourseCode, TAcode):
+        courseCode = Course.objects.get(courseCode=CourseCode)
+        if ClassTAAssignments.objects.get_queryset() == ClassTAAssignments.objects.none():
+            raise RuntimeError("No ClassTAAssignment Object exists")
+        #taCode = MyUser.objects.get(IDNumber=TAcode)
+        else:
+            toUpdate = ClassTAAssignments.objects.get(courseCode=courseCode)
+        # except RuntimeError:
+        #     print("No ClassTAAssignment Object exists")
+        if toUpdate.TAcode.IDNumber != TAcode:
+            raise RuntimeError("That TA isn't assigned to that course!")
+        else:
+            toUpdate.delete()
