@@ -3,3 +3,26 @@
     max-width: 120px;
     display: inline-block;
 }
+.parentLogin {
+height:1000px;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+.childLogin {
+
+border: 2px solid #87d3f8;
+    border-radius: 25px;
+  background: #E2E5DE;
+width: 350px;
+height: 300px;
+
+
+}
+
+.course-button-container{
+    min-width: 120px;
+    max-width: 200px;
+    display: inline-block;
+}
