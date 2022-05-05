@@ -103,7 +103,7 @@
             <a href="/makeSection">
             <button type="submit" class="btn btn-primary my-2 my-sm-0">Add Section</button>
             </a>
-        </div></br>
+        </div><br>
         {% csrf_token %}
 
 
@@ -111,6 +111,13 @@
         {% csrf_token %}
         <a href="/removeSection">
           <button type="submit" class="btn btn-primary my-2 my-sm-0">Remove Section</button>
+        </a>
+        </div>
+
+        <div><br/>
+        {% csrf_token %}
+        <a href="/addTAsec">
+          <button type="submit" class="btn btn-primary my-2 my-sm-0">Add TA to Section</button>
         </a>
         </div>
 

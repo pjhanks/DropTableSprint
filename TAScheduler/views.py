@@ -321,3 +321,126 @@ class addInstructor(View):
             return render(request, "courseTemplates/addInstructor.html",
                           {"name": request.session["name"], "courses": coursesNoInstructor, "users": allInstructors,
                            "message": "Could not add instructor"})
+
+class removeInstructor(View):
+    def get(self, request):
+
+        allCourses = Course.objects.all()
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+
+        if (loggedUser.role == "Supervisor" or loggedUser.role == "Instructor"):
+            if allCourses.count() > 0:
+                return render(request, "courseTemplates/removeInstructor.html",
+                              {"name": request.session["name"], "courses": allCourses})
+
+            else:
+                allCourses = MyUser.objects.all()
+                return render(request, "courseTemplates/courses.html",
+                              {"name": request.session["name"], "message": "No Courses to remove the instructor from",
+                               "courses": allCourses,
+                               "role": loggedUser.role})
+        else:
+            return redirect("/courses/")
+
+    def post(self, request):
+        courseCode = (str(request.POST["InputCourse"]).split("|"))[0].strip()
+
+        CoursesClass.removeInstructor(self, courseCode)
+        allCourses = Course.objects.all()
+        return render(request, "courseTemplates/removeInstructor.html",
+                      {"name": request.session["name"], "message": "Instructor successfully removed",
+                       "courses": allCourses})
+
+class addTA(View):
+
+    def get(self, request):
+
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+        courses = Course.objects.all()
+        allTAs = MyUser.objects.filter(role="TA")
+
+        return render(request, "courseTemplates/addTA.html",
+                      {"name": request.session["name"], "courses": courses, "users": allTAs})
+
+    def post(self, request):
+
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+        courses = Course.objects.all()
+        allTAs = MyUser.objects.filter(role="TA")
+
+        courseCode = (str(request.POST["InputCourse"]).split("|"))[0].strip()
+        TAcode = (str(request.POST["InputTA"]).split("|"))[0].strip()
+
+        try:
+            CoursesClass.assignTA(self, courseCode, TAcode)
+            allCourses = Course.objects.all()
+            return render(request, "courseTemplates/courses.html",
+                          {"name": request.session["name"], "courses": allCourses, "role": loggedUser.role})
+
+        except Exception as e:
+            print(e)
+            return render(request, "courseTemplates/addTA.html",
+                          {"name": request.session["name"], "courses": courses, "users": allTAs,
+                           "message": "Could not add TA"})
+
+class removeTA(View):
+
+    def get(self, request):
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+        courses = Course.objects.all()
+        allTAs = MyUser.objects.filter(role="TA")
+
+        return render(request, "courseTemplates/removeTA.html",
+                      {"name": request.session["name"], "courses": courses, "users": allTAs})
+
+    def post(self, request):
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+        courses = Course.objects.all()
+        allTAs = MyUser.objects.filter(role="TA")
+
+        courseCode = (str(request.POST["InputCourse"]).split("|"))[0].strip()
+        TAcode = (str(request.POST["InputTA"]).split("|"))[0].strip()
+
+        try:
+            CoursesClass.assignTA(self, courseCode, TAcode)
+            allCourses = Course.objects.all()
+            return render(request, "courseTemplates/courses.html",
+                          {"name": request.session["name"], "courses": allCourses, "role": loggedUser.role})
+
+        except Exception as e:
+            print(e)
+            return render(request, "courseTemplates/removeTA.html",
+                          {"name": request.session["name"], "courses": courses, "users": allTAs,
+                           "message": "Could not remove TA"})
+
+class addTAsec(View):
+
+    def get(self, request):
+
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+        sections = Sections.objects.all()
+        allTAs = MyUser.objects.filter(role="TA")
+
+        return render(request, "sectionTemplates/addTAsec.html",
+                      {"name": request.session["name"], "sections": sections, "users": allTAs})
+
+    def post(self, request):
+
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+        sections = Sections.objects.all()
+        allTAs = MyUser.objects.filter(role="TA")
+
+        sectionCode = (str(request.POST["InputSec"]).split("|"))[0].strip()
+        TAcode = (str(request.POST["InputTA"]).split("|"))[0].strip()
+
+        try:
+            SectionsClass.assignTAsec(self, sectionCode, TAcode)
+            allSections = Sections.objects.all()
+            return render(request, "sectionTemplates/addTAsec.html",
+                          {"name": request.session["name"], "sections": allSections, "role": loggedUser.role})
+
+        except Exception as e:
+            print(e)
+            return render(request, "sectionTemplates/addTAsec.html",
+                          {"name": request.session["name"], "sections": sections, "users": allTAs,
+                           "message": "Could not add TA"})

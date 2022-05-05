@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="/static/css/bootstrap.css">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Team DropTable's Amazing TA Scheduling App</title>
+</head>
+<body class="text-center" class="center-block">
+<div class="col-auto text-center">
+    <h1>TA Scheduler</h1>
+    <h2><small>Add TA to Course</small></h2>
+</div>
+<div>
+    <form class="text-center" style="text-align: center" action="/addTA/" method="post">
+            <div>
+                <div class="row justify-content-center">
+                    <div class="col-auto">
+
+                          {% csrf_token %}
+
+
+
+                            <div class="form-group">
+                              <label value="t2" for="InputCourse"><select id = "InputCourse" name = "InputCourse" class="form-control" required>
+                                                <option value="" disabled selected>Course Code | Course Number </option>
+                                              {% for row in courses %}
+                                                <option>{{ row.courseCode }} | {{ row.courseNumber }} </option>
+                                              {% endfor %}
+                                            </select> </label>
+                            </div>
+                            <div class="form-group">
+                              <label value="t2" for="InputTA"><select id = "InputTA" name = "InputTA" class="form-control" required>
+                                                <option value="" disabled selected>TA Code | TA</option>
+
+
+                                              {% for row in users %}
+                                                <option>{{ row.IDNumber }} | {{ row.name }} </option>
+                                              {% endfor %}
+                                            </select> </label>
+                            </div>
+
+
+
+                              <button type="submit" class="btn btn-primary my-2 my-sm-0">Add TA to Course</button>
+                                {{ message }}
+                                <a href="/courses">
+                                Back
+                                </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+</div>
+
+
+
+
+
+</body>
+</html>

@@ -1,6 +1,5 @@
 from django.db import models
 
-
 # Create your models here.
 
 
@@ -15,14 +14,12 @@ class MyUser(models.Model):
 
 
 class Course(models.Model):
-    courseCode = models.CharField(max_length=9, primary_key=True, default="12345")
+    courseCode = models.CharField(max_length=9, primary_key=True)
     instructorID = models.ForeignKey(MyUser, on_delete=models.CASCADE, null=True)
     courseNumber = models.CharField(max_length=20, default="101")
 
     def __str__(self):
         return self.courseCode
-
-
 
 
 class Sections(models.Model):
@@ -42,11 +39,13 @@ class ClassTAAssignments(models.Model):
     def __str__(self):
         return self.AssignmentsID
 
+
 class Skills(models.Model):
     SkillID = models.CharField(max_length=15, primary_key=True)
     SkillDescription = models.CharField(max_length=50)
 
+
 class UserSkills(models.Model):
     UserSkillID=models.CharField(max_length=5, primary_key=True)
-    SkillID = models.ForeignKey(Skills, on_delete= models.CASCADE(), null=False)
-    UserID = models.ForeignKey(MyUser, on_delete=models.CASCADE(), null = False)
+    SkillID = models.ForeignKey(Skills, on_delete= models.CASCADE, null=False)
+    UserID = models.ForeignKey(MyUser, on_delete=models.CASCADE, null = False)
