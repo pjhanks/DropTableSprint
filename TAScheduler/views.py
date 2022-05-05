@@ -1,6 +1,7 @@
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.views import View
+
 from .models import MyUser, Course, Sections
 import logging
 from TAScheduler.classes.Users import UserClass
@@ -54,14 +55,26 @@ class Courses(View):
 
     def get(self, request):
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+        sectionDict = dict()
 
         if (loggedUser.role == "Supervisor"):
             allCourses = Course.objects.all()
+
+
+
         else:
             allCourses = Course.objects.filter(instructorID=request.session["username"])
 
+
+        for x in allCourses:
+            j=(list(Sections.objects.filter(parentCode=x.courseCode).values_list('sectionCode')))
+            i= " | ".join([x[0] for x in j])
+            sectionDict[x.courseCode] = i
+
+
         return render(request, "courseTemplates/courses.html",
-                      {"name": request.session["name"], "courses": allCourses, "role": loggedUser.role})
+                      {"name": request.session["name"], "courses": allCourses, "role": loggedUser.role, "sections": sectionDict})
+
 
 
 class Users(View):

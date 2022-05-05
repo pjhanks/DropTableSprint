@@ -1,5 +1,7 @@
+{% load custom_tags %}
 <!DOCTYPE html>
  <link rel="stylesheet" href="/static/css/bootstrap.css">
+<link rel="stylesheet" href="/static/css/custom.css">
 <html lang="en">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <head>
@@ -37,10 +39,11 @@
     <div class="col-auto">
         <table class = "table table-responsive">
             <thead>
-                <tr>
+                <tr class="text-left">
                     <th>Course Code</th>
                     <th>Course Number</th>
                     <th>Instructor</th>
+                    <th>Sections</th>
 
                 </tr>
             </thead>
@@ -48,10 +51,21 @@
 
             <tbody>
                 {% for row in courses %}
-                    <tr>
+                    <tr class="text-left">
                         <td>{{ row.courseCode }}</td>
                         <td>{{ row.courseNumber }}</td>
                         <td>{{ row.instructorID.name }}</td>
+                        <td>{{ sections|get_item:row.courseCode }}</td>
+                        {% comment %}
+                        list(sections.filter(parentCode = row.courseCode))
+                        {% expr   as var1%}
+                        {% expr "".join(var1) as var2 %}
+                        <td>{{ var2 }}</td>
+                        {% endcomment %}
+
+
+
+
                     </tr>
 
                 {% endfor %}
@@ -65,55 +79,56 @@
 </div>
 </div>
 {% if role == "Supervisor" %}
-    <div>
-        <div>
-            <a href="/makeCourse">
-                <button type="submit" class="btn btn-primary my-2 my-sm-0">Add Course</button>
+    <div class="course-button-container">
+
+        <p>
+            <a href="/makeCourse" class="btn btn-primary btn-block">
+            Make New Course
             </a>
-        </div>
-        <br>
+        </p>
+
         {% csrf_token %}
 
 
-        <div>
+        <p>
             {% csrf_token %}
-            <a href="/removeCourse">
-                <button type="submit" class="btn btn-primary my-2 my-sm-0">Remove Course</button>
+            <a href="/removeCourse"  class="btn btn-primary btn-block">
+            Remove Course
             </a>
-        </div>
-        <br>
-        <div>
-            <a href="/addInstructor">
-                <button type="submit" class="btn btn-primary my-2 my-sm-0">Add Instructor to Course</button>
+        </p>
+
+        <p>
+            <a href="/addInstructor" class="btn btn-primary btn-block">
+            Add Instructor to Course
             </a>
-        </div>
-        <br>
+        </p>
+
         {% csrf_token %}
 
-        <div>
-            <a href="/removeInstructor">
-                <button type="submit" class="btn btn-primary my-2 my-sm-0">Remove Instructor from Course</button>
+        <p>
+            <a href="/removeInstructor" class="btn btn-primary btn-block">
+            Remove Instructor from Course
             </a>
-        </div>
-        <br>
+        </p>
+
         {% csrf_token %}
 
-        <div>
-            <a href="/addTA">
-                <button type="submit" class="btn btn-primary my-2 my-sm-0">Add TA to Course</button>
+        <p>
+            <a href="/addTA" class="btn btn-primary btn-block">
+            Add TA to Course
             </a>
-        </div>
+        </p>
 
-         <br>
+
         {% csrf_token %}
 
-        <div>
-            <a href="/removeTA">
-                <button type="submit" class="btn btn-primary my-2 my-sm-0">Remove TA from Course</button>
+        <p>
+            <a href="/removeTA" class="btn btn-primary btn-block">
+            Remove TA from Course
             </a>
-        </div>
+        </p>
 
-        </br>
+
         {% csrf_token %}
 
 
