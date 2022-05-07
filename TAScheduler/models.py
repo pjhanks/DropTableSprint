@@ -46,6 +46,7 @@ class Skills(models.Model):
 
 
 class UserSkills(models.Model):
-    UserSkillID=models.CharField(max_length=5, primary_key=True)
-    SkillID = models.ForeignKey(Skills, on_delete= models.CASCADE, null=False)
-    UserID = models.ForeignKey(MyUser, on_delete=models.CASCADE, null = False)
+    UserSkillID = models.CharField(max_length=5, primary_key=True)
+    SkillID = models.ForeignKey(Skills, on_delete=models.CASCADE, null=False)
+    UserID = models.ForeignKey(MyUser, on_delete=models.CASCADE, null=False)
+
