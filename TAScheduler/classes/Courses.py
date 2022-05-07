@@ -49,13 +49,11 @@ class CoursesClass():
 
     def removeTA(self, CourseCode, TAcode):
         courseCode = Course.objects.get(courseCode=CourseCode)
-        if ClassTAAssignments.objects.get_queryset() == ClassTAAssignments.objects.none():
-            raise RuntimeError("No ClassTAAssignment Object exists")
-        #taCode = MyUser.objects.get(IDNumber=TAcode)
-        else:
+        try:
             toUpdate = ClassTAAssignments.objects.get(courseCode=courseCode)
-        # except RuntimeError:
-        #     print("No ClassTAAssignment Object exists")
+        except Exception:
+            print("No ClassTAAssignment Object exists")
+
         if toUpdate.TAcode.IDNumber != TAcode:
             raise RuntimeError("That TA isn't assigned to that course!")
         else:

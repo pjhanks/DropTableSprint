@@ -58,9 +58,6 @@ class NegativeTests(TestCase):
 
     def test_TANotAssigned(self):
         NegativeTests.setUp(self)
-        #cc = Course.objects.get(courseCode="351")
-        #tc = MyUser.objects.get(IDNumber="1")
-        #CoursesClass.removeTA(self, "351", "1")
         with self.assertRaises(RuntimeError, msg="That TA is not assigned to that course"):
             CoursesClass.removeTA(self, "351", "2")
 
@@ -70,7 +67,7 @@ class NegativeTests(TestCase):
         print(test)
         CoursesClass.removeTA(self, "351", "1")
         print(test)
-        with self.assertRaises(RuntimeError, msg="No TAs are assigned to this class"):
+        with self.assertRaises(Exception, msg="No TAs are assigned to this class"):
             CoursesClass.removeTA(self, "351", "1")
 
     def test_NoSuchClass(self):
