@@ -1,7 +1,8 @@
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.views import View
-from .models import MyUser, Course, Sections
+
+from .models import MyUser, Course, Sections, UserSkills, Skills
 import logging
 from TAScheduler.classes.Users import UserClass
 from TAScheduler.classes.Courses import CoursesClass
@@ -54,14 +55,26 @@ class Courses(View):
 
     def get(self, request):
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+        sectionDict = dict()
 
         if (loggedUser.role == "Supervisor"):
             allCourses = Course.objects.all()
+
+
+
         else:
             allCourses = Course.objects.filter(instructorID=request.session["username"])
 
+
+        for x in allCourses:
+            j = (list(Sections.objects.filter(parentCode=x.courseCode).values_list('sectionCode')))
+            i = " | ".join([x[0] for x in j])
+            sectionDict[x.courseCode] = i
+
+
         return render(request, "courseTemplates/courses.html",
-                      {"name": request.session["name"], "courses": allCourses, "role": loggedUser.role})
+                      {"name": request.session["name"], "courses": allCourses, "role": loggedUser.role, "sections": sectionDict})
+
 
 
 class Users(View):
@@ -69,14 +82,24 @@ class Users(View):
     def get(self, request):
 
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+        skillDict = dict()
 
         if (loggedUser.role == "Supervisor"):
             allUsers = MyUser.objects.all()
         else:
             allUsers = MyUser.objects.filter(IDNumber=request.session["username"])
 
+        for x in allUsers:
+            j = (list(UserSkills.objects.filter(UserID=x.IDNumber)))
+            skillString=""
+            for i in j:
+                skillString = skillString + ( i.SkillID.SkillDescription ) + ", "
+            skillDict[x.IDNumber] = skillString
+
+        print(skillDict)
+
         return render(request, "userTemplates/users.html",
-                      {"name": request.session["name"], "instructors": allUsers, "role": loggedUser.role})
+                      {"name": request.session["name"], "instructors": allUsers, "role": loggedUser.role, "skills" : skillDict})
 
 
 class Section(View):

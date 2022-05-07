@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<link rel="stylesheet" href="/static/css/bootstrap.css" xmlns="http://www.w3.org/1999/html">
+<link rel="stylesheet" href="/static/css/bootstrap.css">
+
 <html lang="en">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <head>
@@ -8,60 +9,31 @@
 </head>
 <body class="text-center" class="center-block">
 
-<div class="col-auto text-right">
-    <table class = "table">
-          <form class="text-center" style="text-align: center" action="/" method="post">
-            {{ name }}
-        <a href="/">
-            Logout
-        </a>
-        </form>
-    </table>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand">TA Scheduler</a>
+  <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-</div>
+  <div class="collapse navbar-collapse" id="mainNav">
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+      <li class="nav-item active">
+        <a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/courses">Courses</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/users">Users</a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      {{ name }}&nbsp;&nbsp;
+      <a class="btn btn-primary"  href="/">Logout</a>
+    </form>
+  </div>
+</nav>
 
-<div class="col-auto text-center">
-    <h1>TA Scheduler</h1>
-    <h2><small>Sections</small></h2>
-</div>
-
-    <div>
-        <form class="text-center" style="text-align: center" action="/" method="post">
-            <div>
-                <div class="row justify-content-center">
-                    <div class="col-auto center-block">
-                          {% csrf_token %}
-                        <table class = "table table-responsive">
-                            <div class="row">
-
-                                <div class="col-md-4">
-                                    <a href="/users">
-                                        Users
-                                    </a>
-                                </div>
-                                <div class="col-md-1">
-                                    |
-                                </div>
-                                <div class="col-md-3">
-                                    <a href="/courses">
-                                        Courses
-                                    </a>
-                                </div>
-                                <div class="col-md-1">
-                                    |
-                                </div>
-                                <div class="col-md-2">
-                                    <a href="/home">
-                                        Home
-                                    </a>
-                                </div>
-                            </div>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
 
 <div class="row justify-content-center" >
     <div class="col-auto">

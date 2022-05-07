@@ -1,5 +1,7 @@
+{% load custom_tags %}
 <!DOCTYPE html>
  <link rel="stylesheet" href="/static/css/bootstrap.css">
+<link rel="stylesheet" href="/static/css/custom.css">
 <html lang="en">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <head>
@@ -7,68 +9,47 @@
     <title>Team DropTable's Amazing TA Scheudling App</title>
 </head>
 <body class="text-center" class="center-block">
-<div class="col-auto text-right">
-    <table class = "table">
-         <form class="text-center" style="text-align: center" action="/" method="post">
-            {{ name }}
-        <a href="/">
-            Logout
-        </a>
-        </form>
-    </table>
-</div>
-<div class="col-auto text-center">
-    <h1>TA Scheduler</h1>
-    <h2><small>Users</small></h2>
-</div>
-    <div>
-        <form class="text-center" style="text-align: center" action="/" method="post">
-            <div>
-                <div class="row justify-content-center">
-                    <div class="col-auto center-block">
-                          {% csrf_token %}
-                        <table class = "table table-responsive">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <a href="/courses">
-                                        Courses
-                                    </a>
-                                </div>
-                                <div class="col-md-1">
-                                    |
-                                </div>
-                                <div class="col-md-3">
-                                    <a href="/sections">
-                                        Sections
-                                    </a>
-                                </div>
-                                <div class="col-md-1">
-                                    |
-                                </div>
-                                <div class="col-md-2">
-                                    <a href="/home">
-                                        Home
-                                    </a>
-                                </div>
-                            </div>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand">TA Scheduler</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="mainNav">
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+      <li class="nav-item active">
+        <a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/courses">Courses</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/sections">Sections</a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      {{ name }}&nbsp;&nbsp;
+      <a class="btn btn-primary"  href="/">Logout</a>
+    </form>
+  </div>
+</nav>
+
+
 
 <div class="row justify-content-center" >
     <div class="col-auto">
-        <table class = "table table-responsive">
+        <table class = "table table-responsiv">
             <thead>
-                <tr>
+                <tr class="text-left">
                     <th>ID Number</th>
                     <th>Name</th>
                     <th>Address</th>
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Role</th>
+                    <th>User Skills</th>
 
                 </tr>
             </thead>
@@ -76,13 +57,14 @@
 
             <tbody>
                 {% for row in instructors %}
-                    <tr>
+                    <tr class="text-left">
                         <td>{{ row.IDNumber }}</td>
                         <td>{{ row.name }}</td>
                         <td>{{ row.address }}</td>
                         <td>{{ row.email }}</td>
                         <td>{{ row.phoneNumber }}</td>
                         <td>{{ row.role }}</td>
+                        <td>{{ skills|get_item:row.IDNumber }}</td>
                     </tr>
 
                 {% endfor %}
@@ -94,24 +76,16 @@
         </table>
     </div>
 </div>
+
+
 {% if role == "Supervisor" %}
-<div>
-        <div>
-            <a href="/makeUser">
-            <button type="submit" class="btn btn-primary my-2 my-sm-0">Add User</button>
-            </a>
-        </div></br>
-        {% csrf_token %}
 
-
-        <div>
-        {% csrf_token %}
-        <a href="/removeUser">
-          <button type="submit" class="btn btn-primary my-2 my-sm-0">Remove User</button>
-        </a>
-        </div>
-
+<div class="user-button-container">
+    <p><a href="/makeUser" class="btn btn-primary btn-block" role="button">Add User</a></p>
+    <p><a href="/removeUser" class="btn btn-primary btn-block" role="button">Remove User</a></p>
 </div>
+
+
 {% endif %}
 
 {{ message }}
