@@ -68,25 +68,26 @@
         </table>
     </div>
 </div>
-{% if role == "Supervisor" %}
+{% if role == "Supervisor" or role == "Instructor"%}
     <div class="course-button-container">
 
-
+        {% if role == "Supervisor"%}
         <p>
             <a href="/makeSection" class="btn btn-primary btn-block">
             Add Section
             </a>
         </p>
-
+        {% endif %}
 
         {% csrf_token %}
 
-
+        {% if role == "Supervisor"%}
         <p>
             <a href="/makeSection" class="btn btn-primary btn-block">
             Remove Section
             </a>
         </p>
+        {% endif %}
 
         <p>
             <a href="/addTAsec" class="btn btn-primary btn-block">

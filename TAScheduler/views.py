@@ -107,12 +107,17 @@ class Section(View):
     def get(self, request):
 
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+        allSections = Sections.objects.none();
 
         if (loggedUser.role == "Supervisor"):
             allSections = Sections.objects.all()
         else:
-            allSections = MyUser.objects.filter(IDNumber=request.session["username"])
+            allCourses = Course.objects.filter(instructorID=request.session["username"])
 
+            courseIDs = [Course.courseCode for Course in allCourses]
+            allSections =  Sections.objects.filter(parentCode__in=courseIDs)
+
+        print(allSections)
         return render(request, "sectionTemplates/sections.html",
                       {"name": request.session["name"], "sections": allSections, "role": loggedUser.role})
 
