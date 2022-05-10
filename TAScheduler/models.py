@@ -44,7 +44,7 @@ class ClassTAAssignments(models.Model):
 
 class Skills(models.Model):
     SkillID = models.CharField(max_length=15, primary_key=True)
-    SkillDescription = models.CharField(max_length=50)
+    SkillDescription = models.CharField(max_length=50, null = True)
 
 class UserSkills(models.Model):
     UserSkillID=models.CharField(max_length=5, primary_key=True)
