@@ -1,7 +1,7 @@
 import unittest
 import Users
 from django.test import TestCase
-from .models import TA
+from TAScheduler.models import TA
 
 
 class testTA(TestCase):

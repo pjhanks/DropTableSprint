@@ -96,7 +96,7 @@ class Users(View):
                 skillString = skillString + ( i.SkillID.SkillDescription ) + ", "
             skillDict[x.IDNumber] = skillString
 
-        print(skillDict)
+
 
         return render(request, "userTemplates/users.html",
                       {"name": request.session["name"], "instructors": allUsers, "role": loggedUser.role, "skills" : skillDict})

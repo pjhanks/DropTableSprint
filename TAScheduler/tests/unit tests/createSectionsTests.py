@@ -1,7 +1,7 @@
 import unittest
 import Users
 from django.test import TestCase
-from .models import Sections
+from TAScheduler.models import Sections
 
 
 class testSection(TestCase):
