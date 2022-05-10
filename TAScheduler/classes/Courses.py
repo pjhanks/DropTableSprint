@@ -31,3 +31,16 @@ class CoursesClass():
         toUpdate = Course.objects.get(courseCode=CourseCode)
         toUpdate.instructorID = MyUser.objects.get(IDNumber=InstructorID)
         toUpdate.save()
+
+    def unassignInstructor(self, CourseCode):
+        if CourseCode is None:
+            raise Exception("does not accept full Primary keys")
+        check = Course.objects.filter(courseCode=CourseCode)
+        if check.count() <= 0:
+            raise Exception("Database does not contain course with that ID")
+        else:
+            temp = Course.objects.get(courseCode=CourseCode)
+            if temp.instructorID is None:
+                raise Exception("Instructor is already not assigned to Course")
+            temp.instructorID = None
+            temp.save()

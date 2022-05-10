@@ -5,34 +5,34 @@ from TAScheduler.models import MyUser, Course
 
 class positiveTests(TestCase):
     def setup(self):
-        temp = MyUser(IDNumber="1",
+        temp1 = MyUser(IDNumber="1",
                       name="Fred",
                       address="123 park place",
                       email="fred@uwm.edu",
                       phoneNumber="18000000000",
                       role="Instructor",
                       password="1234")
-        temp.save()
-        temp = MyUser(IDNumber="2",
+        temp1.save()
+        temp2 = MyUser(IDNumber="2",
                       name="John",
                       address="123 park place",
-                      email="fred@uwm.edu",
+                      email="john@uwm.edu",
                       phoneNumber="18000000000",
                       role="Instructor",
                       password="1234")
-        temp.save()
-        temp = Course(courseCode="1",
+        temp2.save()
+        temp = Course(courseCode="351",
                       instructorID=None,
-                      courseNumber="3")
+                      courseNumber="101")
         temp.save()
-        temp = Course(courseCode="2",
-                      instructorID="1",
-                      courseNumber="3")
+        temp = Course(courseCode="479",
+                      instructorID=temp2,
+                      courseNumber="315")
         temp.save()
 
     def test_NonetoSome(self):
-        Courses.CoursesClass.assignInstructor(self, "1", "1")
-        checkCourse = Course.objects.get(courseCode="1")
+        Courses.CoursesClass.assignInstructor(self, "351", "1")
+        checkCourse = Course.objects.get(courseCode="351")
         self.assertEqual(checkCourse.instructorID, "1")
 
     def testSomeToSome(self):
@@ -43,29 +43,29 @@ class positiveTests(TestCase):
 
 class negativeTests(TestCase):
     def setup(self):
-        temp = MyUser(IDNumber="1",
+        temp1 = MyUser(IDNumber="1",
                       name="Fred",
                       address="123 park place",
                       email="fred@uwm.edu",
                       phoneNumber="18000000000",
                       role="Instructor",
                       password="1234")
-        temp.save()
-        temp = MyUser(IDNumber="2",
+        temp1.save()
+        temp2 = MyUser(IDNumber="2",
                       name="John",
                       address="123 park place",
                       email="fred@uwm.edu",
                       phoneNumber="18000000000",
-                      role="TA",
+                      role="Instructor",
                       password="1234")
-        temp.save()
-        temp = Course(courseCode="1",
+        temp2.save()
+        temp = Course(courseCode="351",
                       instructorID=None,
-                      courseNumber="3")
+                      courseNumber="101")
         temp.save()
-        temp = Course(courseCode="2",
-                      instructorID="1",
-                      courseNumber="3")
+        temp = Course(courseCode="479",
+                      instructorID=temp2,
+                      courseNumber="315")
         temp.save()
 
     def testNotInstructor(self):
