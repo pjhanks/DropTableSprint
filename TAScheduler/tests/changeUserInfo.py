@@ -15,17 +15,17 @@ class positiveTests(TestCase):
                       password="1234")
         temp.save()
     def test_changeAll(self):
-        TAScheduler.classes.Users.UserClass.changeInfo("1","Fry","123 park", "fred5@uwm.edu", "17000000000","1235")
+        TAScheduler.classes.Users.UserClass.changeInfo(self, "1","Fry","123 park", "fred5@uwm.edu", "17000000000","1235")
         Check=MyUser.objects.filter(IDNumber="1")
         Check=Check[0]
         self.assertEqual(Check.address,"123 park")
     def test_ChangeSome(self):
-        TAScheduler.classes.Users.UserClass.changeInfo("1","Fred", None, "fred5@uwm.edu", "17000000000","")
+        TAScheduler.classes.Users.UserClass.changeInfo(self, "1","Fred", None, "fred5@uwm.edu", "17000000000","")
         Check = MyUser.objects.filter(IDNumber="1")
         Check = Check[0]
         self.assertEqual(Check.name, "Fred")
-        self.assertEqual(Check.address, "123 park")
-        self.assertEqual(Check.password, "1235")
+        self.assertEqual(Check.address, "123 park place")
+        self.assertEqual(Check.password, "1234")
 
 class negativeTests(TestCase):
     def setUp(self):
@@ -40,12 +40,12 @@ class negativeTests(TestCase):
 
     def test_tooManyArguments(self):
         with self.assertRaises(TypeError, msg="Should not accept that many fields"):
-            TAScheduler.classes.Users.UserClass.changeInfo("1","Fred", "None", "fred5@uwm.edu", "17000000000","1234", "error")
+            TAScheduler.classes.Users.UserClass.changeInfo(self, "1","Fred", "None", "fred5@uwm.edu", "17000000000","1234", "error")
 
     def test_tooFewArguments(self):
         with self.assertRaises(TypeError, msg="Should not accept that few fields"):
-            TAScheduler.classes.Users.UserClass.changeInfo("1","Fred", "None", "fred5@uwm.edu", "17000000000")
+            TAScheduler.classes.Users.UserClass.changeInfo(self, "1","Fred", "None", "fred5@uwm.edu", "17000000000")
 
     def test_nonExistingUser(self):
         with self.assertRaises(RuntimeError, msg="Should not accept invalid ID"):
-            TAScheduler.classes.Users.UserClass.changeInfo("3","Fred", "None", "fred5@uwm.edu", "17000000000","1234")
+            TAScheduler.classes.Users.UserClass.changeInfo(self, "3","Fred", "None", "fred5@uwm.edu", "17000000000","1234")
