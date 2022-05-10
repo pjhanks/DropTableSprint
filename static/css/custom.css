@@ -1,3 +1,7 @@
+input, select{
+    width: 300px  !important;
+}
+
 .user-button-container{
     min-width: 120px;
     max-width: 120px;

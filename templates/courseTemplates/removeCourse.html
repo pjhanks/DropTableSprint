@@ -14,7 +14,7 @@
     <div class="col-auto">
         <table class = "table table-responsive">
             <thead>
-                <tr>
+                <tr class="text-left">
                     <th>Course Code</th>
                     <th>Course Number</th>
                     <th>Instructor</th>
@@ -25,7 +25,7 @@
 
             <tbody>
                 {% for row in courses %}
-                    <tr>
+                    <tr  class="text-left">
                         <td>{{ row.courseCode }}</td>
                         <td>{{ row.courseNumber }}</td>
                         <td>{{ row.instructorID.name }}</td>
@@ -50,8 +50,8 @@
                                                 <option>{{ row.courseCode }} </option>
                                               {% endfor %}
                                             </select> </label>
-                    <button type="submit" class="btn btn-primary my-2 my-sm-0">Remove Course</button>
-                    <a href="/courses">
+                    <button style="vertical-align: top" type="submit" class="btn btn-primary my-2 my-sm-0">Remove Course</button>
+                    <a  href="/courses">
                         Back
                     </a>
         </div>

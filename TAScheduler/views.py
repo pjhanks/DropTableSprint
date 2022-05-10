@@ -306,7 +306,7 @@ class removeSection(View):
                                "sections": allSections,
                                "role": loggedUser.role})
         else:
-            return redirect("/courses/")
+            return redirect("/section/")
 
     def post(self, request):
 
@@ -406,7 +406,7 @@ class addTA(View):
                           {"name": request.session["name"], "courses": allCourses, "role": loggedUser.role})
 
         except Exception as e:
-            print(e)
+
             return render(request, "courseTemplates/addTA.html",
                           {"name": request.session["name"], "courses": courses, "users": allTAs,
                            "message": "Could not add TA"})
