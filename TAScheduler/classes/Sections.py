@@ -1,9 +1,12 @@
-from TAScheduler.models import MyUser, Sections, Course
+from TAScheduler.models import Sections, Course, MyUser, ClassTAAssignments
 
 
 class SectionsClass():
 
     def createSection(self, SectionCode, ParentID):
+
+
+
         if (SectionCode is None):
             raise Exception("does not accept null Primary keys")
         checkRepeat = list(map(str, Sections.objects.filter(sectionCode=SectionCode)))
