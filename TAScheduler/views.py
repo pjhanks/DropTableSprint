@@ -17,9 +17,10 @@ class Login(View):
     # Put the logging info within your django view
 
     def get(self, request):
+
         logger = logging.getLogger(__name__)
         logger.info("Simple info")
-
+        request.session["username"] = ""
         return render(request, "login.html")
 
     def post(self, request):
@@ -48,12 +49,21 @@ class Login(View):
 class Home(View):
 
     def get(self, request):
+        if (request.session["username"] == ""):
+            return render(request, "login.html", {"message": "Not logged in"})
+
         return render(request, "home.html", {"name": request.session["name"]})
 
 
 class Courses(View):
 
     def get(self, request):
+        if (request.session["username"] == ""):
+            return render(request, "login.html", {"message": "Not logged in"})
+
+        if (request.session["username"] == ""):
+            redirect("/login/")
+
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
         sectionDict = dict()
 
@@ -65,21 +75,25 @@ class Courses(View):
         else:
             allCourses = Course.objects.filter(instructorID=request.session["username"])
 
-
         for x in allCourses:
             j = (list(Sections.objects.filter(parentCode=x.courseCode).values_list('sectionCode')))
             i = " | ".join([x[0] for x in j])
             sectionDict[x.courseCode] = i
 
-
         return render(request, "courseTemplates/courses.html",
-                      {"name": request.session["name"], "courses": allCourses, "role": loggedUser.role, "sections": sectionDict})
-
+                      {"name": request.session["name"], "courses": allCourses, "role": loggedUser.role,
+                       "sections": sectionDict})
 
 
 class Users(View):
 
     def get(self, request):
+
+        if (request.session["username"] == ""):
+            return render(request, "login.html", {"message": "Not logged in"})
+
+        if (request.session["username"] == ""):
+            redirect("/login/")
 
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
         skillDict = dict()
@@ -91,20 +105,22 @@ class Users(View):
 
         for x in allUsers:
             j = (list(UserSkills.objects.filter(UserID=x.IDNumber)))
-            skillString=""
+            skillString = ""
             for i in j:
-                skillString = skillString + ( i.SkillID.SkillDescription ) + ", "
+                skillString = skillString + (i.SkillID.SkillDescription) + ", "
             skillDict[x.IDNumber] = skillString
 
-
-
         return render(request, "userTemplates/users.html",
-                      {"name": request.session["name"], "instructors": allUsers, "role": loggedUser.role, "skills" : skillDict})
+                      {"name": request.session["name"], "instructors": allUsers, "role": loggedUser.role,
+                       "skills": skillDict})
 
 
 class Section(View):
 
     def get(self, request):
+
+        if (request.session["username"] == ""):
+            return render(request, "login.html", {"message": "Not logged in"})
 
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
         allSections = Sections.objects.none();
@@ -115,7 +131,7 @@ class Section(View):
             allCourses = Course.objects.filter(instructorID=request.session["username"])
 
             courseIDs = [Course.courseCode for Course in allCourses]
-            allSections =  Sections.objects.filter(parentCode__in=courseIDs)
+            allSections = Sections.objects.filter(parentCode__in=courseIDs)
 
         print(allSections)
         return render(request, "sectionTemplates/sections.html",
@@ -125,6 +141,9 @@ class Section(View):
 class makeUser(View):
 
     def get(self, request):
+
+        if (request.session["username"] == ""):
+            return render(request, "login.html", {"message": "Not logged in"})
 
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
         if (loggedUser.role == "Supervisor"):
@@ -156,6 +175,9 @@ class removeUser(View):
 
     def get(self, request):
 
+        if (request.session["username"] == ""):
+            return render(request, "login.html", {"message": "Not logged in"})
+
         allUserWithoutLoggedUser = MyUser.objects.filter(~Q(IDNumber=request.session["username"]))
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
         if (loggedUser.role == "Supervisor"):
@@ -185,6 +207,9 @@ class removeUser(View):
 class makeCourse(View):
 
     def get(self, request):
+
+        if (request.session["username"] == ""):
+            return render(request, "login.html", {"message": "Not logged in"})
 
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
         allInstructors = MyUser.objects.filter(role="Instructor")
@@ -227,6 +252,9 @@ class removeCourse(View):
 
     def get(self, request):
 
+        if (request.session["username"] == ""):
+            return render(request, "login.html", {"message": "Not logged in"})
+
         allCourses = Course.objects.all()
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
         if (loggedUser.role == "Supervisor"):
@@ -256,6 +284,9 @@ class removeCourse(View):
 class makeSection(View):
 
     def get(self, request):
+
+        if (request.session["username"] == ""):
+            return render(request, "login.html", {"message": "Not logged in"})
 
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
         allCourses = Course.objects.all()
@@ -291,6 +322,9 @@ class removeSection(View):
 
     def get(self, request):
 
+        if (request.session["username"] == ""):
+            return render(request, "login.html", {"message": "Not logged in"})
+
         allSections = Sections.objects.all()
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
 
@@ -322,6 +356,9 @@ class addInstructor(View):
 
     def get(self, request):
 
+        if (request.session["username"] == ""):
+            return render(request, "login.html", {"message": "Not logged in"})
+
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
         coursesNoInstructor = Course.objects.filter(instructorID=None)
         allInstructors = MyUser.objects.filter(role="Instructor")
@@ -350,8 +387,12 @@ class addInstructor(View):
                           {"name": request.session["name"], "courses": coursesNoInstructor, "users": allInstructors,
                            "message": "Could not add instructor"})
 
+
 class removeInstructor(View):
     def get(self, request):
+
+        if (request.session["username"] == ""):
+            return render(request, "login.html", {"message": "Not logged in"})
 
         allCourses = Course.objects.all()
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
@@ -379,9 +420,13 @@ class removeInstructor(View):
                       {"name": request.session["name"], "message": "Instructor successfully removed",
                        "courses": allCourses})
 
+
 class addTA(View):
 
     def get(self, request):
+
+        if (request.session["username"] == ""):
+            return render(request, "login.html", {"message": "Not logged in"})
 
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
         courses = Course.objects.all()
@@ -411,9 +456,14 @@ class addTA(View):
                           {"name": request.session["name"], "courses": courses, "users": allTAs,
                            "message": "Could not add TA"})
 
+
 class removeTA(View):
 
     def get(self, request):
+
+        if (request.session["username"] == ""):
+            return render(request, "login.html", {"message": "Not logged in"})
+
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
         courses = Course.objects.all()
         allTAs = MyUser.objects.filter(role="TA")
@@ -441,9 +491,13 @@ class removeTA(View):
                           {"name": request.session["name"], "courses": courses, "users": allTAs,
                            "message": "Could not remove TA"})
 
+
 class addTAsec(View):
 
     def get(self, request):
+
+        if (request.session["username"] == ""):
+            return render(request, "login.html", {"message": "Not logged in"})
 
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
         sections = Sections.objects.all()
