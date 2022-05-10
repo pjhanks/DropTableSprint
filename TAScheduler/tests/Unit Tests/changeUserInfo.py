@@ -1,8 +1,7 @@
 from django.test import TestCase
 
 import TAScheduler.classes.Users
-from TAScheduler.classes import Courses
-from TAScheduler.models import MyUser, Course
+from TAScheduler.models import MyUser
 
 
 class positiveTests(TestCase):
