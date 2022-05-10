@@ -9,7 +9,7 @@
 <body class="text-center" class="center-block">
 <div class="col-auto text-right">
     <table class = "table">
-        <form class="text-center" style="text-align: center" action="/" method="post">
+         <form class="text-center" style="text-align: center" action="/" method="post">
             {{ name }}
         <a href="/">
             Logout
@@ -19,7 +19,7 @@
 </div>
 <div class="col-auto text-center">
     <h1>TA Scheduler</h1>
-    <h2><small>Home</small></h2>
+    <h2><small>Users</small></h2>
 </div>
     <div>
         <form class="text-center" style="text-align: center" action="/" method="post">
@@ -46,8 +46,8 @@
                                     |
                                 </div>
                                 <div class="col-md-2">
-                                    <a href="/users">
-                                        Users
+                                    <a href="/home">
+                                        Home
                                     </a>
                                 </div>
                             </div>
@@ -57,6 +57,63 @@
             </div>
         </form>
     </div>
-<label>{{ message }}</label>
+
+<div class="row justify-content-center" >
+    <div class="col-auto">
+        <table class = "table table-responsive">
+            <thead>
+                <tr>
+                    <th>ID Number</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Role</th>
+
+                </tr>
+            </thead>
+
+
+            <tbody>
+                {% for row in instructors %}
+                    <tr>
+                        <td>{{ row.IDNumber }}</td>
+                        <td>{{ row.name }}</td>
+                        <td>{{ row.address }}</td>
+                        <td>{{ row.email }}</td>
+                        <td>{{ row.phoneNumber }}</td>
+                        <td>{{ row.role }}</td>
+                    </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+
+
+        </table>
+    </div>
+</div>
+{% if role == "Supervisor" %}
+<div>
+        <div>
+            <a href="/makeUser">
+            <button type="submit" class="btn btn-primary my-2 my-sm-0">Add User</button>
+            </a>
+        </div></br>
+        {% csrf_token %}
+
+
+        <div>
+        {% csrf_token %}
+        <a href="/removeUser">
+          <button type="submit" class="btn btn-primary my-2 my-sm-0">Remove User</button>
+        </a>
+        </div>
+
+</div>
+{% endif %}
+
+{{ message }}
 </body>
 </html>

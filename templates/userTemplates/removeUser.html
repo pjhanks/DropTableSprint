@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="/static/css/bootstrap.css">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Team DropTable's Amazing TA Scheduling App</title>
+</head>
+<div class="col-auto text-center">
+    <h1>TA Scheduler</h1>
+    <h2><small>Remove User</small></h2>
+<body>
+<div class="row justify-content-center" >
+    <div class="col-auto">
+        <table class = "table table-responsive">
+            <thead>
+                <tr>
+                    <th>ID Number</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Role</th>
+
+                </tr>
+            </thead>
+
+
+            <tbody>
+                {% for row in users %}
+                    <tr>
+                        <td>{{ row.IDNumber }}</td>
+                        <td>{{ row.name }}</td>
+                        <td>{{ row.address }}</td>
+                        <td>{{ row.email }}</td>
+                        <td>{{ row.phoneNumber }}</td>
+                        <td>{{ row.role }}</td>
+                    </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+
+
+        </table>
+    </div>
+</div>
+<br>
+    <div class="text-center" class="center-block">
+     <form class="text-center" style="text-align: center" action="/removeUser/" method="post">
+         {% csrf_token %}
+         <div class="form-group">
+                              <label value="t2" for="InputUser"><select id = "InputUser" name = "InputUser" class="form-control" required>
+                                              {% for row in users %}
+                                                <option>{{ row.IDNumber }} </option>
+                                              {% endfor %}
+                                            </select> </label>
+                    <button type="submit" class="btn btn-primary my-2 my-sm-0">Remove User</button>
+                    <a href="/users">
+                        Back
+                    </a>
+        </div>
+     </form>
+    <br>
+    {{ message }}
+    </div>
+</div>
+
+</body>
+</html>
