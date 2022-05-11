@@ -425,7 +425,7 @@ class removeTA(View):
         TAcode = (str(request.POST["InputTA"]).split("|"))[0].strip()
 
         try:
-            CoursesClass.assignTA(self, courseCode, TAcode)
+            CoursesClass.removeTA(self, courseCode, TAcode)
             allCourses = Course.objects.all()
             return render(request, "courseTemplates/courses.html",
                           {"name": request.session["name"], "courses": allCourses, "role": loggedUser.role})
