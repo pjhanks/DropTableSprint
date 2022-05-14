@@ -33,13 +33,12 @@ class testPositive(TestCase):
                        instructorID=temp1,
                        courseNumber="101")
         temp5.save()
-        self.mockClient.post("/", {"InputCourseCode": "1"}, follow=True)
+        self.mockClient.post("/", {"InputCourseCode": "1", "InputIDNumber": "2"}, follow=True)
 
-    def test_removeInstructor(self):
-        resp = self.mockClient.post("/removeInstructor/", {"InputCourseCode": "1"}, follow=True)
+    def test_changeInstructor(self):
+        resp = self.mockClient.post("/addInstructor/", {"InputCourseCode": "1", "InputIDNumber": "1"}, follow=True)
         checkCourse = Course.objects.get(courseCode="1")
-        self.assertEqual("1", checkCourse, "Instructor was not removed")
-
+        self.assertEqual("1", checkCourse, "Item was not added to list")
 
 class testNegative(TestCase):
     def setUp(self):
@@ -73,25 +72,31 @@ class testNegative(TestCase):
                        instructorID=temp1,
                        courseNumber="101")
         temp5.save()
-        self.mockClient.post("/", {"InputCourseCode": "1"}, follow=True)
+        self.mockClient.post("/", {"InputCourseCode": "1", "InputIDNumber": "2"}, follow=True)
 
-    def test_unassignNotFullyFilledOut(self):
-        self.mockClientclient.post("/", {"InputCourseCode": "2"}, follow=True)
-        resp = self.mockClient.post("/removeInstructor/", {"InputSectionCode": ""}, follow=True)
-        checkCourse = Course.objects.get(courseCode="")
-        self.assertNotIn("", checkCourse, "Item was not added to list")
-        resp = self.mockClient.post("/removeInstructor/", {"InputCourseCode": None}, follow=True)
-        checkCourse = Course.objects.get(sectionCode=None)
-        self.assertNotIn(None, checkCourse, "Item was not added to list")
+    def test_assignNotFullyFilledOut(self):
+        self.mockClient.post("/", {"InputCourseCode": "1", "InputIDNumber": "2"}, follow=True)
+        resp = self.mockClient.post("/addInstructor/", {"InputCourseCode": "2", "InputIDNumber": ""}, follow=True)
+        checkCourse = Course.objects.get(courseCode="2")
+        self.assertNotIn("2", checkCourse, "Item was not added to list")
+        resp = self.mockClient.post("/addInstructor/", {"InputCourseCode": "2", "InputIDNumber": None}, follow=True)
+        checkCourse = Course.objects.get(courseCode="2")
+        self.assertNotIn("2", checkCourse, "Item was not added to list")
 
-    def test_NoInstructorToRemove(self):
-        self.mockClientclient.post("/", {"InputCourseCode": "3"}, follow=True)
-        resp = self.mockClient.post("/removeInstructor/", {"InputCourseCode": "3"}, follow=True)
-        checkCourse = Course.objects.get(courseCode="3")
-        self.assertNotIn("3", checkCourse, "Item was not added to list")
+    def test_alreadyContainsSpecifiedInstructor(self):
+        self.mockClientclient.post("/", {"InputCourseCode": "2", "InputIDNumber": "1"}, follow=True)
+        resp = self.mockClient.post("/addInstructor/", {"InputCourseCode": "1", "InputIDNumber": "1"}, follow=True)
+        checkCourse = Course.objects.get(courseCode="1")
+        self.assertNotIn("1", checkCourse, "Item was not added to list")
+
+    def test_noInstructorAttached(self):
+        self.mockClientclient.post("/", {"InputCourseCode": "2", "InputIDNumber": "1"}, follow=True)
+        resp = self.mockClient.post("/addInstructor/", {"InputCourseCode": "1"})
+        checkCourse = Course.objects.get(courseCode="1")
+        self.assertNotIn("300", checkCourse, "Item was missing Instructor ID")
 
     def test_noCourseEntered(self):
-        self.mockClientclient.post("/", {"InputCourseCode": "2"}, follow=True)
-        resp = self.mockClient.post("/removeInstructor/", follow=True)
+        self.mockClientclient.post("/", {"InputCourseCode": "2", "InputIDNumber": "1"}, follow=True)
+        resp = self.mockClient.post("/addInstructor/", {"InputCourseCode": ""}, follow=True)
         checkCourse = Course.objects.get(courseCode="")
-        self.assertNotIn("", checkCourse, "Item was missing Course")
+        self.assertNotIn("", checkCourse, "Item missing Course")
