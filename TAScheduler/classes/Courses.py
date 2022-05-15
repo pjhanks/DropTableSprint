@@ -50,7 +50,7 @@ class CoursesClass():
             else:
                 id = ClassTAAssignments.objects.count()
 
-            temp = ClassTAAssignments(AssignmentsID=id,courseCode=courseCode, TAcode=taCode)
+            temp = ClassTAAssignments(AssignmentsID=id, courseCode=courseCode, TAcode=taCode)
             temp.save()
 
     def removeTA(self, CourseCode, TAcode):
