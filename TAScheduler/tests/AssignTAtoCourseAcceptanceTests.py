@@ -83,13 +83,16 @@ class testPositive(TestCase):
         resp = self.mockClient.post("/addTA/",
                                     {"InputCourse": "1", "InputTA": "3"},
                                     follow=True)
+
+        checkSecondCourse = ClassTAAssignments.objects.get(courseCode="1")
+        self.assertEqual("3", checkSecondCourse.TAcode.IDNumber, "TA was not added to the course")
+
         resp = self.mockClient.post("/addTA/",
                                     {"InputCourse": "2", "InputTA": "3"},
                                     follow=True)
-        checkFirstCourse = ClassTAAssignments.objects.get(courseCode="1")
+        checkFirstCourse = ClassTAAssignments.objects.get(courseCode="2")
         self.assertEqual("3", checkFirstCourse.TAcode.IDNumber, "TA was removed from their other course!")
-        checkSecondCourse = ClassTAAssignments.objects.get(courseCode="2")
-        self.assertEqual("3", checkSecondCourse.TAcode.IDNumber, "TA was not added to the course")
+
 
 class testNegative(TestCase):
     def setUp(self):
@@ -147,19 +150,8 @@ class testNegative(TestCase):
         self.mockClient.post("/addTA/", {"InputCourse": "2", "InputTA": "3"}, follow=True)
 
     def test_addSameTAtoCourse(self):
-        assert self.mockClient.post("/addTA/", {"InputCourse": "2", "InputTA": "3"}, follow=True)
-
-    def test_NotFullyFilledOut(self):
-        self.mockClient.post("/", {"InputUsername": "2", "InputPassword": "1234"}, follow=True)
-        resp = self.mockClient.post("/makeCourse/",
-                                    {"InputCourseCode": "6", "InputCourseNumber": "", "InputInstructor": ""},
-                                    follow=True)
-        checkCourse = Course.objects.get(courseCode="6")
-        self.assertNotEqual("6", checkCourse.courseCode, "Item was not supposed added to list")
-        resp = self.mockClient.post("/makeCourse/",
-                                    {"InputCourseCode": "7", "InputCourseNumber": "", "InputInstructor": ""},
-                                    follow=True)
-        checkCourse = Course.objects.get(courseCode="7")
-        self.assertNotEqual("7", checkCourse.courseCode, "Item was not supposed added to list")
+        resp = self.mockClient.post("/addTA/", {"InputCourse": "2", "InputTA": "3"}, follow=True)
+        checkCourse = ClassTAAssignments.objects.get(courseCode="2")
+        self.assertEqual("3", checkCourse.TAcode.IDNumber, "TA was not added to the course")
 
 
