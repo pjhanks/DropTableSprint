@@ -36,12 +36,12 @@
   </div>
 </nav>
 
-
+{% if role == "Supervisor" %}
 
 <div class="row justify-content-center" >
     <div class="col-auto">
-        <table class = "table table-responsiv">
-            <thead>
+        <table class = "table table-responsive">
+            <thead class="thead-light">
                 <tr class="text-left">
                     <th>ID Number</th>
                     <th>Name</th>
@@ -77,17 +77,71 @@
     </div>
 </div>
 
+{% endif %}
 
+
+{% if role != "Supervisor" %}
+
+<div class="row justify-content-center" >
+    <div class="col-auto">
+        <table class = "table table-responsive">
+            <thead class="thead-light">
+                <tr class="text-left">
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+
+                </tr>
+            </thead>
+
+
+            <tbody>
+                <tr class="text-left table-primary" >
+                    <td>{{ loggedUser.name }}</td>
+                    <td>{{ loggedUser.email }}</td>
+                    <td>{{ loggedUser.role }}</td>
+                </tr>
+
+                {% for row in instructors %}
+
+                    <tr class="text-left">
+                        <td>{{ row.name }}</td>
+                        <td>{{ row.email }}</td>
+                        <td>{{ row.role }}</td>
+                    </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+
+
+        </table>
+    </div>
+</div>
+<div class="user-button-container">
+{% endif %}
 {% if role == "Supervisor" %}
 
-<div class="user-button-container">
+
     <p><a href="/makeUser" class="btn btn-primary btn-block" role="button">Add User</a></p>
     <p><a href="/removeUser" class="btn btn-primary btn-block" role="button">Remove User</a></p>
-</div>
+
 
 
 {% endif %}
 
+
+    <p><a href="/editContactInfo" class="btn btn-primary btn-block" role="button">Edit Account Info</a></p>
+
+
+{% if role != "Supervisor" %}
+
+    <p><a href="/addSkills" class="btn btn-primary btn-block" role="button">Add Skills</a></p>
+
+{% endif %}
+
+</div>
 {{ message }}
 </body>
 </html>

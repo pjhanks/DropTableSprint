@@ -101,7 +101,8 @@ class Users(View):
         if (loggedUser.role == "Supervisor"):
             allUsers = MyUser.objects.all()
         else:
-            allUsers = MyUser.objects.filter(IDNumber=request.session["username"])
+            allUsers = MyUser.objects.filter(~Q(IDNumber=request.session["username"]))
+
 
         for x in allUsers:
             j = (list(UserSkills.objects.filter(UserID=x.IDNumber)))
@@ -112,7 +113,7 @@ class Users(View):
 
         return render(request, "userTemplates/users.html",
                       {"name": request.session["name"], "instructors": allUsers, "role": loggedUser.role,
-                       "skills": skillDict})
+                       "skills": skillDict, "loggedUser": loggedUser})
 
 
 class Section(View):
@@ -451,7 +452,7 @@ class addTA(View):
                           {"name": request.session["name"], "courses": allCourses, "role": loggedUser.role})
 
         except Exception as e:
-
+            print(e)
             return render(request, "courseTemplates/addTA.html",
                           {"name": request.session["name"], "courses": courses, "users": allTAs,
                            "message": "Could not add TA"})

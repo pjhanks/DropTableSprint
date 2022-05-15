@@ -3,8 +3,8 @@ input, select{
 }
 
 .user-button-container{
-    min-width: 120px;
-    max-width: 120px;
+    min-width: 180px;
+    max-width: 180px;
     display: inline-block;
 }
 

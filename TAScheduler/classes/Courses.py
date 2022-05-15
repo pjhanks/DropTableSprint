@@ -42,10 +42,11 @@ class CoursesClass():
         courseCode = Course.objects.get(courseCode=CourseCode)
         taCode = MyUser.objects.get(IDNumber=TAcode)
         check = ClassTAAssignments.objects.filter(courseCode=courseCode, TAcode=taCode)
-        if check.exists():
+        if check.count()>0:
             raise RuntimeError("That TA is already assigned to that course!")
-        temp = ClassTAAssignments(courseCode=courseCode, TAcode=taCode)
-        temp.save()
+        else:
+            temp = ClassTAAssignments(courseCode=courseCode, TAcode=taCode)
+            temp.save()
 
     def removeTA(self, CourseCode, TAcode):
         courseCode = Course.objects.get(courseCode=CourseCode)
