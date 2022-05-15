@@ -23,8 +23,6 @@ class Course(models.Model):
         return self.courseCode
 
 
-
-
 class Sections(models.Model):
     sectionCode = models.CharField(max_length=10, primary_key=True)
     parentCode = models.ForeignKey(Course, on_delete=models.CASCADE, null=True)
@@ -42,11 +40,13 @@ class ClassTAAssignments(models.Model):
     def __str__(self):
         return self.AssignmentsID
 
+
 class Skills(models.Model):
     SkillID = models.CharField(max_length=15, primary_key=True)
-    SkillDescription = models.CharField(max_length=50, null = True)
+    SkillDescription = models.CharField(max_length=50, null=True)
+
 
 class UserSkills(models.Model):
-    UserSkillID=models.CharField(max_length=5, primary_key=True)
-    SkillID = models.ForeignKey(Skills, on_delete= models.CASCADE, null=False)
-    UserID = models.ForeignKey(MyUser, on_delete=models.CASCADE, null = False)
+    UserSkillID = models.CharField(max_length=5, primary_key=True)
+    SkillID = models.ForeignKey(Skills, on_delete=models.CASCADE, null=False)
+    UserID = models.ForeignKey(MyUser, on_delete=models.CASCADE, null=False)
