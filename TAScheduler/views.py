@@ -2,7 +2,7 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.views import View
 
-from .models import MyUser, Course, Sections, UserSkills, Skills
+from .models import MyUser, Course, Sections, UserSkills, Skills, ClassTAAssignments
 import logging
 from TAScheduler.classes.Users import UserClass
 from TAScheduler.classes.Courses import CoursesClass
@@ -430,7 +430,9 @@ class addTA(View):
             return render(request, "login.html", {"message": "Not logged in"})
 
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
-        courses = Course.objects.all()
+
+        courses = ClassTAAssignments.objects.all()
+
         allTAs = MyUser.objects.filter(role="TA")
 
         return render(request, "courseTemplates/addTA.html",
@@ -466,7 +468,7 @@ class removeTA(View):
             return render(request, "login.html", {"message": "Not logged in"})
 
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
-        courses = Course.objects.all()
+        courses = ClassTAAssignments.objects.values('courseCode')
         allTAs = MyUser.objects.filter(role="TA")
 
         return render(request, "courseTemplates/removeTA.html",
@@ -481,7 +483,7 @@ class removeTA(View):
         TAcode = (str(request.POST["InputTA"]).split("|"))[0].strip()
 
         try:
-            CoursesClass.assignTA(self, courseCode, TAcode)
+            CoursesClass.removeTA(self, courseCode, TAcode)
             allCourses = Course.objects.all()
             return render(request, "courseTemplates/courses.html",
                           {"name": request.session["name"], "courses": allCourses, "role": loggedUser.role})
