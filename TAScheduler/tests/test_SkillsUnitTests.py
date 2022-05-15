@@ -1,4 +1,4 @@
-from django.test import TestCase, Client
+from django.test import TestCase
 import TAScheduler.classes.Skills as SkillMethods
 from TAScheduler.models import MyUser, Skills, UserSkills
 
@@ -55,24 +55,28 @@ class testAssignNewSkill(TestCase):
         tempSkill = Skills(SkillID="temp name",
                            SkillDescription="temp description")
         tempSkill.save()
-        tempUser = MyUser(IDNumber="1",
+        tempUser1 = MyUser(IDNumber="1",
                           name="test",
                           address="test land",
                           email="test@uwm.edu",
                           phoneNumber="123",
                           role="TA",
                           password="1234")
-        tempUser.save()
-        tempUser = MyUser(IDNumber="2",
+        tempUser1.save()
+        tempUser2 = MyUser(IDNumber="2",
                           name="test",
                           address="test land",
                           email="test@uwm.edu",
                           phoneNumber="123",
                           role="Instructor",
                           password="1234")
-        tempUser.save()
+        tempUser2.save()
+        tempAssignment = UserSkills(UserSkillID = "3",
+                                    SkillID = tempSkill,
+                                    UserID = tempUser1)
+        tempAssignment.save()
     def testPositiveAssignSkill(self):
-        SkillMethods.SkillsClass.assignNewSkill(self,"3","1","temp name")
+        SkillMethods.SkillsClass.assignNewSkill(self,"4","1","temp name")
         CheckAssignment = UserSkills.objects.filter(UserSkillID="3")
         self.assertEqual(CheckAssignment[0].UserSkillID, "3", "Should return new skill")
     def testNegativeTooManyFields(self):
@@ -90,6 +94,9 @@ class testAssignNewSkill(TestCase):
     def testNegativeNotTA(self):
         with self.assertRaises(RuntimeError, msg="Should not accept a user that is not a TA"):
             SkillMethods.SkillsClass.assignNewSkill(self, "ID5", "2", "temp name")
+    def testNegativeAlreadyAssigned(self):
+        with self.assertRaises(RuntimeError, msg="Should not try to add a skill assignment that already exists"):
+            SkillMethods.SkillsClass.assignNewSkill(self, "3", "1", "temp name")
 class testRemoveSkillAssignment(TestCase):
     def setUp(self):
         tempSkill = Skills(SkillID="temp name",
@@ -103,9 +110,10 @@ class testRemoveSkillAssignment(TestCase):
                           role="TA",
                           password="1234")
         tempUser.save()
-        tempAssignment = UserSkills(UserSkillID="2",
-                                    UserID="1",
-                                    SkillID="temp name")
+        tempAssignment = UserSkills(UserSkillID = "2",
+                                    SkillID =tempSkill,
+                                    UserID =tempUser)
+        tempAssignment.save()
     def testPositiveSkillRemoval(self):
         SkillMethods.SkillsClass.removeSkillAssignment(self,"2")
         checkAssignment = UserSkills.objects.filter(UserSkillID="2")

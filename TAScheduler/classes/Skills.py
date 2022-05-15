@@ -15,16 +15,21 @@ class SkillsClass():
         else:
             check[0].delete()
     def assignNewSkill(self, userSkillID,userId, skillName):
-        check = MyUser.objects.filter(UserID=userId)
+        check = MyUser.objects.filter(IDNumber = userId)
         if not check.exists():
             raise RuntimeError("User does not exist")
-        else:
-            check = UserSkills.objects.filter(UserID=userId)
-            for a in check:
-                if a.skillID == skillName:
-                    raise RuntimeError("Already have that skill")
-            skillAsignment = UserSkills(userSkillID,skillName, userId )
-            skillAsignment.save()
+            return
+        check2 = Skills.objects.filter(SkillID = skillName)
+        if not check2.exists():
+            raise RuntimeError("Skill does not exist")
+            return
+
+        check = UserSkills.objects.filter(SkillID=skillName)
+        for a in check:
+            if a.SkillID == skillName:
+                raise RuntimeError("Already have that skill")
+        skillAsignment = UserSkills(userSkillID,skillName, userId )
+        skillAsignment.save()
 
     def removeSkillAssignment(self, userSkillID):
         check = UserSkills.objects.filter(UserSkillID=userSkillID)
