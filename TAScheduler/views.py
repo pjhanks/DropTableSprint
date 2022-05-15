@@ -431,7 +431,8 @@ class addTA(View):
 
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
 
-        courses = ClassTAAssignments.objects.all()
+        courses = Course.objects.all()
+        #assignments = ClassTAAssignments.objects.all()
 
         allTAs = MyUser.objects.filter(role="TA")
 
@@ -529,3 +530,39 @@ class addTAsec(View):
             return render(request, "sectionTemplates/addTAsec.html",
                           {"name": request.session["name"], "sections": sections, "users": allTAs,
                            "message": "Could not add TA"})
+
+class removeTAsec(View):
+
+    def get(self, request):
+
+        if (request.session["username"] == ""):
+            return render(request, "login.html", {"message": "Not logged in"})
+
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+        sections = Sections.objects.all()
+        allTAs = MyUser.objects.filter(role="TA")
+
+        return render(request, "sectionTemplates/removeTAsec.html",
+                      {"name": request.session["name"], "sections": sections, "users": allTAs})
+
+    def post(self, request):
+
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+        sections = Sections.objects.all()
+        allTAs = MyUser.objects.filter(role="TA")
+
+        sectionCode = (str(request.POST["InputSec"]).split("|"))[0].strip()
+        TAcode = (str(request.POST["InputTA"]).split("|"))[0].strip()
+
+        try:
+            SectionsClass.removeTAsec(self, sectionCode, TAcode)
+            allSections = Sections.objects.all()
+            return render(request, "sectionTemplates/removeTAsec.html",
+                          {"name": request.session["name"], "sections": allSections, "role": loggedUser.role})
+
+        except Exception as e:
+            print(e)
+            return render(request, "sectionTemplates/removeTAsec.html",
+                          {"name": request.session["name"], "sections": sections, "users": allTAs,
+                           "message": "Could not remove TA"})
+
