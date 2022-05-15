@@ -1,3 +1,5 @@
+import traceback
+
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.views import View
@@ -102,7 +104,6 @@ class Users(View):
             allUsers = MyUser.objects.filter(~Q(IDNumber=request.session["username"]))
         else:
             allUsers = MyUser.objects.filter(~Q(IDNumber=request.session["username"]))
-
 
         for x in allUsers:
             j = (list(UserSkills.objects.filter(UserID=x.IDNumber)))
@@ -379,11 +380,18 @@ class addInstructor(View):
         try:
             CoursesClass.assignInstructor(self, courseCode, instructorID)
             allCourses = Course.objects.all()
+            sectionDict= dict()
+            for x in allCourses:
+                j = (list(Sections.objects.filter(parentCode=x.courseCode).values_list('sectionCode')))
+                i = " | ".join([x[0] for x in j])
+                sectionDict[x.courseCode] = i
+
             return render(request, "courseTemplates/courses.html",
-                          {"name": request.session["name"], "courses": allCourses, "role": loggedUser.role})
+                          {"name": request.session["name"], "courses": allCourses, "role": loggedUser.role,
+                           "sections": sectionDict})
 
         except Exception as e:
-            print(e)
+            print(traceback.format_exc())
             return render(request, "courseTemplates/addInstructor.html",
                           {"name": request.session["name"], "courses": coursesNoInstructor, "users": allInstructors,
                            "message": "Could not add instructor"})
@@ -460,10 +468,9 @@ class addTA(View):
                            "message": "Could not add TA"})
 
 
-class removeTA(View):
+class removeTA1(View):
 
     def get(self, request):
-
         if (request.session["username"] == ""):
             return render(request, "login.html", {"message": "Not logged in"})
 
@@ -471,7 +478,7 @@ class removeTA(View):
         courses = ClassTAAssignments.objects.values('courseCode')
         allTAs = MyUser.objects.filter(role="TA")
 
-        return render(request, "courseTemplates/removeTA.html",
+        return render(request, "courseTemplates/removeTA1.html",
                       {"name": request.session["name"], "courses": courses, "users": allTAs})
 
     def post(self, request):
@@ -480,17 +487,49 @@ class removeTA(View):
         allTAs = MyUser.objects.filter(role="TA")
 
         courseCode = (str(request.POST["InputCourse"]).split("|"))[0].strip()
+        request.session["selectedCourse"] = courseCode
+
+        allCourses = Course.objects.all()
+        return render(request, "courseTemplates/removeTA2.html.html",
+                      {"name": request.session["name"], "courses": allCourses, "role": loggedUser.role})
+
+
+class removeTA2(View):
+
+    def get(self, request):
+
+        if (request.session["username"] == ""):
+            return render(request, "login.html", {"message": "Not logged in"})
+
+        courseCode = request.session["selectedCourse"]
+
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+        courses = ClassTAAssignments.objects.values('courseCode')
+        allTAs = ClassTAAssignments.objects.filter(courseCode=courseCode).values('TAcode')
+
+
+        return render(request, "courseTemplates/removeTA2.html",
+                      {"name": request.session["name"], "users": allTAs})
+
+    def post(self, request):
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+        courses = Course.objects.all()
+        allTAs = MyUser.objects.filter(role="TA")
+
+        courseCode = request.session["selectedCourse"]
+
         TAcode = (str(request.POST["InputTA"]).split("|"))[0].strip()
 
         try:
             CoursesClass.removeTA(self, courseCode, TAcode)
             allCourses = Course.objects.all()
+            request.session["selectedCourse"] = ""
             return render(request, "courseTemplates/courses.html",
                           {"name": request.session["name"], "courses": allCourses, "role": loggedUser.role})
 
         except Exception as e:
             print(e)
-            return render(request, "courseTemplates/removeTA.html",
+            return render(request, "courseTemplates/removeTA1.html",
                           {"name": request.session["name"], "courses": courses, "users": allTAs,
                            "message": "Could not remove TA"})
 
