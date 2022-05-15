@@ -68,6 +68,7 @@ class Courses(View):
 
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
         sectionDict = dict()
+        taDict = dict()
 
         if (loggedUser.role == "Supervisor"):
             allCourses = Course.objects.all()
@@ -79,12 +80,16 @@ class Courses(View):
 
         for x in allCourses:
             j = (list(Sections.objects.filter(parentCode=x.courseCode).values_list('sectionCode')))
+            b = (list(ClassTAAssignments.objects.filter(courseCode=x.courseCode).values_list('TAcode__name')))
+            print(b)
             i = " | ".join([x[0] for x in j])
+            l = " | ".join([x[0] for x in b])
             sectionDict[x.courseCode] = i
+            taDict[x.courseCode] = l
 
         return render(request, "courseTemplates/courses.html",
                       {"name": request.session["name"], "courses": allCourses, "role": loggedUser.role,
-                       "sections": sectionDict})
+                       "sections": sectionDict, "tas": taDict})
 
 
 class Users(View):
@@ -380,15 +385,19 @@ class addInstructor(View):
         try:
             CoursesClass.assignInstructor(self, courseCode, instructorID)
             allCourses = Course.objects.all()
-            sectionDict= dict()
+            sectionDict = dict()
+            taDict = dict()
             for x in allCourses:
                 j = (list(Sections.objects.filter(parentCode=x.courseCode).values_list('sectionCode')))
+                b = (list(ClassTAAssignments.objects.filter(courseCode=x.courseCode).values_list('TAcode__name')))
                 i = " | ".join([x[0] for x in j])
+                l = " | ".join([x[0] for x in b])
                 sectionDict[x.courseCode] = i
+                taDict[x.courseCode] = l
 
             return render(request, "courseTemplates/courses.html",
                           {"name": request.session["name"], "courses": allCourses, "role": loggedUser.role,
-                           "sections": sectionDict})
+                           "sections": sectionDict, "tas": taDict})
 
         except Exception as e:
             print(traceback.format_exc())
@@ -458,14 +467,25 @@ class addTA(View):
         try:
             CoursesClass.assignTA(self, courseCode, TAcode)
             allCourses = Course.objects.all()
+            sectionDict = dict()
+            taDict = dict()
+            for x in allCourses:
+                j = (list(Sections.objects.filter(parentCode=x.courseCode).values_list('sectionCode')))
+                b = (list(ClassTAAssignments.objects.filter(courseCode=x.courseCode).values_list('TAcode__name')))
+                i = " | ".join([x[0] for x in j])
+                l = " | ".join([x[0] for x in b])
+                sectionDict[x.courseCode] = i
+                taDict[x.courseCode] = l
+
             return render(request, "courseTemplates/courses.html",
-                          {"name": request.session["name"], "courses": allCourses, "role": loggedUser.role})
+                          {"name": request.session["name"], "courses": allCourses, "role": loggedUser.role,
+                           "sections": sectionDict, "tas": taDict})
 
         except Exception as e:
-            print(e)
+            print(traceback.format_exc())
             return render(request, "courseTemplates/addTA.html",
                           {"name": request.session["name"], "courses": courses, "users": allTAs,
-                           "message": "Could not add TA"})
+                           "message": "TA is already assigned to that course"})
 
 
 class removeTA1(View):
@@ -475,7 +495,7 @@ class removeTA1(View):
             return render(request, "login.html", {"message": "Not logged in"})
 
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
-        courses = ClassTAAssignments.objects.values('courseCode')
+        courses = ClassTAAssignments.objects.values('courseCode').distinct()
         allTAs = MyUser.objects.filter(role="TA")
 
         return render(request, "courseTemplates/removeTA1.html",
@@ -490,7 +510,7 @@ class removeTA1(View):
         request.session["selectedCourse"] = courseCode
 
         allCourses = Course.objects.all()
-        return render(request, "courseTemplates/removeTA2.html.html",
+        return render(request, "courseTemplates/removeTA2.html",
                       {"name": request.session["name"], "courses": allCourses, "role": loggedUser.role})
 
 
@@ -506,7 +526,6 @@ class removeTA2(View):
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
         courses = ClassTAAssignments.objects.values('courseCode')
         allTAs = ClassTAAssignments.objects.filter(courseCode=courseCode).values('TAcode')
-
 
         return render(request, "courseTemplates/removeTA2.html",
                       {"name": request.session["name"], "users": allTAs})
@@ -528,7 +547,7 @@ class removeTA2(View):
                           {"name": request.session["name"], "courses": allCourses, "role": loggedUser.role})
 
         except Exception as e:
-            print(e)
+            print(traceback.format_exc())
             return render(request, "courseTemplates/removeTA1.html",
                           {"name": request.session["name"], "courses": courses, "users": allTAs,
                            "message": "Could not remove TA"})
