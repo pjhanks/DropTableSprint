@@ -395,7 +395,7 @@ class removeInstructor(View):
         if (request.session["username"] == ""):
             return render(request, "login.html", {"message": "Not logged in"})
 
-        allCourses = Course.objects.all()
+        allCourses = Course.objects.filter(~Q(instructorID=None))
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
 
         if (loggedUser.role == "Supervisor" or loggedUser.role == "Instructor"):
