@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <link rel="stylesheet" href="/static/css/bootstrap.css">
-
+<link rel="stylesheet" href="/static/css/custom.css">
 <html lang="en">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <head>
@@ -38,9 +38,8 @@
 <div class="row justify-content-center" >
     <div class="col-auto">
         <table class = "table table-responsive">
-            <thead>
-                <tr>
-
+            <thead >
+                <tr class="text-left">
                     <th>Section Code</th>
                     <th>Course Number</th>
                     <th>Course Instructor</th>
@@ -52,7 +51,7 @@
 
             <tbody>
                 {% for row in sections %}
-                    <tr>
+                    <tr class="text-left">
                         <td>{{ row.sectionCode }}</td>
 
                         <td>{{ row.parentCode.courseNumber }}</td>
@@ -69,31 +68,35 @@
         </table>
     </div>
 </div>
-{% if role == "Supervisor" %}
-<div>
-    <div>
-            <a href="/makeSection">
-            <button type="submit" class="btn btn-primary my-2 my-sm-0">Add Section</button>
+{% if role == "Supervisor" or role == "Instructor"%}
+    <div class="course-button-container">
+
+        {% if role == "Supervisor"%}
+        <p>
+            <a href="/makeSection" class="btn btn-primary btn-block">
+            Add Section
             </a>
-        </div><br>
+        </p>
+        {% endif %}
+
         {% csrf_token %}
 
+        {% if role == "Supervisor"%}
+        <p>
+            <a href="/removeSection" class="btn btn-primary btn-block">
+            Remove Section
+            </a>
+        </p>
+        {% endif %}
 
-        <div>
-        {% csrf_token %}
-        <a href="/removeSection">
-          <button type="submit" class="btn btn-primary my-2 my-sm-0">Remove Section</button>
-        </a>
-        </div>
+        <p>
+            <a href="/addTAsec" class="btn btn-primary btn-block">
+            Add TA to Section
+            </a>
+        </p>
 
-        <div><br/>
-        {% csrf_token %}
-        <a href="/addTAsec">
-          <button type="submit" class="btn btn-primary my-2 my-sm-0">Add TA to Section</button>
-        </a>
-        </div>
 
-</div>
+    </div>
 {% endif %}
 {{ message }}
 </body>

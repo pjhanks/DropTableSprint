@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <link rel="stylesheet" href="/static/css/bootstrap.css">
+<link rel="stylesheet" href="/static/css/custom.css">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -13,7 +14,7 @@
     <div class="col-auto">
         <table class = "table table-responsive">
             <thead>
-                <tr>
+                <tr class="text-left">
                     <th>ID Number</th>
                     <th>Name</th>
                     <th>Address</th>
@@ -27,7 +28,7 @@
 
             <tbody>
                 {% for row in users %}
-                    <tr>
+                    <tr class="text-left">
                         <td>{{ row.IDNumber }}</td>
                         <td>{{ row.name }}</td>
                         <td>{{ row.address }}</td>
@@ -55,7 +56,7 @@
                                                 <option>{{ row.IDNumber }} </option>
                                               {% endfor %}
                                             </select> </label>
-                    <button type="submit" class="btn btn-primary my-2 my-sm-0">Remove User</button>
+                    <button style="vertical-align:top" type="submit" class="btn btn-primary my-2 my-sm-0">Remove User</button>
                     <a href="/users">
                         Back
                     </a>

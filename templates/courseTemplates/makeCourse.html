@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <link rel="stylesheet" href="/static/css/bootstrap.css">
+<link rel="stylesheet" href="/static/css/custom.css">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -20,20 +21,20 @@
 
                         <table class="table table-responsive">
                             <div class="form-group">
-                                <label value="t2" for="InputCourseCode"><input type="text" name="InputCourseCode" class="form-control" id="InputCourseCode" placeholder="Course Code" required> </label>
+                                <input type="text" name="InputCourseCode" class="form-control" id="InputCourseCode" placeholder="Course Code" required>
                             </div>
                             <div class="form-group">
-                              <label value="t2" for="InputCourseNumber"><input type="text" name="InputCourseNumber" class="form-control" id="InputCourseNumber" placeholder="Course Number" required> </label>
+                              <input type="text" name="InputCourseNumber" class="form-control" id="InputCourseNumber" placeholder="Course Number" required>
                             </div>
                             <div class="form-group">
-                              <label value="t2" for="InputInstructor"><select id = "InputInstructor" name = "InputInstructor" class="form-control" required>
+                              <select id = "InputInstructor" name = "InputInstructor" class="form-control" required>
                                                 <option value="" disabled selected>Instructor ID Number | Instructor</option>
                                                 <option>  </option>
 
                                               {% for row in users %}
                                                 <option>{{ row.IDNumber }} | {{ row.name }} </option>
                                               {% endfor %}
-                                            </select> </label>
+                                            </select>
                             </div>
 
                         </table>
