@@ -7,13 +7,13 @@
 </head>
 <div class="col-auto text-center">
     <h1>TA Scheduler</h1>
-    <h2><small>Remove Course</small></h2>
+    <h2><small>Remove Section</small></h2>
 </div>
 <body>
 <div class="row justify-content-center" >
     <div class="col-auto">
         <table class = "table table-responsive">
-            <thead>
+            <thead class="thead-light">
                 <tr>
                     <th>Section Code</th>
                     <th>Course Number</th>
@@ -50,7 +50,7 @@
                                                 <option>{{ row.sectionCode }} </option>
                                               {% endfor %}
                                             </select> </label>
-                    <button type="submit" class="btn btn-primary my-2 my-sm-0">Remove Section</button>
+                    <button style="vertical-align: top" type="submit" class="btn btn-primary my-2 my-sm-0">Remove Section</button>
                     <a href="/sections">
                         Back
                     </a>

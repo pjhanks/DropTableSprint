@@ -21,22 +21,22 @@
 
 
                             <div class="form-group">
-                              <label value="t2" for="InputCourse"><select id = "InputCourse" name = "InputCourse" class="form-control" required>
+                             <select id = "InputCourse" name = "InputCourse" class="form-control" required>
                                                 <option value="" disabled selected>Course Code | Course Number </option>
                                               {% for row in courses %}
                                                 <option>{{ row.courseCode }} | {{ row.courseNumber }} </option>
                                               {% endfor %}
-                                            </select> </label>
+                                            </select>
                             </div>
                             <div class="form-group">
-                              <label value="t2" for="InputTA"><select id = "InputTA" name = "InputTA" class="form-control" required>
+                              <select id = "InputTA" name = "InputTA" class="form-control" required>
                                                 <option value="" disabled selected>TA Code | TA</option>
 
 
                                               {% for row in users %}
                                                 <option>{{ row.IDNumber }} | {{ row.name }} </option>
                                               {% endfor %}
-                                            </select> </label>
+                                            </select>
                             </div>
 
 

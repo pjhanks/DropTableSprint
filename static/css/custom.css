@@ -1,0 +1,39 @@
+input, select{
+    width: 300px  !important;
+}
+
+.user-button-container{
+    min-width: 180px;
+    max-width: 180px;
+    display: inline-block;
+}
+
+.parentLogin {
+
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+.childLogin {
+
+border: 2px solid #87d3f8;
+    border-radius: 25px;
+  background: #E2E5DE;
+width: 350px;
+height: 350px;
+
+
+}
+
+.course-button-container{
+    min-width: 250px;
+    max-width: 250px;
+    display: inline-block;
+}
+
+.section-button-container{
+    min-width: 200px;
+    max-width: 200px;
+    display: inline-block;
+}
