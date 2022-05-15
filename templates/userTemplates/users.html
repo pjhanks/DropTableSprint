@@ -56,6 +56,15 @@
 
 
             <tbody>
+                <tr class="text-left table-primary" >
+                        <td>{{ loggedUser.IDNumber }}</td>
+                        <td>{{ loggedUser.name }}</td>
+                        <td>{{ loggedUser.address }}</td>
+                        <td>{{ loggedUser.email }}</td>
+                        <td>{{ loggedUser.phoneNumber }}</td>
+                        <td>{{ loggedUser.role }}</td>
+                        <td>{{ skills|get_item:loggedUser.IDNumber }}</td>
+                </tr>
                 {% for row in instructors %}
                     <tr class="text-left">
                         <td>{{ row.IDNumber }}</td>

@@ -99,7 +99,7 @@ class Users(View):
         skillDict = dict()
 
         if (loggedUser.role == "Supervisor"):
-            allUsers = MyUser.objects.all()
+            allUsers = MyUser.objects.filter(~Q(IDNumber=request.session["username"]))
         else:
             allUsers = MyUser.objects.filter(~Q(IDNumber=request.session["username"]))
 

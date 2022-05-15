@@ -10,9 +10,12 @@ input, select{
 
 .parentLogin {
 
-display: flex;
-align-items: center;
-justify-content: center;
+ position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10px;
+
 }
 
 .childLogin {
@@ -21,7 +24,6 @@ border: 2px solid #87d3f8;
     border-radius: 25px;
   background: #E2E5DE;
 width: 350px;
-height: 350px;
 
 
 }
