@@ -431,7 +431,7 @@ class addTA(View):
 
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
 
-        courses = ClassTAAssignments.objects.all()
+        courses = Course.objects.all()
 
         allTAs = MyUser.objects.filter(role="TA")
 
