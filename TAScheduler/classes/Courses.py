@@ -46,7 +46,7 @@ class CoursesClass():
             raise RuntimeError("That TA is already assigned to that course!")
         else:
             if ClassTAAssignments.objects.count()==0:
-                id = 0;
+                id = 0
             else:
                 id = ClassTAAssignments.objects.count()
 

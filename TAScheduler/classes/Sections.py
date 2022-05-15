@@ -23,8 +23,13 @@ class SectionsClass():
     def assignTAsec(self, SectionCode, TAcode):
         toUpdate = Sections.objects.get(sectionCode=SectionCode)
         taCode = MyUser.objects.get(IDNumber=TAcode)
-        toUpdate.TA = taCode
-        toUpdate.save()
+        courseCode = toUpdate.parentCode
+        #check = ClassTAAssignments.objects.filter(courseCode=courseCode, TAcode=taCode)
+        if toUpdate.TA != None:
+            raise RuntimeError("A TA is already assigned to that section!")
+        else:
+            toUpdate.TA = taCode
+            toUpdate.save()
 
     def removeTAsec(self, SectionCode, TAcode):
         toUpdate = Sections.objects.get(sectionCode=SectionCode)
