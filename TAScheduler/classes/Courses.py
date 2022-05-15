@@ -45,7 +45,12 @@ class CoursesClass():
         if check.count()>0:
             raise RuntimeError("That TA is already assigned to that course!")
         else:
-            temp = ClassTAAssignments(courseCode=courseCode, TAcode=taCode)
+            if ClassTAAssignments.objects.count()==0:
+                id = 0;
+            else:
+                id = ClassTAAssignments.objects.count()
+
+            temp = ClassTAAssignments(AssignmentsID=id,courseCode=courseCode, TAcode=taCode)
             temp.save()
 
     def removeTA(self, CourseCode, TAcode):
