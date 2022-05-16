@@ -522,7 +522,6 @@ class removeTA2(View):
 
         courseCode = request.session["selectedCourse"]
 
-
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
         courses = ClassTAAssignments.objects.values('courseCode')
         allTAs = ClassTAAssignments.objects.filter(courseCode=courseCode)
@@ -568,7 +567,6 @@ class removeTA2(View):
 class addTAsec(View):
 
     def get(self, request):
-
         if (request.session["username"] == ""):
             return render(request, "login.html", {"message": "Not logged in"})
 
@@ -577,6 +575,31 @@ class addTAsec(View):
         allTAs = MyUser.objects.filter(role="TA")
 
         return render(request, "sectionTemplates/addTAsec.html",
+                      {"name": request.session["name"], "sections": sections, "users": allTAs})
+
+    def post(self, request):
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+
+        request.session["courseCode"] = (str(request.POST["InputSec"]).split("|"))[1].strip()
+        request.session["sectionCode"] = (str(request.POST["InputSec"]).split("|"))[0].strip()
+
+        return redirect("/addTAsec2/")
+
+
+class addTAsec2(View):
+
+    def get(self, request):
+
+        if (request.session["username"] == ""):
+            return render(request, "login.html", {"message": "Not logged in"})
+
+        sectionCode = request.session["sectionCode"]
+        courseCode = request.session["courseCode"]
+
+        sections = Sections.objects.all()
+        allTAs = ClassTAAssignments.objects.filter(courseCode=courseCode)
+
+        return render(request, "sectionTemplates/addTAsec2.html",
                       {"name": request.session["name"], "sections": sections, "users": allTAs})
 
     def post(self, request):

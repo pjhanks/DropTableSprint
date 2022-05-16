@@ -12,7 +12,7 @@
     <h2><small>Add TA to Section</small></h2>
 </div>
 <div>
-    <form class="text-center" style="text-align: center" action="/addTAsec/" method="post">
+    <form class="text-center" style="text-align: center" action="/addTAsec2/" method="post">
             <div>
                 <div class="row justify-content-center">
                     <div class="col-auto">
@@ -21,21 +21,23 @@
 
 
 
+
                             <div class="form-group">
-                              <select id = "InputSec" name = "InputSec" class="form-control" required>
-                                                <option value="" disabled selected>Section Code | Course Number </option>
-                                              {% for row in sections %}
-                                                <option>{{ row.sectionCode }} | {{ row.parentCode }} </option>
+                             <select id = "InputTA" name = "InputTA" class="form-control" required>
+                                                <option value="" disabled selected>TA Code | TA</option>
+
+
+                                              {% for row in users %}
+                                                <option>{{ row.TAcode.IDNumber }} | {{ row.TAcode.name }} </option>
                                               {% endfor %}
                                             </select>
                             </div>
 
 
 
-
                               <button type="submit" class="btn btn-primary my-2 my-sm-0">Add TA to Section</button>
                                 {{ message }}
-                                <a href="/sections">
+                                <a href="/addTAsec">
                                 Back
                                 </a>
                     </div>

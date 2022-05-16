@@ -3,7 +3,7 @@ from . import views
 from django.contrib import admin
 from TAScheduler.views import Login, Home, Users, Courses, \
     Section, makeUser, removeUser, makeCourse, removeCourse,makeSection, \
-    removeSection, addInstructor, removeInstructor, addTA, removeTA1,removeTA2, addTAsec
+    removeSection, addInstructor, removeInstructor, addTA, removeTA1,removeTA2, addTAsec, addTAsec2
 
 
 urlpatterns = [
@@ -26,5 +26,6 @@ urlpatterns = [
     path('removeInstructor/', removeInstructor.as_view(), name="removeInstructor"),
     path('removeTA1/', removeTA1.as_view(), name="removeTA"),
     path('removeTA2/', removeTA2.as_view(), name="removeTA"),
-    path('addTAsec/', addTAsec.as_view(), name="addTAsec")
+    path('addTAsec2/', addTAsec2.as_view(), name="addTAsec2"),
+    path('addTAsec/', addTAsec.as_view(), name="addTAsec"),
 ]
