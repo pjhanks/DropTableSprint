@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <link rel="stylesheet" href="/static/css/bootstrap.css">
-
+<link rel="stylesheet" href="/static/css/custom.css">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,31 +9,23 @@
 <body class="text-center" class="center-block">
 <div class="col-auto text-center">
     <h1>TA Scheduler</h1>
-    <h2><small>Add Skill</small></h2>
+    <h2><small>Create Skill</small></h2>
 </div>
 <div>
-    <form class="text-center" style="text-align: center" action="/addSkillsUser/" method="post">
+    <form class="text-center" style="text-align: center" action="/addSkillSup/" method="post">
             <div>
                 <div class="row justify-content-center">
                     <div class="col-auto">
-
                           {% csrf_token %}
+                        <table class="table table-responsive">
 
 
                             <div class="form-group">
-                             <select id = "InputSkill" name = "InputSkill" class="form-control" required>
-                                                <option value="" disabled selected>TA Code | TA</option>
-
-
-                                              {% for row in skills %}
-                                                <option>{{ row.IDNumber }} </option>
-                                              {% endfor %}
-                                            </select>
+                              <input type="text" name="InputSkill" class="form-control" id="InputSkill" placeholder="New Password" required>
                             </div>
+                        </table>
 
-
-
-                              <button type="submit" class="btn btn-primary my-2 my-sm-0">Remove TA from Section</button>
+                              <button type="submit" class="btn btn-primary my-2 my-sm-0">Add User</button>
                                 {{ message }}
                                 <a href="/users">
                                 Back
@@ -45,10 +37,6 @@
 
 
 </div>
-
-
-
-
 
 </body>
 </html>

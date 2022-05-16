@@ -1,10 +1,53 @@
 <!DOCTYPE html>
+<link rel="stylesheet" href="/static/css/bootstrap.css">
+<link rel="stylesheet" href="/static/css/custom.css">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Team DropTable's Amazing TA Scheduling App</title>
 </head>
-<body>
+<body class="text-center" class="center-block">
+<div class="col-auto text-center">
+    <h1>TA Scheduler</h1>
+    <h2><small>Create User</small></h2>
+</div>
+<div>
+    <form class="text-center" style="text-align: center" action="/editUser/" method="post">
+            <div>
+                <div class="row justify-content-center">
+                    <div class="col-auto">
+                          {% csrf_token %}
+                        <table class="table table-responsive">
+
+                            <div class="form-group">
+                              <input type="text" name="InputName" class="form-control" id="InputName" placeholder="Name" required>
+                            </div>
+                            <div class="form-group">
+                              <input type="text" name="InputAddress" class="form-control" id="InputAddress" placeholder="Address" required>
+                            </div>
+                            <div class="form-group">
+                              <input type="email" name="InputEmail" class="form-control" id="InputEmail" placeholder="Email" required>
+                            </div>
+                            <div class="form-group">
+                              <input type="text" name="InputPhoneNumber" class="form-control" id="InputPhoneNumber" placeholder="Phone Number" required>
+                            </div>
+                            <div class="form-group">
+                              <input type="text" name="InputPassword" class="form-control" id="InputPassword" placeholder="New Password" required>
+                            </div>
+                        </table>
+
+                              <button type="submit" class="btn btn-primary my-2 my-sm-0">Add User</button>
+                                {{ message }}
+                                <a href="/users">
+                                Back
+                                </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+</div>
 
 </body>
 </html>
