@@ -24,14 +24,27 @@ class SectionsClass():
         toUpdate = Sections.objects.get(sectionCode=SectionCode)
         taCode = MyUser.objects.get(IDNumber=TAcode)
         courseCode = toUpdate.parentCode
-        #check = ClassTAAssignments.objects.filter(courseCode=courseCode, TAcode=taCode)
-        if toUpdate.TA != None:
+        check = ClassTAAssignments.objects.filter(courseCode=courseCode, TAcode=taCode)
+        if check.count()>0:
             raise RuntimeError("A TA is already assigned to that section!")
         else:
-            toUpdate.TA = taCode
-            toUpdate.save()
+            temp = Sections(sectionCode=SectionCode, parentCode=courseCode, TA=taCode)
+            temp.save()
+
+            # toUpdate.TA = taCode
+            # toUpdate.save()
 
     def removeTAsec(self, SectionCode, TAcode):
-        toUpdate = Sections.objects.get(sectionCode=SectionCode)
-        toUpdate.TA = None
-        toUpdate.save()
+        sectionCode = Sections.objects.get(sectionCode=SectionCode)
+        parentCode = sectionCode.parentCode
+        try:
+            toUpdate = Sections.objects.get(sectionCode=sectionCode, parentCode=parentCode, TAcode=TAcode)
+            if toUpdate.TAcode.IDNumber != TAcode:
+                raise RuntimeError("That TA isn't assigned to that course!")
+            else:
+                toUpdate.delete()
+                # toUpdate.TA = "BOB"
+                # toUpdate.save()
+        except Exception:
+            print("No Section object exists")
+
