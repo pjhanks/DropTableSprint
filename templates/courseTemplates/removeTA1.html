@@ -25,7 +25,7 @@
                              <select id = "InputCourse" name = "InputCourse" class="form-control" required>
                                                 <option value="" disabled selected>Course Code | Course Number </option>
                                               {% for row in courses %}
-                                                <option>{{ row.courseCode }} | {{ row.courseNumber }} </option>
+                                                <option>{{ row.courseCode }} | {{ row.courseCode.courseNumber }} </option>
                                               {% endfor %}
                                             </select>
                             </div>

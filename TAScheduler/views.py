@@ -495,9 +495,9 @@ class removeTA1(View):
             return render(request, "login.html", {"message": "Not logged in"})
 
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
-        courses = ClassTAAssignments.objects.values('courseCode').distinct()
+        courses = ClassTAAssignments.objects.filter(~Q(courseCode=None))
         allTAs = MyUser.objects.filter(role="TA")
-
+        print(courses)
         return render(request, "courseTemplates/removeTA1.html",
                       {"name": request.session["name"], "courses": courses, "users": allTAs})
 
@@ -510,8 +510,7 @@ class removeTA1(View):
         request.session["selectedCourse"] = courseCode
 
         allCourses = Course.objects.all()
-        return render(request, "courseTemplates/removeTA2.html",
-                      {"name": request.session["name"], "courses": allCourses, "role": loggedUser.role})
+        return redirect("/removeTA2/")
 
 
 class removeTA2(View):
@@ -523,9 +522,11 @@ class removeTA2(View):
 
         courseCode = request.session["selectedCourse"]
 
+
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
         courses = ClassTAAssignments.objects.values('courseCode')
-        allTAs = ClassTAAssignments.objects.filter(courseCode=courseCode).values('TAcode')
+        allTAs = ClassTAAssignments.objects.filter(courseCode=courseCode)
+        print(allTAs)
 
         return render(request, "courseTemplates/removeTA2.html",
                       {"name": request.session["name"], "users": allTAs})
@@ -543,8 +544,19 @@ class removeTA2(View):
             CoursesClass.removeTA(self, courseCode, TAcode)
             allCourses = Course.objects.all()
             request.session["selectedCourse"] = ""
+            sectionDict = dict()
+            taDict = dict()
+            for x in allCourses:
+                j = (list(Sections.objects.filter(parentCode=x.courseCode).values_list('sectionCode')))
+                b = (list(ClassTAAssignments.objects.filter(courseCode=x.courseCode).values_list('TAcode__name')))
+                i = " | ".join([x[0] for x in j])
+                l = " | ".join([x[0] for x in b])
+                sectionDict[x.courseCode] = i
+                taDict[x.courseCode] = l
+
             return render(request, "courseTemplates/courses.html",
-                          {"name": request.session["name"], "courses": allCourses, "role": loggedUser.role})
+                          {"name": request.session["name"], "courses": allCourses, "role": loggedUser.role,
+                           "sections": sectionDict, "tas": taDict})
 
         except Exception as e:
             print(traceback.format_exc())
