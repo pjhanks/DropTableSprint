@@ -43,7 +43,8 @@
                     <th>Course Code</th>
                     <th>Course Number</th>
                     <th>Instructor</th>
-                    <th>Sections</th>
+                    <th>Section List</th>
+                    <th>TA List</th>
 
                 </tr>
             </thead>
@@ -56,6 +57,7 @@
                         <td>{{ row.courseNumber }}</td>
                         <td>{{ row.instructorID.name }}</td>
                         <td>{{ sections|get_item:row.courseCode }}</td>
+                        <td>{{ tas|get_item:row.courseCode }}</td>
                         {% comment %}
                         list(sections.filter(parentCode = row.courseCode))
                         {% expr   as var1%}
@@ -123,7 +125,7 @@
         {% csrf_token %}
 
         <p>
-            <a href="/removeTA" class="btn btn-primary btn-block">
+            <a href="/removeTA1" class="btn btn-primary btn-block">
             Remove TA from Course
             </a>
         </p>

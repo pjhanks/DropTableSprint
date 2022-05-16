@@ -45,22 +45,24 @@ class CoursesClass():
         if check.count()>0:
             raise RuntimeError("That TA is already assigned to that course!")
         else:
-            if ClassTAAssignments.objects.count()==0:
-                id = 0;
-            else:
-                id = ClassTAAssignments.objects.count()
 
-            temp = ClassTAAssignments(AssignmentsID=id,courseCode=courseCode, TAcode=taCode)
+            id = ClassTAAssignments.objects.filter(courseCode=CourseCode).count()
+            while (ClassTAAssignments.objects.filter(AssignmentsID=id).count()>0):
+                id = id+1
+
+            temp = ClassTAAssignments(AssignmentsID=id, courseCode=courseCode, TAcode=taCode)
             temp.save()
 
     def removeTA(self, CourseCode, TAcode):
         courseCode = Course.objects.get(courseCode=CourseCode)
+        toUpdate = ClassTAAssignments()
         try:
-            toUpdate = ClassTAAssignments.objects.get(courseCode=courseCode)
+            toUpdate = ClassTAAssignments.objects.get(courseCode=courseCode, TAcode=TAcode)
+            if toUpdate.TAcode.IDNumber != TAcode:
+                raise RuntimeError("That TA isn't assigned to that course!")
+            else:
+                toUpdate.delete()
         except Exception:
             print("No ClassTAAssignment Object exists")
 
-        if toUpdate.TAcode.IDNumber != TAcode:
-            raise RuntimeError("That TA isn't assigned to that course!")
-        else:
-            toUpdate.delete()
+
