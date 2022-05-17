@@ -814,6 +814,7 @@ class editContactInfo(View):
 
         try:
             UserClass.changeInfo(self, loggedUser.IDNumber, name, Address, Email, PhoneNumber, password)
+            request.session["name"] = loggedUser.name
             return redirect("/users/")
 
         except  Exception as e:
@@ -839,17 +840,49 @@ class addSkills(View):
     def post(self, request):
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
         skills = Skills.objects.all()
-        id = Skills.objects.all().count()
-        while (Skills.objects.filter(SkillID=id).count() > 0):
+
+        id = UserSkills.objects.all().count()
+
+
+        while (UserSkills.objects.filter(UserSkillID=id).count() > 0):
             id = id + 1
 
         name = (str(request.POST["InputSkill"]).split("|"))[0].strip()
 
         try:
-            SkillsClass.assignNewSkill(self, id , loggedUser.IDNumber, name)
+            SkillsClass.assignNewSkill(self, id, loggedUser.IDNumber, name)
             return redirect("/users/")
 
         except Exception as e:
-            print(e)
+            print(traceback.format_exc())
             return render(request, "userTemplates/addSkills.html",
                           {"name": request.session["name"], "skills": skills, "message": "could not add skill"})
+
+class addSkillSup(View):
+
+    def get(self, request):
+
+        if (request.session["username"] == ""):
+            return render(request, "login.html", {"message": "Not logged in"})
+
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+
+
+        return render(request,"userTemplates/addSkillSup.html")
+
+    def post(self, request):
+
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+        newSkill = request.POST["InputSkill"]
+
+        id = Skills.objects.all().count()
+
+        while (Skills.objects.filter(SkillID=id).count() > 0):
+            id = id + 1
+
+        try:
+            SkillsClass.newSkill(self,id,newSkill)
+            return render(request, "userTemplates/addSkillSup.html",{"message": "New Skill Added!"})
+        except Exception as e:
+
+            return render(request, "userTemplates/addSkillSup.html",{"message": "Skill could not be added."})

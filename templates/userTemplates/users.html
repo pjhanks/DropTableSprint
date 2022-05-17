@@ -147,9 +147,15 @@
     <p><a href="/editContactInfo" class="btn btn-primary btn-block" role="button">Edit Account Info</a></p>
 
 
-{% if role != "Instructor" %}
+{% if role == "TA" %}
 
     <p><a href="/addSkills" class="btn btn-primary btn-block" role="button">Add Skills</a></p>
+
+{% endif %}
+
+{% if role == "Supervisor" %}
+
+    <p><a href="/addSkillSup" class="btn btn-primary btn-block" role="button">Add Skills</a></p>
 
 {% endif %}
 
