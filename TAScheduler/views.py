@@ -673,7 +673,12 @@ class addTAsec3(View):
             return render(request, "login.html", {"message": "Not logged in"})
 
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
-        sections = Course.objects.all()
+
+        if (loggedUser.role == "Supervisor"):
+            sections = Course.objects.all()
+        else:
+            sections = Course.objects.filter(instructorID=request.session["username"])
+
         allTAs = MyUser.objects.filter(role="TA")
 
         return render(request, "sectionTemplates/addTAsec3.html",
@@ -774,11 +779,43 @@ class addTAsec2(View):
         try:
             SectionsClass.assignTAsec(self, sectionCode, TAcode)
             allSections = Sections.objects.all()
-            return render(request, "sectionTemplates/sections.html",
-                          {"name": request.session["name"], "sections": allSections, "role": loggedUser.role})
+            return redirect("/sections/")
 
         except Exception as e:
             print(e)
             return render(request, "sectionTemplates/addTAsec2.html",
                           {"name": request.session["name"], "sections": sections, "users": allTAs,
                            "message": "Could not add TA"})
+
+
+class editContactInfo(View):
+
+    def get(self, request):
+
+        if (request.session["username"] == ""):
+            return render(request, "login.html", {"message": "Not logged in"})
+
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+
+        return render(request, "userTemplates/editContactInfo.html",
+                      {"name": request.session["name"], "user": loggedUser})
+
+    def post(self, request):
+
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+
+        name=request.POST["InputName"]
+        Address = request.POST["InputAddress"]
+        Email = request.POST["InputEmail"]
+        PhoneNumber = request.POST["InputPhoneNumber"]
+        password = request.POST["InputPassword"]
+
+        try:
+            UserClass.changeInfo(self,loggedUser.IDNumber,name,Address,Email,PhoneNumber,password)
+            return redirect("/users/")
+
+        except  Exception as e:
+            print(e)
+            return render(request, "userTemplates/editContactInfo.html",
+                      {"name": request.session["name"], "user": loggedUser, "message": "could not edit user"})
+
