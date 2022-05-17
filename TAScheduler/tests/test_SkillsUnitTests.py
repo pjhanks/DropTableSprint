@@ -16,9 +16,6 @@ class addSkillsTests(TestCase):
         CheckSkill = Skills.objects.filter(SkillID="testSkill1")
         self.assertEqual("testSkill1", CheckSkill[0].SkillID)
 
-        SkillMethods.SkillsClass.newSkill(self, "testSkill2", None)
-        CheckSkill = Skills.objects.filter(SkillID="testSkill2")
-        self.assertEqual("testSkill2", CheckSkill[0].SkillID)
     def testNegativeTooManyFields(self):
         with self.assertRaises(TypeError, msg="Should not accept that many fields"):
             SkillMethods.SkillsClass.newSkill(self,"testSkill3", "testDescription", "error")
@@ -41,10 +38,10 @@ class testRemoveSkills(TestCase):
         self.assertEqual(CheckSkill.exists(), False, "Should not have anything to return")
     def testNegativeTooManyFields(self):
         with self.assertRaises(TypeError, msg="Should not accept that many fields"):
-            SkillMethods.SkillsClass.newSkill(self, "testSkill3", "error")
+            SkillMethods.SkillsClass.removeSkill(self, "testSkill3", "error")
     def testNegativeTooFewFields(self):
         with self.assertRaises(TypeError, msg="Should not accept that few fields"):
-            SkillMethods.SkillsClass.newSkill(self)
+            SkillMethods.SkillsClass.removeSkill(self)
     def testNegativeNoSuchSkill(self):
         with self.assertRaises(RuntimeError, msg="Skill does not exist"):
             SkillMethods.SkillsClass.removeSkill(self, "no name")
