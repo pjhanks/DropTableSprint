@@ -63,7 +63,7 @@
                         <td>{{ loggedUser.email }}</td>
                         <td>{{ loggedUser.phoneNumber }}</td>
                         <td>{{ loggedUser.role }}</td>
-                        <td>{{ skills|get_item:loggedUser.IDNumber }}</td>
+                        <td>{{ loggedUserSkills }}</td>
                 </tr>
                 {% for row in instructors %}
                     <tr class="text-left">
@@ -99,6 +99,7 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Role</th>
+                    <th>Skills</th>
 
                 </tr>
             </thead>
@@ -109,6 +110,7 @@
                     <td>{{ loggedUser.name }}</td>
                     <td>{{ loggedUser.email }}</td>
                     <td>{{ loggedUser.role }}</td>
+                    <td>{{ loggedUserSkills }}</td>
                 </tr>
 
                 {% for row in instructors %}

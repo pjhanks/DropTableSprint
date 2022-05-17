@@ -12,7 +12,7 @@
     <h2><small>Add Skill To Account</small></h2>
 </div>
 <div>
-    <form class="text-center" style="text-align: center" action="/addSkillsUser/" method="post">
+    <form class="text-center" style="text-align: center" action="/addSkills/" method="post">
             <div>
                 <div class="row justify-content-center">
                     <div class="col-auto">
@@ -22,18 +22,18 @@
 
                             <div class="form-group">
                              <select id = "InputSkill" name = "InputSkill" class="form-control" required>
-                                                <option value="" disabled selected>TA Code | TA</option>
-
+                                                <option value="" disabled selected>Skill ID | Skill Description</option>
 
                                               {% for row in skills %}
-                                                <option>{{ row.IDNumber }} </option>
+
+                                                <option>{{ row.SkillID }} | {{ row.SkillDescription }} </option>
                                               {% endfor %}
                                             </select>
                             </div>
 
 
 
-                              <button type="submit" class="btn btn-primary my-2 my-sm-0">Remove TA from Section</button>
+                              <button type="submit" class="btn btn-primary my-2 my-sm-0">Add Skill to Skill List</button>
                                 {{ message }}
                                 <a href="/users">
                                 Back
