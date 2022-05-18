@@ -71,7 +71,7 @@ class tests(TestCase):
         self.mySection.save()
         self.ca1= ClassTAAssignments.objects.create(AssignmentsID="1",
                                                     courseCode=self.courses,
-                                                    TAcode=self.TA1)
+                                                    TAcode=self.TA)
         self.ca1.save()
         self.ca1 = ClassTAAssignments.objects.create(AssignmentsID="1",
                                                      courseCode=self.courses,
@@ -91,7 +91,6 @@ class tests(TestCase):
         resp = self.mockClient.post("/sectionTemplates/addTAsec.html", {"sectionCode": "3", "TAcode": "5"}, follow=True)
         checkSection = Sections.objects.filter(sectionCode="3")[0]
         self.assertEqual(checkSection.TA, None, "TA not in course assigned")
-
     def test_NotTA(self):
         resp = self.mockClient.post("/sectionTemplates/addTAsec.html", {"sectionCode": "3", "TAcode": "2"}, follow=True)
         checkSection = Sections.objects.filter(sectionCode="3")[0]
