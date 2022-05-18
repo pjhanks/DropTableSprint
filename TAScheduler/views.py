@@ -9,6 +9,7 @@ import logging
 from TAScheduler.classes.Users import UserClass
 from TAScheduler.classes.Courses import CoursesClass
 from TAScheduler.classes.Sections import SectionsClass
+from TAScheduler.classes.Skills import SkillsClass
 
 
 # Create your views here.
@@ -63,17 +64,12 @@ class Courses(View):
         if (request.session["username"] == ""):
             return render(request, "login.html", {"message": "Not logged in"})
 
-        if (request.session["username"] == ""):
-            redirect("/login/")
-
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
         sectionDict = dict()
         taDict = dict()
 
         if (loggedUser.role == "Supervisor"):
             allCourses = Course.objects.all()
-
-
 
         else:
             allCourses = Course.objects.filter(instructorID=request.session["username"])
@@ -104,6 +100,16 @@ class Users(View):
 
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
         skillDict = dict()
+        loggedUserSkillz = UserSkills.objects.filter(UserID=loggedUser.IDNumber)
+
+        print(loggedUserSkillz)
+        loggedUserSkills = ""
+        if (loggedUserSkillz.count() == 0):
+            loggedUserSkills = ""
+        else:
+            for x in loggedUserSkillz:
+                loggedUserSkills= loggedUserSkills+(x.SkillID.SkillDescription) + ", "
+
 
         if (loggedUser.role == "Supervisor"):
             allUsers = MyUser.objects.filter(~Q(IDNumber=request.session["username"]))
@@ -119,7 +125,7 @@ class Users(View):
 
         return render(request, "userTemplates/users.html",
                       {"name": request.session["name"], "instructors": allUsers, "role": loggedUser.role,
-                       "skills": skillDict, "loggedUser": loggedUser})
+                       "skills": skillDict, "loggedUser": loggedUser,"loggedUserSkills" : loggedUserSkills})
 
 
 class Section(View):
@@ -570,47 +576,40 @@ class removeTAsec(View):
             return render(request, "login.html", {"message": "Not logged in"})
 
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
-        sections = Sections.objects.all()
-        allTAs = MyUser.objects.filter(role="TA")
+        sections = Sections.objects.filter(~Q(TA=None))
+        allTAs = Sections.objects.filter(~Q(TA=None))
         print(sections)
         return render(request, "sectionTemplates/removeTAsec.html",
                       {"name": request.session["name"], "sections": sections, "users": allTAs})
 
     def post(self, request):
-        def post(self, request):
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+        sections = Sections.objects.all()
+        allTAs = MyUser.objects.filter(role="TA")
 
-            loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
-            sections = Sections.objects.all()
-            allTAs = MyUser.objects.filter(role="TA")
+        sectionCode = (str(request.POST["InputSec"]).split("|"))[0].strip()
 
-            sectionCode = (str(request.POST["InputSec"]).split("|"))[0].strip()
-            TAcode = (str(request.POST["InputTA"]).split("|"))[0].strip()
+        try:
 
-            try:
-                SectionsClass.removeTAsec(self, sectionCode, TAcode)
-                allCourses = Course.objects.all()
-                request.session["selectedCourse"] = ""
-                sectionDict = dict()
-                taDict = dict()
-                for x in allCourses:
-                    j = (list(Sections.objects.filter(parentCode=x.courseCode).values_list('sectionCode')))
-                    b = (list(ClassTAAssignments.objects.filter(courseCode=x.courseCode).values_list('TAcode__name')))
-                    i = " | ".join([x[0] for x in j])
-                    l = " | ".join([x[0] for x in b])
-                    sectionDict[x.courseCode] = i
-                    taDict[x.courseCode] = l
+            allCourses = Course.objects.all()
+            request.session["selectedCourse"] = ""
+            sectionDict = dict()
+            taDict = dict()
+            for x in allCourses:
+                j = (list(Sections.objects.filter(parentCode=x.courseCode).values_list('sectionCode')))
+                b = (list(ClassTAAssignments.objects.filter(courseCode=x.courseCode).values_list('TAcode__name')))
+                i = " | ".join([x[0] for x in j])
+                l = " | ".join([x[0] for x in b])
+                sectionDict[x.courseCode] = i
+                taDict[x.courseCode] = l
 
-                return render(request, "courseTemplates/courses.html",
-                              {"name": request.session["name"], "courses": allCourses, "role": loggedUser.role,
-                               "sections": sectionDict, "tas": taDict})
+            return redirect("/removeTAsec2/")
 
-            except Exception as e:
-                print(traceback.format_exc())
-                return render(request, "sectionTemplates/removeTAsec2.html",
-                              {"name": request.session["name"], "sections": sections, "users": allTAs,
-                               "message": "Could not remove TA"})
-
-
+        except Exception as e:
+            print(traceback.format_exc())
+            return render(request, "sectionTemplates/removeTAsec2.html",
+                          {"name": request.session["name"], "sections": sections, "users": allTAs,
+                           "message": "Could not remove TA"})
 
         # loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
         # courses = Course.objects.all()
@@ -633,7 +632,7 @@ class removeTAsec2(View):
 
         sections = Sections.objects.all()
         allTAs = ClassTAAssignments.objects.filter(courseCode=courseCode)
-
+        print(allTAs)
         return render(request, "sectionTemplates/removeTAsec2.html",
                       {"name": request.session["name"], "sections": sections, "users": allTAs})
 
@@ -643,8 +642,8 @@ class removeTAsec2(View):
         sections = Sections.objects.all()
         allTAs = MyUser.objects.filter(role="TA")
 
-        sectionCode = (str(request.POST["InputSec"]).split("|"))[0].strip()
         TAcode = (str(request.POST["InputTA"]).split("|"))[0].strip()
+        sectionCode = request.session["sectionCode"]
 
         try:
             SectionsClass.removeTAsec(self, sectionCode, TAcode)
@@ -660,15 +659,52 @@ class removeTAsec2(View):
                 sectionDict[x.courseCode] = i
                 taDict[x.courseCode] = l
 
-            return render(request, "courseTemplates/courses.html",
-                          {"name": request.session["name"], "courses": allCourses, "role": loggedUser.role,
-                           "sections": sectionDict, "tas": taDict})
+            return redirect("/sections/")
 
         except Exception as e:
             print(traceback.format_exc())
             return render(request, "sectionTemplates/removeTAsec2.html",
                           {"name": request.session["name"], "sections": sections, "users": allTAs,
                            "message": "Could not remove TA"})
+
+
+# Actually the first view for this prompt series
+class addTAsec3(View):
+
+    def get(self, request):
+        if (request.session["username"] == ""):
+            return render(request, "login.html", {"message": "Not logged in"})
+
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+
+        if (loggedUser.role == "Supervisor"):
+            sections = Course.objects.all()
+        else:
+            sections = Course.objects.filter(instructorID=request.session["username"])
+
+        allTAs = MyUser.objects.filter(role="TA")
+
+        return render(request, "sectionTemplates/addTAsec3.html",
+                      {"name": request.session["name"], "sections": sections, "users": allTAs})
+
+    def post(self, request):
+
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+        sections = Sections.objects.all()
+        allTAs = MyUser.objects.filter(role="TA")
+
+        request.session["courseCode"] = (str(request.POST["InputCourse"]).split("|"))[0].strip()
+
+        try:
+
+            allSections = Sections.objects.filter(parentCode__courseCode=request.session["courseCode"])
+            return redirect("/addTAsec/")
+
+        except Exception as e:
+            print(e)
+            return render(request, "sectionTemplates/addTAsec.html",
+                          {"name": request.session["name"], "sections": sections, "users": allTAs,
+                           "message": "Could not add TA"})
 
 
 class addTAsec(View):
@@ -678,7 +714,9 @@ class addTAsec(View):
             return render(request, "login.html", {"message": "Not logged in"})
 
         loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
-        sections = Sections.objects.all()
+        sections = Sections.objects.filter(parentCode__courseCode=request.session["courseCode"], TA=None)
+        print(sections)
+
         allTAs = MyUser.objects.filter(role="TA")
 
         return render(request, "sectionTemplates/addTAsec.html",
@@ -690,17 +728,16 @@ class addTAsec(View):
         sections = Sections.objects.all()
         allTAs = MyUser.objects.filter(role="TA")
 
-        sectionCode = (str(request.POST["InputSec"]).split("|"))[0].strip()
-        TAcode = (str(request.POST["InputTA"]).split("|"))[0].strip()
+        request.session["sectionCode"] = (str(request.POST["InputSec"]).split("|"))[0].strip()
 
         try:
-            SectionsClass.assignTAsec(self, sectionCode, TAcode)
+
             allSections = Sections.objects.all()
-            return render(request, "sectionTemplates/addTAsec.html",
-                          {"name": request.session["name"], "sections": allSections, "role": loggedUser.role})
+
+            return redirect("/addTAsec2/")
 
         except Exception as e:
-            print(e)
+
             return render(request, "sectionTemplates/addTAsec.html",
                           {"name": request.session["name"], "sections": sections, "users": allTAs,
                            "message": "Could not add TA"})
@@ -724,12 +761,13 @@ class addTAsec2(View):
 
         sectionCode = request.session["sectionCode"]
         courseCode = request.session["courseCode"]
+        print(courseCode)
 
-        sections = Sections.objects.all()
         allTAs = ClassTAAssignments.objects.filter(courseCode=courseCode)
+        print(allTAs)
 
         return render(request, "sectionTemplates/addTAsec2.html",
-                      {"name": request.session["name"], "sections": sections, "users": allTAs})
+                      {"name": request.session["name"], "users": allTAs})
 
     def post(self, request):
 
@@ -737,17 +775,114 @@ class addTAsec2(View):
         sections = Sections.objects.all()
         allTAs = MyUser.objects.filter(role="TA")
 
-        sectionCode = (str(request.POST["InputSec"]).split("|"))[0].strip()
         TAcode = (str(request.POST["InputTA"]).split("|"))[0].strip()
+        sectionCode = request.session["sectionCode"]
 
         try:
             SectionsClass.assignTAsec(self, sectionCode, TAcode)
             allSections = Sections.objects.all()
-            return render(request, "sectionTemplates/addTAsec.html",
-                          {"name": request.session["name"], "sections": allSections, "role": loggedUser.role})
+            return redirect("/sections/")
 
         except Exception as e:
             print(e)
-            return render(request, "sectionTemplates/addTAsec.html",
+            return render(request, "sectionTemplates/addTAsec2.html",
                           {"name": request.session["name"], "sections": sections, "users": allTAs,
                            "message": "Could not add TA"})
+
+
+class editContactInfo(View):
+
+    def get(self, request):
+
+        if (request.session["username"] == ""):
+            return render(request, "login.html", {"message": "Not logged in"})
+
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+
+        return render(request, "userTemplates/editContactInfo.html",
+                      {"name": request.session["name"], "user": loggedUser})
+
+    def post(self, request):
+
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+
+        name = request.POST["InputName"]
+        Address = request.POST["InputAddress"]
+        Email = request.POST["InputEmail"]
+        PhoneNumber = request.POST["InputPhoneNumber"]
+        password = request.POST["InputPassword"]
+
+        try:
+            UserClass.changeInfo(self, loggedUser.IDNumber, name, Address, Email, PhoneNumber, password)
+            request.session["name"] = loggedUser.name
+            return redirect("/users/")
+
+        except  Exception as e:
+            print(e)
+            return render(request, "userTemplates/editContactInfo.html",
+                          {"name": request.session["name"], "user": loggedUser, "message": "could not edit user"})
+
+
+class addSkills(View):
+
+    def get(self, request):
+
+        if (request.session["username"] == ""):
+            return render(request, "login.html", {"message": "Not logged in"})
+
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+
+        skills = Skills.objects.all()
+
+        return render(request, "userTemplates/addSkills.html",
+                      {"name": request.session["name"], "skills": skills})
+
+    def post(self, request):
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+        skills = Skills.objects.all()
+
+        id = UserSkills.objects.all().count()
+
+
+        while (UserSkills.objects.filter(UserSkillID=id).count() > 0):
+            id = id + 1
+
+        name = (str(request.POST["InputSkill"]).split("|"))[0].strip()
+
+        try:
+            SkillsClass.assignNewSkill(self, id, loggedUser.IDNumber, name)
+            return redirect("/users/")
+
+        except Exception as e:
+            print(traceback.format_exc())
+            return render(request, "userTemplates/addSkills.html",
+                          {"name": request.session["name"], "skills": skills, "message": "could not add skill"})
+
+class addSkillSup(View):
+
+    def get(self, request):
+
+        if (request.session["username"] == ""):
+            return render(request, "login.html", {"message": "Not logged in"})
+
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+
+
+        return render(request,"userTemplates/addSkillSup.html")
+
+    def post(self, request):
+
+        loggedUser = MyUser.objects.get(IDNumber=request.session["username"])
+        newSkill = request.POST["InputSkill"]
+
+        id = Skills.objects.all().count()
+
+        while (Skills.objects.filter(SkillID=id).count() > 0):
+            id = id + 1
+
+        try:
+            SkillsClass.newSkill(self,id,newSkill)
+            return render(request, "userTemplates/addSkillSup.html",{"message": "New Skill Added!"})
+        except Exception as e:
+
+            return render(request, "userTemplates/addSkillSup.html",{"message": "Skill could not be added."})

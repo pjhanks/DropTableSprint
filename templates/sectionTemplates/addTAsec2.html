@@ -26,7 +26,6 @@
                              <select id = "InputTA" name = "InputTA" class="form-control" required>
                                                 <option value="" disabled selected>TA Code | TA</option>
 
-
                                               {% for row in users %}
                                                 <option>{{ row.TAcode.IDNumber }} | {{ row.TAcode.name }} </option>
                                               {% endfor %}
@@ -37,7 +36,7 @@
 
                               <button type="submit" class="btn btn-primary my-2 my-sm-0">Add TA to Section</button>
                                 {{ message }}
-                                <a href="/sections">
+                                <a href="/addTAsec">
                                 Back
                                 </a>
                     </div>

@@ -9,10 +9,10 @@
 <body class="text-center" class="center-block">
 <div class="col-auto text-center">
     <h1>TA Scheduler</h1>
-    <h2><small>Add Skill To Account</small></h2>
+    <h2><small>Select Course</small></h2>
 </div>
 <div>
-    <form class="text-center" style="text-align: center" action="/addSkills/" method="post">
+    <form class="text-center" style="text-align: center" action="/addTAsec3/" method="post">
             <div>
                 <div class="row justify-content-center">
                     <div class="col-auto">
@@ -20,22 +20,22 @@
                           {% csrf_token %}
 
 
+
                             <div class="form-group">
-                             <select id = "InputSkill" name = "InputSkill" class="form-control" required>
-                                                <option value="" disabled selected>Skill ID | Skill Description</option>
-
-                                              {% for row in skills %}
-
-                                                <option>{{ row.SkillID }} | {{ row.SkillDescription }} </option>
+                              <select id = "InputCourse" name = "InputCourse" class="form-control" required>
+                                                <option value="" disabled selected> Course Code | Course Number  </option>
+                                              {% for row in sections %}
+                                                <option>{{ row.courseCode }} | {{ row.courseNumber }} </option>
                                               {% endfor %}
                                             </select>
                             </div>
 
 
 
-                              <button type="submit" class="btn btn-primary my-2 my-sm-0">Add Skill to Skill List</button>
+
+                              <button type="submit" class="btn btn-primary my-2 my-sm-0">Add TA to Section</button>
                                 {{ message }}
-                                <a href="/users">
+                                <a href="/sections">
                                 Back
                                 </a>
                     </div>

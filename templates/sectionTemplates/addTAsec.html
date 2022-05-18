@@ -9,7 +9,7 @@
 <body class="text-center" class="center-block">
 <div class="col-auto text-center">
     <h1>TA Scheduler</h1>
-    <h2><small>Add TA to Section</small></h2>
+    <h2><small>Select Section</small></h2>
 </div>
 <div>
     <form class="text-center" style="text-align: center" action="/addTAsec/" method="post">
@@ -29,22 +29,13 @@
                                               {% endfor %}
                                             </select>
                             </div>
-                            <div class="form-group">
-                              <select id = "InputTA" name = "InputTA" class="form-control" required>
-                                                <option value="" disabled selected>TA Code | TA</option>
 
-
-                                              {% for row in users %}
-                                                <option>{{ row.IDNumber }} | {{ row.name }} </option>
-                                              {% endfor %}
-                                            </select>
-                            </div>
 
 
 
                               <button type="submit" class="btn btn-primary my-2 my-sm-0">Add TA to Section</button>
                                 {{ message }}
-                                <a href="/sections">
+                                <a href="/addTAsec3">
                                 Back
                                 </a>
                     </div>
