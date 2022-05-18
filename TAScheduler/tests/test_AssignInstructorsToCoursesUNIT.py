@@ -4,15 +4,15 @@ from TAScheduler.models import MyUser, Course
 
 
 class positiveTests(TestCase):
-    def setup(self):
-        temp = MyUser(IDNumber="1",
+    def setUp(self):
+        temp1 = MyUser(IDNumber="1",
                       name="Fred",
                       address="123 park place",
                       email="fred@uwm.edu",
                       phoneNumber="18000000000",
                       role="Instructor",
                       password="1234")
-        temp.save()
+        temp1.save()
         temp = MyUser(IDNumber="2",
                       name="John",
                       address="123 park place",
@@ -26,31 +26,31 @@ class positiveTests(TestCase):
                       courseNumber="3")
         temp.save()
         temp = Course(courseCode="2",
-                      instructorID="1",
+                      instructorID=temp1,
                       courseNumber="3")
         temp.save()
 
     def test_NonetoSome(self):
         Courses.CoursesClass.assignInstructor(self, "1", "1")
         checkCourse = Course.objects.get(courseCode="1")
-        self.assertEqual(checkCourse.instructorID, "1")
+        self.assertEqual(checkCourse.instructorID.IDNumber, "1")
 
     def testSomeToSome(self):
         Courses.CoursesClass.assignInstructor(self, "2", "2")
-        checkCourse = Course.objects.get(courseCode="1")
-        self.assertEqual(checkCourse.instructorID, "2")
+        checkCourse = Course.objects.get(courseCode="2")
+        self.assertEqual(checkCourse.instructorID.IDNumber, "2")
 
 
 class negativeTests(TestCase):
-    def setup(self):
-        temp = MyUser(IDNumber="1",
+    def setUp(self):
+        temp1 = MyUser(IDNumber="1",
                       name="Fred",
                       address="123 park place",
                       email="fred@uwm.edu",
                       phoneNumber="18000000000",
                       role="Instructor",
                       password="1234")
-        temp.save()
+        temp1.save()
         temp = MyUser(IDNumber="2",
                       name="John",
                       address="123 park place",
@@ -64,7 +64,7 @@ class negativeTests(TestCase):
                       courseNumber="3")
         temp.save()
         temp = Course(courseCode="2",
-                      instructorID="1",
+                      instructorID=temp1,
                       courseNumber="3")
         temp.save()
 
