@@ -1,4 +1,6 @@
 import unittest
+
+import TAScheduler.classes.Courses
 from TAScheduler.classes import Users
 from django.test import TestCase
 from TAScheduler.models import ClassTAAssignments, Course, MyUser
@@ -74,9 +76,9 @@ class testClassTAAssignments(TestCase):
 
     def test_addClassTA(self):
         # add Something.addClassTA("AssignmentsID");
-        Users.UserClass.createClassTAAssignments("3", "9", "44")
-        things = list(map(str, ClassTAAssignments.objects.filter(courseCode="9")))
-        self.assertIn("3", things, "Class TA Assignment was not added to list")
+        TAScheduler.classes.Courses.CoursesClass.assignTA(self,"9","39")
+        things = ClassTAAssignments.objects.filter(courseCode="9")
+        self.assertIn("3", things[0], "Class TA Assignment was not added to list")
 
     def test_intID(self):
         # non string
